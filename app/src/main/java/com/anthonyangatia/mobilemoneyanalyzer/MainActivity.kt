@@ -36,26 +36,36 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-//TODO:Read on ContentProviders
+//TODO 100:Read on ContentProviders
+//    fun readSMS(view: View){
+//        val uri = Telephony.Sms.Inbox.CONTENT_URI
+//        val projection = arrayOf("address", "body")
+//        val selectionClause = "address IN(?,?)"
+//        val selectionArgs:Array<String> = arrayOf("KCB","MPESA")
+//        val cursor = contentResolver.query(uri, projection, selectionClause, selectionArgs, null)
+//        if (cursor != null) {
+//            val addressIndex = cursor.getColumnIndexOrThrow("address")
+//            val bodyIndex = cursor.getColumnIndexOrThrow("body")
+//            val address: MutableList<String> = ArrayList()//"Jumia, Safaricom, 0791278088"
+//            val body: MutableList<String> = ArrayList()//"The message itself"
+//            while (cursor.moveToNext()) {
+//                address.add(cursor.getString(addressIndex))
+//                body.add(cursor.getString(bodyIndex))
+//            }
+//            }else{
+//                Log.i("TAG", "Cursor is empty")
+//            }
+//        cursor?.close()
+//    }
+
     fun readSMS(view: View){
-        val uri = Telephony.Sms.Inbox.CONTENT_URI
-        val projection = arrayOf("address", "body")
-        val selectionClause = "address IN(?,?)"
-        val selectionArgs:Array<String> = arrayOf("KCB","MPESA")
-        val cursor = contentResolver.query(uri, projection, selectionClause, selectionArgs, null)
-        if (cursor != null) {
-            val addressIndex = cursor.getColumnIndexOrThrow("address")
-            val bodyIndex = cursor.getColumnIndexOrThrow("address")
-            val address: MutableList<String> = ArrayList()//"Jumia, Safaricom, 0791278088"
-            val body: MutableList<String> = ArrayList()//"The message itself"
-            while (cursor.moveToNext()) {
-                address.add(cursor.getString(addressIndex))
-                body.add(cursor.getString(bodyIndex))
-            }
-            }else{
-                Log.i("TAG", "Cursor is empty")
-            }
-        cursor?.close()
+        val message = "PK83DGZMY3 Confirmed. Ksh140.00 paid to MAURICE OUMA. on 8/11/21 at 1:00 PM.New M-PESA balance is Ksh29,896.68. Transaction cost, Ksh0.00. Amount you can transact within the day is 299,830.00.You can now access M-PESA via *334#"
+        val sentMoneyRegex = """(\w+) Confirmed\. (Ksh|Tzsh)([\d\.\,]+) paid to (.*) on (\d{1,2}\/\d{1,2}\/\d{2}) at (\d{1,2}:\d{2} (PM|AM)).\s?New M-PESA balance is Ksh([\d\.\,]+)\. Transaction cost, Ksh([\d\.\,])+\..*""".toRegex()
+
+        val matchResult = sentMoneyRegex.matchEntire(message)
+        var listOfCapturedGroups = matchResult!!.groupValues
+        val state = sentMoneyRegex.containsMatchIn(message)
+
     }
 
     private fun checkForSmsPermission() {

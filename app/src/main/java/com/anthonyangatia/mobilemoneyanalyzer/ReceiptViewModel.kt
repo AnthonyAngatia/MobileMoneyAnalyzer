@@ -5,10 +5,8 @@ import android.content.ContentResolver
 import android.provider.Telephony
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
-import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import kotlinx.coroutines.launch
 import java.util.ArrayList
 
@@ -39,18 +37,16 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
 
     }
     fun insertReceipts(receipt: TransactionReceipt){
-        viewModelScope.launch {
-            database.insert(receipt)
-        }
+//        viewModelScope.launch {
+            processText()
+//        }
     }
 
     fun processText(){
         //InitializeReceipt
-//        var receipt: TransactionReceipt ={
-//
-//        }//
-////        TODO: While loop
-//        insertReceipts(receipt)
+        var receipt = TransactionReceipt()
+//        TODO: While loop
+//        database.insert(receipt)
     }
 
 
