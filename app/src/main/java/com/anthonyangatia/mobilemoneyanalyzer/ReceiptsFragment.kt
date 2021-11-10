@@ -2,7 +2,6 @@ package com.anthonyangatia.mobilemoneyanalyzer
 
 import android.content.ContentResolver
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +23,7 @@ class ReceiptsFragment : Fragment() {
 
         val adapter = ReceiptsAdapter()
         binding.smsReceiptList.adapter = adapter
+
         resolver = activity?.contentResolver!!
 
         val application = requireNotNull(this.activity).application
@@ -31,10 +31,10 @@ class ReceiptsFragment : Fragment() {
         val viewModelFactory = ReceiptsViewModelFactory(dataSource, application)
         val receiptViewModel =ViewModelProvider(this, viewModelFactory).get(ReceiptViewModel::class.java)
 
+        adapter.receiptList = receiptViewModel.receipts!!
 
 
-
-        return binding.root
+            return binding.root
     }
 
 

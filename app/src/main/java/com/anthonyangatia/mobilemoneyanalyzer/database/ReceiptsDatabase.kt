@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.anthonyangatia.mobilemoneyanalyzer.TransactionReceipt
+import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 
-@Database(entities = [TransactionReceipt::class], version = 1, exportSchema = false)
+@Database(entities = [Receipt::class], version = 2, exportSchema = false)
 abstract class ReceiptsDatabase: RoomDatabase() {
 
     abstract val receiptsDao:ReceiptsDao
@@ -22,7 +22,7 @@ abstract class ReceiptsDatabase: RoomDatabase() {
                 if(instance == null){
                     instance = Room.databaseBuilder(context.applicationContext,
                     ReceiptsDatabase::class.java, "receipts_database")
-                        .fallbackToDestructiveMigration()
+                        .fallbackToDestructiveMigration().allowMainThreadQueries()//remove allowmain thread quesries after soring coroutines
                         .build()
                     INSTANCE = instance
                 }
