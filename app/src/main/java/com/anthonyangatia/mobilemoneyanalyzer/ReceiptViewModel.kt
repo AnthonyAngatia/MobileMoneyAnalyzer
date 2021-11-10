@@ -6,19 +6,27 @@ import android.provider.Telephony
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
+import kotlinx.coroutines.launch
 import java.util.ArrayList
 
 class ReceiptViewModel(val database: ReceiptsDao, application: Application): AndroidViewModel(application) {
-    var receipts: List<Receipt>? = null
+    var receipts =database.getAllReceipts()
     init {
         Log.i(javaClass.simpleName, "Created A view SmsReceiptViewModel" )
-        readSMS(application)
-        receipts = database.getAllReceipts()!!
-
+        viewModelScope.launch {
+            readSMS(application)
+        }
+        viewModelScope.launch {
+            receipts = database.getAllReceipts()!!
+        }
 
     }
+
+
+
     //TODO 100:Read on ContentProviders
     fun readSMS(application: Application){
         val uri = Telephony.Sms.Inbox.CONTENT_URI
@@ -59,14 +67,18 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
         if(sentMoneyRegex.matches(message) ){
             val matchResult = sentMoneyRegex.matchEntire(message)
             val (code, amountSent, paidSent,recipient, date, time, balance, transactionCost) = matchResult!!.destructured
-            database.insert(receipt = Receipt(0L,code, recipient, null, "sent", date, time, balance, amountSent, null,transactionCost) )
+            viewModelScope.launch {
+                database.insert(receipt = Receipt(0L,code, recipient, null, "sent", date, time, balance, amountSent, null,transactionCost) )
+            }
 
 //            TODO:1. Insert into the database
             return true
         }else if(receiveMoneyRegex.matches(message)) {
             val matchResult = receiveMoneyRegex.matchEntire(message)
             val (code, amountReceived, sender, date, time, balance) = matchResult!!.destructured
-            database.insert(receipt = Receipt(0L,code, null, sender, "receive", date, time, balance, null, amountReceived ) )
+            viewModelScope.launch {
+                database.insert(receipt = Receipt(0L,code, null, sender, "received", date, time, balance, null, amountReceived ) )
+            }
 
             return true
         }

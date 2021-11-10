@@ -11,6 +11,7 @@ class ReceiptsAdapter: RecyclerView.Adapter<ReceiptsAdapter.ViewHolder>() {
     var receiptList = listOf<Receipt>()
         set(value) {
             field =value
+            notifyDataSetChanged()
         }
 
 
