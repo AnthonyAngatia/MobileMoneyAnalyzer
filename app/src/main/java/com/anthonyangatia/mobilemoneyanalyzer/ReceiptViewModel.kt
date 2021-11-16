@@ -1,16 +1,16 @@
 package com.anthonyangatia.mobilemoneyanalyzer
 
 import android.app.Application
-import android.content.ContentResolver
 import android.provider.Telephony
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import kotlinx.coroutines.launch
-import java.util.ArrayList
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ReceiptViewModel(val database: ReceiptsDao, application: Application): AndroidViewModel(application) {
     var receipts =database.getAllReceipts()
@@ -68,7 +68,7 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
             val matchResult = sentMoneyRegex.matchEntire(message)
             val (code, amountSent, paidSent,recipient, date, time, balance, transactionCost) = matchResult!!.destructured
             viewModelScope.launch {
-                database.insert(receipt = Receipt(0L,code, recipient, null, "sent", date, time, balance, amountSent, null,transactionCost) )
+                database.insert(receipt = Receipt(0L,message, code, recipient, null, "sent", convertDateToLong(date), time, convertToDouble(balance), convertToDouble(amountSent), null,convertToDouble(transactionCost)) )
             }
 
 //            TODO:1. Insert into the database
@@ -77,13 +77,23 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
             val matchResult = receiveMoneyRegex.matchEntire(message)
             val (code, amountReceived, sender, date, time, balance) = matchResult!!.destructured
             viewModelScope.launch {
-                database.insert(receipt = Receipt(0L,code, null, sender, "received", date, time, balance, null, amountReceived ) )
+                database.insert(receipt = Receipt(0L, message , code, null, sender, "received", convertDateToLong(date), time, convertToDouble(balance), null, convertToDouble(amountReceived), null ) )
             }
 
             return true
         }
         return false
     }
+    fun convertToDouble(value: String):Double{
+        return value.replace(",", "").toDouble()
+    }
+
+    fun convertDateToLong(value: String): Long {
+        val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yy")
+        val date = dateFormat.parse(value)
+        return date.time
+    }
+
 
     fun insertReceipts(receipt: Receipt){
 //        viewModelScope.launch {

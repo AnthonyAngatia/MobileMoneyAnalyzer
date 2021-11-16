@@ -3,12 +3,15 @@ package com.anthonyangatia.mobilemoneyanalyzer.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
+import java.sql.Date
 
 @Entity(tableName = "transaction_receipt_table")
 data class Receipt(
     @PrimaryKey(autoGenerate = true)
     var receiptId: Long = 0L,
+
+    @ColumnInfo(name = "receipt_message")
+    var message: String = "default-message",
 
     @ColumnInfo(name = "receipt_code")
     var code: String = "default-code",
@@ -22,18 +25,19 @@ data class Receipt(
     @ColumnInfo(name = "transactionType")
     var transactionType: String? = null,
 
-    var date: String? = null,//TODO: Look for valid type for dates and time
+    var date: Long? = null,//TODO: Look for valid type for dates and time
 
     var time: String? = null,
 
     @ColumnInfo(name = "account_balance")
-    var balance: String = "0.0",
+    var balance: Double? = null,
 
     @ColumnInfo(name = "amount_sent")
-    var amountSent: String? = "10.0",
+    var amountSent: Double? = null,
 
     @ColumnInfo(name = "amount_received")
-    var amountReceived: String? = "0.0",
+    var amountReceived: Double? = null,
 
     @ColumnInfo(name="transaction_cost")
-    var transactionCost: String? ="0.0")
+    var transactionCost: Double? =null)
+
