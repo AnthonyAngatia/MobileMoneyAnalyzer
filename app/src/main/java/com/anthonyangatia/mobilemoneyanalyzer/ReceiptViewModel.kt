@@ -8,13 +8,16 @@ import androidx.lifecycle.viewModelScope
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import kotlinx.coroutines.launch
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ReceiptViewModel(val database: ReceiptsDao, application: Application): AndroidViewModel(application) {
     var receipts =database.getAllReceipts()
     init {
+        viewModelScope.launch {
+            database.clear()
+        }
+
         Log.i(javaClass.simpleName, "Created A view SmsReceiptViewModel" )
         viewModelScope.launch {
             readSMS(application)
@@ -66,31 +69,44 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
         val receiveMoneyRegex = """(?<code>\w+) Confirmed\.*\s*You have received Ksh(?<amountReceived>[\d\.\,]+) from (?<sender>.*) on (?<date>\d{1,2}\/\d{1,2}\/\d{2}) at (?<time>\d{1,2}:\d{2} \w{2})\.*\s*New M-PESA balance is Ksh(?<balance>[\d\.\,]+)\..*""".toRegex()
         if(sentMoneyRegex.matches(message) ){
             val matchResult = sentMoneyRegex.matchEntire(message)
-            val (code, amountSent, paidSent,recipient, date, time, balance, transactionCost) = matchResult!!.destructured
+            var (code, amountSent, paidSent,recipient, date, time, balance, transactionCost) = matchResult!!.destructured
+            time = formatTime(time)
             viewModelScope.launch {
-                database.insert(receipt = Receipt(0L,message, code, recipient, null, "sent", convertDateToLong(date), time, convertToDouble(balance), convertToDouble(amountSent), null,convertToDouble(transactionCost)) )
+                database.insert(receipt = Receipt(0L,message, code, recipient, null, "sent", convertDateToLong(date+" "+time), time, convertToDouble(balance), convertToDouble(amountSent), null,convertToDouble(transactionCost)) )
             }
 
 //            TODO:1. Insert into the database
             return true
         }else if(receiveMoneyRegex.matches(message)) {
             val matchResult = receiveMoneyRegex.matchEntire(message)
-            val (code, amountReceived, sender, date, time, balance) = matchResult!!.destructured
+            var (code, amountReceived, sender, date, time, balance) = matchResult!!.destructured
+            time = formatTime(time)
             viewModelScope.launch {
-                database.insert(receipt = Receipt(0L, message , code, null, sender, "received", convertDateToLong(date), time, convertToDouble(balance), null, convertToDouble(amountReceived), null ) )
+                database.insert(receipt = Receipt(0L, message , code, null, sender, "received", convertDateToLong(date+" "+time), time, convertToDouble(balance), null, convertToDouble(amountReceived), null ) )
             }
 
             return true
         }
         return false
     }
+
+    private fun formatTime(date: String): String {
+        var newstring = date.replace("AM", "a.m.")
+        if(newstring.equals(date)){
+            var newstring = date.replace("PM", "p.m.")
+            return newstring
+        }
+        return newstring
+    }
+
     fun convertToDouble(value: String):Double{
         return value.replace(",", "").toDouble()
     }
 
-    fun convertDateToLong(value: String): Long {
-        val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yy")
-        val date = dateFormat.parse(value)
+
+    fun convertDateToLong(dateString: String): Long {
+        val dateFormat = SimpleDateFormat("dd/MM/yy hh:mm aa")
+        val date = dateFormat.parse(dateString)
         return date.time
     }
 

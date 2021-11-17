@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
+import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.FragmentSmsReceiptsBinding
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.MonthlyChartFragmentBinding
 import com.github.mikephil.charting.charts.LineChart
@@ -15,6 +17,8 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MonthlyChartFragment : Fragment() {
 
@@ -22,18 +26,35 @@ class MonthlyChartFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: MonthlyChartViewModel
     private lateinit var resolver: ContentResolver
+    var listOfReceipts = listOf<Receipt>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         _binding = MonthlyChartFragmentBinding.inflate(inflater,container,false)
+        var calendar = Calendar.getInstance()
+        calendar.time = Date()
 
+//TODO: edit the parameters of the viewmodel
+        val application = requireNotNull(this.activity).application
+        val dataSource = ReceiptsDatabase.getInstance(application).receiptsDao
+        val viewModelFactory = MonthlyChartViewModelFactory(dataSource, application)
+        val monthlyChartViewModel =ViewModelProvider(this, viewModelFactory).get(MonthlyChartViewModel::class.java)
+
+
+        monthlyChartViewModel.receipts?.observe(viewLifecycleOwner, {
+            it?.let{
+                listOfReceipts = it
+                binding.monthlyReceipts.text = listOfReceipts.size.toString()
+                it.forEach {
+//                    binding.monthlyReceipts.text = it.message
+                }
+            }
+        })
         drawGraph()
-
         return binding.root
     }
 
     fun drawGraph(){
-        val xvalues = listOf<String>("value1", "value2", "xvalue3")
 
         var lineEntry = ArrayList<Entry>();
         lineEntry.add(Entry(20f, 5F))

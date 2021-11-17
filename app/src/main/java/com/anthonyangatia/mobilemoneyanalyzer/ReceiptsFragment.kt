@@ -17,7 +17,7 @@ import com.anthonyangatia.mobilemoneyanalyzer.databinding.FragmentSmsReceiptsBin
 class ReceiptsFragment : Fragment() {
     private var _binding:FragmentSmsReceiptsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: ReceiptViewModel
+    private lateinit var viewModel: ReceiptViewModel //No need of this
     private lateinit var resolver: ContentResolver
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
