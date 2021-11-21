@@ -11,6 +11,7 @@ class ReceiptsAdapter: RecyclerView.Adapter<ReceiptsAdapter.ViewHolder>() {
     var receiptList = listOf<Receipt>()
         set(value) {
             field =value
+            notifyDataSetChanged()
         }
 
 
@@ -23,7 +24,7 @@ class ReceiptsAdapter: RecyclerView.Adapter<ReceiptsAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = receiptList[position].code
+        val item = receiptList[position].toString()
         holder.smsMessage.text = item
 
     }

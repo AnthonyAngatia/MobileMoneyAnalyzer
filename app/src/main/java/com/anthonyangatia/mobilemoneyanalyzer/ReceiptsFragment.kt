@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.FragmentSmsReceiptsBinding
@@ -15,7 +17,7 @@ import com.anthonyangatia.mobilemoneyanalyzer.databinding.FragmentSmsReceiptsBin
 class ReceiptsFragment : Fragment() {
     private var _binding:FragmentSmsReceiptsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: ReceiptViewModel
+    private lateinit var viewModel: ReceiptViewModel //No need of this
     private lateinit var resolver: ContentResolver
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -31,10 +33,17 @@ class ReceiptsFragment : Fragment() {
         val viewModelFactory = ReceiptsViewModelFactory(dataSource, application)
         val receiptViewModel =ViewModelProvider(this, viewModelFactory).get(ReceiptViewModel::class.java)
 
-        adapter.receiptList = receiptViewModel.receipts!!
-
-
-            return binding.root
+        receiptViewModel.receipts?.observe(viewLifecycleOwner, Observer{
+            it?.let{
+                adapter.receiptList = it
+            }
+        })
+//        if(receiptViewModel.receipts == null){
+//            adapter.receiptList = listOf(Receipt(), Receipt())
+//        }else{
+//            adapter.receiptList = receiptViewModel.receipts!!
+//        }
+        return binding.root
     }
 
 

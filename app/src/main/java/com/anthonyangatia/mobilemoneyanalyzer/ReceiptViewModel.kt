@@ -1,24 +1,35 @@
 package com.anthonyangatia.mobilemoneyanalyzer
 
 import android.app.Application
-import android.content.ContentResolver
 import android.provider.Telephony
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
-import java.util.ArrayList
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ReceiptViewModel(val database: ReceiptsDao, application: Application): AndroidViewModel(application) {
-    var receipts: List<Receipt>? = null
+    var receipts =database.getAllReceipts()
     init {
-        Log.i(javaClass.simpleName, "Created A view SmsReceiptViewModel" )
-        readSMS(application)
-        receipts = database.getAllReceipts()!!
+        viewModelScope.launch {
+            database.clear()
+        }
 
+        Log.i(javaClass.simpleName, "Created A view SmsReceiptViewModel" )
+        viewModelScope.launch {
+            readSMS(application)
+        }
+        viewModelScope.launch {
+            receipts = database.getAllReceipts()!!
+        }
 
     }
+
+
+
     //TODO 100:Read on ContentProviders
     fun readSMS(application: Application){
         val uri = Telephony.Sms.Inbox.CONTENT_URI
@@ -58,20 +69,47 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
         val receiveMoneyRegex = """(?<code>\w+) Confirmed\.*\s*You have received Ksh(?<amountReceived>[\d\.\,]+) from (?<sender>.*) on (?<date>\d{1,2}\/\d{1,2}\/\d{2}) at (?<time>\d{1,2}:\d{2} \w{2})\.*\s*New M-PESA balance is Ksh(?<balance>[\d\.\,]+)\..*""".toRegex()
         if(sentMoneyRegex.matches(message) ){
             val matchResult = sentMoneyRegex.matchEntire(message)
-            val (code, amountSent, paidSent,recipient, date, time, balance, transactionCost) = matchResult!!.destructured
-            database.insert(receipt = Receipt(0L,code, recipient, null, "sent", date, time, balance, amountSent, null,transactionCost) )
+            var (code, amountSent, paidSent,recipient, date, time, balance, transactionCost) = matchResult!!.destructured
+            time = formatTime(time)
+            viewModelScope.launch {
+                database.insert(receipt = Receipt(0L,message, code, recipient, null, "sent", convertDateToLong(date+" "+time), time, convertToDouble(balance), convertToDouble(amountSent), null,convertToDouble(transactionCost)) )
+            }
 
 //            TODO:1. Insert into the database
             return true
         }else if(receiveMoneyRegex.matches(message)) {
             val matchResult = receiveMoneyRegex.matchEntire(message)
-            val (code, amountReceived, sender, date, time, balance) = matchResult!!.destructured
-            database.insert(receipt = Receipt(0L,code, null, sender, "receive", date, time, balance, null, amountReceived ) )
+            var (code, amountReceived, sender, date, time, balance) = matchResult!!.destructured
+            time = formatTime(time)
+            viewModelScope.launch {
+                database.insert(receipt = Receipt(0L, message , code, null, sender, "received", convertDateToLong(date+" "+time), time, convertToDouble(balance), null, convertToDouble(amountReceived), null ) )
+            }
 
             return true
         }
         return false
     }
+
+    private fun formatTime(date: String): String {
+        var newstring = date.replace("AM", "a.m.")
+        if(newstring.equals(date)){
+            var newstring = date.replace("PM", "p.m.")
+            return newstring
+        }
+        return newstring
+    }
+
+    fun convertToDouble(value: String):Double{
+        return value.replace(",", "").toDouble()
+    }
+
+
+    fun convertDateToLong(dateString: String): Long {
+        val dateFormat = SimpleDateFormat("dd/MM/yy hh:mm aa")
+        val date = dateFormat.parse(dateString)
+        return date.time
+    }
+
 
     fun insertReceipts(receipt: Receipt){
 //        viewModelScope.launch {

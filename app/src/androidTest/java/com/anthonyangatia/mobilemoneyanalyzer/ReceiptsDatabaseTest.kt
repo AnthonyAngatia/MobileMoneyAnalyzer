@@ -3,6 +3,7 @@ package com.anthonyangatia.mobilemoneyanalyzer
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import org.junit.After
@@ -33,9 +34,10 @@ class ReceiptsDatabaseTest {
     receiptsDatabase.close()
     }
 
+
     @Test
     @Throws(Exception::class)
-    fun insertAndGetReceipts(){
+    suspend fun insertAndGetReceipts(){
         val receipt = Receipt(code="default-code")
         receiptsDao.insert(receipt)
         val transactionReceipt =receiptsDao.getReceipt("default-code")
