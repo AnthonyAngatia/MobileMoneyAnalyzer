@@ -33,11 +33,11 @@ data class Receipt(
     var balance: Double? = null,
 
     @ColumnInfo(name = "amount_sent")
-    var amountSent: Double? = null,
+    var amountSent: Double? = 0.0,
 
     @ColumnInfo(name = "amount_received")
-    var amountReceived: Double? = null,
+    var amountReceived: Double? = 0.0,
 
     @ColumnInfo(name="transaction_cost")
-    var transactionCost: Double? =null)
+    var transactionCost: Double? =0.0)
 

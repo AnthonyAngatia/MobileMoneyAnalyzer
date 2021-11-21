@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
+import com.anthonyangatia.mobilemoneyanalyzer.AmountTransacted
 
 @Dao
 interface ReceiptsDao{
@@ -19,6 +19,9 @@ interface ReceiptsDao{
 
     @Query("SELECT * from transaction_receipt_table WHERE date BETWEEN :beginningDate AND :endDate")
     fun getReceiptWhereDate(beginningDate:Long , endDate:Long ): LiveData<List<Receipt>>?
+
+    @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived, account_balance from transaction_receipt_table WHERE date BETWEEN :beginningDate AND :endDate")
+    suspend fun getAmountTransactedList(beginningDate:Long , endDate:Long ): AmountTransacted?
 
     @Query("DELETE FROM transaction_receipt_table")
     suspend fun clear()
