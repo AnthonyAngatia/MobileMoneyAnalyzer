@@ -1,6 +1,7 @@
 package com.anthonyangatia.mobilemoneyanalyzer
 
 import android.content.ContentResolver
+import android.graphics.Color
 import android.graphics.Color.red
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -26,7 +27,6 @@ class MonthlyChartFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: MonthlyChartViewModel
     private lateinit var resolver: ContentResolver
-    var listOfReceipts = listOf<Receipt>()
     var lineEntry = ArrayList<Entry>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +42,7 @@ class MonthlyChartFragment : Fragment() {
         monthlyChartViewModel.amountTransactedListLiveData.observe(viewLifecycleOwner, {
             lineEntry.clear()
             for(index in it.indices){
-                var amountSentTotal = 0.0
+                var amountSentTotal = it[index].amountSentTotal
                 if(it[index].amountSentTotal == null){
                      amountSentTotal = 0.0
                 }else{
@@ -62,8 +62,13 @@ class MonthlyChartFragment : Fragment() {
 
     fun drawGraph(){
         val lineDataSet = LineDataSet(lineEntry, "First")
+        lineDataSet.lineWidth = 1.25f
+        lineDataSet.color = Color.CYAN
+        lineDataSet.setCircleColor(Color.RED)
         val data = LineData(lineDataSet )
         binding.chartId.data = data
+        binding.chartId.setDrawGridBackground(false)
+        binding.chartId.setDrawBorders(false)
         binding.chartId.invalidate()
 
     }
