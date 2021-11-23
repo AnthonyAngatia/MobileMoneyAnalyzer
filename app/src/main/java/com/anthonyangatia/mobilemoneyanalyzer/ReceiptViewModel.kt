@@ -65,8 +65,9 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
     }
 
      fun checkRegex(message:String):Boolean{
-        val sentMoneyRegex = """(?<code>\w+)\.*\s*Confirmed\.*\s*Ksh(?<amountSent>[\d\.\,]+) (paid|sent) to (?<recipient>.+) on (?<date>\d{1,2}\/\d{1,2}\/\d{2}) at (?<time>\d{1,2}:\d{2} \w{2}).\s*New M-PESA balance is Ksh(?<balance>[\d\.\,]+)\.\s*Transaction cost, Ksh(?<transactionCost>[\d\.\,]+)\.\s*.*""".toRegex()
-        val receiveMoneyRegex = """(?<code>\w+) Confirmed\.*\s*You have received Ksh(?<amountReceived>[\d\.\,]+) from (?<sender>.*) on (?<date>\d{1,2}\/\d{1,2}\/\d{2}) at (?<time>\d{1,2}:\d{2} \w{2})\.*\s*New M-PESA balance is Ksh(?<balance>[\d\.\,]+)\..*""".toRegex()
+        val sentMoneyRegex = SENT_MONEY_REGEX_STRING.toRegex()
+        val receiveMoneyRegex = RECEIVED_MONEY_REGEX_STRING.toRegex()
+//         TODO: refactor the code to avoid duplicity
         if(sentMoneyRegex.matches(message) ){
             val matchResult = sentMoneyRegex.matchEntire(message)
             var (code, amountSent, paidSent,recipient, date, time, balance, transactionCost) = matchResult!!.destructured
@@ -110,19 +111,6 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
         return date.time
     }
 
-
-    fun insertReceipts(receipt: Receipt){
-//        viewModelScope.launch {
-            processText()
-//        }
-    }
-
-    fun processText(){
-        //InitializeReceipt
-        var receipt = Receipt()
-//        TODO: While loop
-//        database.insert(receipt)
-    }
 
 
 }

@@ -62,6 +62,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
 //    Graph
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    //Debugging
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
 
     testImplementation 'junit:junit:4.+'

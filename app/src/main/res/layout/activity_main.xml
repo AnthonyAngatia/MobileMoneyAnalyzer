@@ -20,7 +20,7 @@
 
 <!--    <androidx.fragment.app.FragmentContainerView-->
 <!--        android:id="@+id/monthlyChartFragment"-->
-<!--        android:name="com.anthonyangatia.mobilemoneyanalyzer.MonthlyChartFragment"-->
+<!--        android:name="com.anthonyangatia.mobilemoneyanalyzer.linechart.MonthlyChartFragment"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->
 <!--        android:layout_marginTop="8dp"-->
