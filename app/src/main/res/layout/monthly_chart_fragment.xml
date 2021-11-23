@@ -7,13 +7,13 @@
     <data>
         <variable
             name="monthlyChartFragment"
-            type="com.anthonyangatia.mobilemoneyanalyzer.MonthlyChartViewModel" />
+            type="com.anthonyangatia.mobilemoneyanalyzer.linechart.MonthlyChartViewModel" />
     </data>
 
 <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MonthlyChartFragment">
+    tools:context=".linechart.MonthlyChartFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

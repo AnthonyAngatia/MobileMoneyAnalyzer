@@ -1,7 +1,8 @@
-package com.anthonyangatia.mobilemoneyanalyzer
+package com.anthonyangatia.mobilemoneyanalyzer.linechart
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.anthonyangatia.mobilemoneyanalyzer.AmountTransacted
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import kotlinx.coroutines.launch

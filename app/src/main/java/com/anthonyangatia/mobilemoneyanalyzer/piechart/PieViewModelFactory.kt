@@ -3,7 +3,6 @@ package com.anthonyangatia.mobilemoneyanalyzer.piechart
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.anthonyangatia.mobilemoneyanalyzer.MonthlyChartViewModel
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 
 class PieViewModelFactory(private val dataSource: ReceiptsDao, private val application: Application) : ViewModelProvider.Factory {
