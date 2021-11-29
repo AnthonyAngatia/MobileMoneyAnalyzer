@@ -65,6 +65,8 @@ dependencies {
     //Debugging
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
+    implementation 'com.google.code.gson:gson:2.8.9'
+
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

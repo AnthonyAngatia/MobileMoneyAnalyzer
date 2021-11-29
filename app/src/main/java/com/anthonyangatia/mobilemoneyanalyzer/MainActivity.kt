@@ -17,11 +17,6 @@ import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
     private val MY_PERMISSIONS_REQUEST_RECEIVE_SMS = 1
-    private val TAG = MainActivity::class.java.simpleName
-    val CHANNEL_ID = "Test_Channel_ID"
-    var messages: List<String> = ArrayList()
-    private val messageTextView: TextView? = null
-    private val columnNames: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +45,7 @@ class MainActivity : AppCompatActivity() {
             ) !=
             PackageManager.PERMISSION_GRANTED
         ) {
-            Log.d(TAG, getString(R.string.permission_not_granted))
+            Timber.i("Permission not granted")
             // Permission not yet granted. Use requestPermissions().
             // MY_PERMISSIONS_REQUEST_SEND_SMS is an
             // app-defined int constant. The callback method gets the

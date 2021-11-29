@@ -14,7 +14,10 @@ class MonthlyChartViewModel (val database: ReceiptsDao, application: Application
     // TODO: Implement the ViewModel
     var receipts: LiveData<List<Receipt>>
     var x = ArrayList<AmountTransacted>()
-     var amountTransactedListLiveData = MutableLiveData<List<AmountTransacted>>()
+    private var _amountTransactedListLiveData = MutableLiveData<List<AmountTransacted>>()
+    val amountTransactedListLiveData:LiveData<List<AmountTransacted>>
+        get() = _amountTransactedListLiveData
+
 
     init{
         val calendar = Calendar.getInstance()
@@ -30,7 +33,7 @@ class MonthlyChartViewModel (val database: ReceiptsDao, application: Application
 
     fun addAmtTransacted(amtTransacted: AmountTransacted){
         x.add(amtTransacted)
-        amountTransactedListLiveData.value = x
+        _amountTransactedListLiveData.value = x
 
     }
     fun getDate(calendar:Calendar){

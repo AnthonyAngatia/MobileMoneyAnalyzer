@@ -2,30 +2,50 @@ package com.anthonyangatia.mobilemoneyanalyzer
 
 import android.app.Application
 import android.provider.Telephony
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ReceiptViewModel(val database: ReceiptsDao, application: Application): AndroidViewModel(application) {
-    var receipts =database.getAllReceipts()
+    var receipts:LiveData<List<Receipt>>
+
+//    private val _lastReceipt:MutableLiveData<Receipt> = MutableLiveData()
+
+    var lastReceipt:LiveData<Receipt>?
+//        get() = _lastReceipt
+
     init {
         viewModelScope.launch {
-            database.clear()
+//            database.clear()
+        }
+        val prefs = Prefs(application)
+        if(prefs.newPhone){
+            viewModelScope.launch {
+//                readSMS(application)
+                prefs.newPhone = true
+            }
+        }else{
+//            TODO: Check whether the last receipt in content provider is the same as the one in my database
+//            If not, write a recursive algorithm that tries to establish the last message
         }
 
-        Log.i(javaClass.simpleName, "Created A view SmsReceiptViewModel" )
-        viewModelScope.launch {
-            readSMS(application)
-        }
-        viewModelScope.launch {
-            receipts = database.getAllReceipts()!!
-        }
 
+        receipts = database.getAllReceipts()!!
+//        _lastReceipt.value = database.getLastReceipt()!!
+        lastReceipt = database.getLastReceipt()
+
+    }
+    fun getSms(){
+        Timber.i("getSms called")
+        receipts = database.getAllReceipts()!!
+        Timber.i("Size"+receipts.value?.size)
     }
 
 
@@ -54,12 +74,12 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
                 }else{
                     invalidMessages.add(cursor.getString(bodyIndex))
                 }
-                if(cursor.position > 500)
+                if(cursor.position > 100)
                     break
 
             }
         }else{
-            Log.i("TAG", "Cursor is empty")
+            Timber.i("Cursor is empty")
         }
         cursor?.close()
     }
@@ -67,6 +87,7 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
      fun checkRegex(message:String):Boolean{
         val sentMoneyRegex = SENT_MONEY_REGEX_STRING.toRegex()
         val receiveMoneyRegex = RECEIVED_MONEY_REGEX_STRING.toRegex()
+         val accountBalanceRegex = ACCOUNT_BALANCE.toRegex()
 //         TODO: refactor the code to avoid duplicity
         if(sentMoneyRegex.matches(message) ){
             val matchResult = sentMoneyRegex.matchEntire(message)
@@ -88,6 +109,36 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
 
             return true
         }
+         when(true){
+             sentMoneyRegex.matches(message)->{
+                 val matchResult = sentMoneyRegex.matchEntire(message)
+                 var (code, amountSent, paidSent,recipient, date, time, balance, transactionCost) = matchResult!!.destructured
+                 time = formatTime(time)
+                 viewModelScope.launch {
+                     database.insert(receipt = Receipt(0L,message, code, recipient, null, "sent", convertDateToLong(date+" "+time), time, convertToDouble(balance), convertToDouble(amountSent), null,convertToDouble(transactionCost)) )
+                 }
+                 return true
+             }
+             receiveMoneyRegex.matches(message)->{
+                 val matchResult = receiveMoneyRegex.matchEntire(message)
+                 var (code, amountReceived, sender, date, time, balance) = matchResult!!.destructured
+                 time = formatTime(time)
+                 viewModelScope.launch {
+                     database.insert(receipt = Receipt(0L, message , code, null, sender, "received", convertDateToLong(date+" "+time), time, convertToDouble(balance), null, convertToDouble(amountReceived), null ) )
+                 }
+                 return true
+             }
+             accountBalanceRegex.matches(message)->{
+                 val matchResult = accountBalanceRegex.matchEntire(message)
+                 var (code, mpesaBalance, businessBalance, date, time, transactionCost) = matchResult!!.destructured
+                 time = formatTime(time)
+                 viewModelScope.launch {
+                     database.insert(receipt = Receipt(0L, message, code, null, null, "balance", convertDateToLong(date + " " + time), time, convertToDouble(mpesaBalance), null, null, convertToDouble(transactionCost)))
+                 }
+                 Timber.i("Receiver insert into the database")
+             }
+
+         }
         return false
     }
 

@@ -6,51 +6,51 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-<!--    <androidx.fragment.app.FragmentContainerView-->
-<!--        android:id="@+id/smsReceiptFragement"-->
-<!--        android:name="com.anthonyangatia.mobilemoneyanalyzer.ReceiptsFragment"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:layout_marginEnd="8dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/monthlyChartFragment" />-->
-
-<!--    <androidx.fragment.app.FragmentContainerView-->
-<!--        android:id="@+id/monthlyChartFragment"-->
-<!--        android:name="com.anthonyangatia.mobilemoneyanalyzer.linechart.MonthlyChartFragment"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/pieFragment"
-        android:name="com.anthonyangatia.mobilemoneyanalyzer.piechart.PieFragment"
-        android:layout_width="397dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/smsReceiptFragement"
         android:name="com.anthonyangatia.mobilemoneyanalyzer.ReceiptsFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pieFragment" />
+        app:layout_constraintTop_toBottomOf="@+id/monthlyChartFragment" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/monthlyChartFragment"
+        android:name="com.anthonyangatia.mobilemoneyanalyzer.linechart.MonthlyChartFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+<!--    <androidx.fragment.app.FragmentContainerView-->
+<!--        android:id="@+id/pieFragment"-->
+<!--        android:name="com.anthonyangatia.mobilemoneyanalyzer.piechart.PieFragment"-->
+<!--        android:layout_width="397dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <androidx.fragment.app.FragmentContainerView-->
+<!--        android:id="@+id/smsReceiptFragement"-->
+<!--        android:name="com.anthonyangatia.mobilemoneyanalyzer.ReceiptsFragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/pieFragment" />-->
 
 
 

@@ -45,7 +45,7 @@ class MonthlyChartFragment : Fragment() {
                      amountSentTotal = it[index].amountSentTotal!!
                 }
 
-                Log.d(javaClass.simpleName, "Loop "+index+"AmountSent "+ amountSentTotal)
+//                Log.d(javaClass.simpleName, "Loop "+index+"AmountSent "+ amountSentTotal)
                 lineEntry.add(Entry(index.toFloat(), amountSentTotal.toFloat()))
                 binding.monthlyReceipts.text = it[index].toString() + index
             }
