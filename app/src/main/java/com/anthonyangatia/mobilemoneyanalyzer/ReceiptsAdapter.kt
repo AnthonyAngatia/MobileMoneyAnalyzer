@@ -31,7 +31,7 @@ class ReceiptsAdapter: RecyclerView.Adapter<ReceiptsAdapter.ViewHolder>() {
 //            TODO:Rename
         }else if (item.transactionType == "sent"){
             holder.amt.text = "Kshs "+item.amountSent.toString()
-            holder.recipientName.text = item.recipient
+            holder.recipientName.text = item.recipientName
 
         }
 

@@ -14,10 +14,16 @@ data class Receipt(
     var message: String = "default-message",
 
     @ColumnInfo(name = "receipt_code")
-    var code: String = "default-code",
+    var code: String? = null,
 
-    @ColumnInfo(name = "recipient")
-    var recipient: String? = "default-recipient",
+    @ColumnInfo(name = "recipient_name")
+    var recipientName: String? = "default-recipient",
+
+    @ColumnInfo(name = "recipient_number")
+    var recipientNumber: Long? = null,
+
+    @ColumnInfo(name = "account_number")
+    var account: String? = null,
 
     @ColumnInfo(name = "sender")
     var sender: String? = "default-sender",

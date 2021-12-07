@@ -34,8 +34,9 @@ class MyIntentService : IntentService("MyIntentService") {
         when (intent?.action) {
             PROCESSMESSAGE -> {
                 val param1 = intent.getStringExtra("MESSAGE")
-                handleActionProcessMessage(param1)
-//                getFromDatabase()
+                if (param1 != null) {
+                    handleActionProcessMessage(param1)
+                }
             }
         }
     }
@@ -53,69 +54,17 @@ class MyIntentService : IntentService("MyIntentService") {
         GlobalScope.launch {
             val amt = database.getAmountTransactedList(1637830380000,1637985120000)
             Timber.i("Amount"+amt)
-
         }
 
     }
-    private fun handleActionProcessMessage(param: String?) {
+    private fun handleActionProcessMessage(param: String) {
+        val receipt = buildReceiptFromSms(param)
         val database = ReceiptsDatabase.getInstance(applicationContext).receiptsDao
-        val sentMoneyRegex = SENT_MONEY_REGEX_STRING.toRegex()
-        val receiveMoneyRegex = RECEIVED_MONEY_REGEX_STRING.toRegex()
-        val accountBalanceRegex = ACCOUNT_BALANCE.toRegex()
-        if (param != null){
-            when(true){
-                sentMoneyRegex.matches(param) ->{
-                    val matchResult = sentMoneyRegex.matchEntire(param)
-                    var (code, amountSent, paidSent, recipient, date, time, balance, transactionCost) = matchResult!!.destructured
-                    time = formatTime(time)
-                    Timber.i("Inserting sent message")
-                    GlobalScope.launch {
-                        database.insert(receipt = Receipt(0L, param, code, recipient, null, "sent", convertDateToLong(date + " " + time), time, convertToDouble(balance), convertToDouble(amountSent), null, convertToDouble(transactionCost)))
-                    }
-
-                }
-                receiveMoneyRegex.matches(param)->{
-                    val matchResult = receiveMoneyRegex.matchEntire(param)
-                    var (code, amountReceived, sender, date, time, balance) = matchResult!!.destructured
-                    time = formatTime(time)
-                    Timber.i("Inserting received messages")
-                    GlobalScope.launch {
-                        database.insert(receipt = Receipt(0L, param, code, null, sender, "received", convertDateToLong(date + " " + time), time, convertToDouble(balance), null, convertToDouble(amountReceived), null))
-                    }
-
-//                        Toast.makeText(context, messages[0]!!.messageBody, Toast.LENGTH_SHORT).show()
-                }
-                accountBalanceRegex.matches(param)->{
-                    val matchResult = accountBalanceRegex.matchEntire(param)
-                    var (code, mpesaBalance, businessBalance, date, time, transactionCost) = matchResult!!.destructured
-                    time = formatTime(time)
-
-                    GlobalScope.launch {
-                        withContext(Dispatchers.IO){
-                            val receipt = Receipt(0L, param, code,
-                                null, null, "balance", convertDateToLong(date + " " + time), time,
-                                convertToDouble(mpesaBalance), null, null, convertToDouble(transactionCost))
-                            //Fire a notification to classify the transaction
-                            fireNotification(receipt)
-
-                            val id = database.insert(receipt)
-                            Timber.i("Id is"+id.toString())
-
-                            val rec = database.getReceipt(68895)
-                            Timber.i(rec.toString())
-//                            Timber.i(receipt.toString())
-                            val rec2 = database.getLastReceipt2()
-                            Timber.i(rec2.toString())
-
-//                            Timber.i("Receiver insert into the database")
-
-                        }
-
-                    }
-
-                }
-
-
+        if(receipt.code == null){
+            Timber.i("ALERT:Receipt not constructed appropriately by the regex function")
+        }else{
+            GlobalScope.launch {
+                database.insert(receipt)
             }
         }
     }
@@ -124,7 +73,6 @@ class MyIntentService : IntentService("MyIntentService") {
         val prefs = Prefs(applicationContext)
         val gson = Gson()
         val receiptString = gson.toJson(receipt)
-        //TODO:[VERY IMPORTANT] The below code puts only one receipt, we need to find a solution for putting multiple receipts
         if (prefs.index == -1) {
             prefs.objectPref = receiptString
             prefs.index++
@@ -168,26 +116,5 @@ class MyIntentService : IntentService("MyIntentService") {
             )
             notificationManager.createNotificationChannel(channel)
         }
-    }
-
-
-    private fun formatTime(date: String): String {
-        var newstring = date.replace("AM", "a.m.")
-        if(newstring.equals(date)){
-            var newstring = date.replace("PM", "p.m.")
-            return newstring
-        }
-        return newstring
-    }
-
-    fun convertToDouble(value: String):Double{
-        return value.replace(",", "").toDouble()
-    }
-
-
-    fun convertDateToLong(dateString: String): Long {
-        val dateFormat = SimpleDateFormat("dd/MM/yy hh:mm aa")
-        val date = dateFormat.parse(dateString)
-        return date.time
     }
 }
