@@ -94,6 +94,7 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
             var (code, amountSent, paidSent,recipient, date, time, balance, transactionCost) = matchResult!!.destructured
             time = formatTime(time)
             viewModelScope.launch {
+//                TODO:1 Rename to sendTransaction
                 database.insert(receipt = Receipt(0L,message, code, recipient, null, "sent", convertDateToLong(date+" "+time), time, convertToDouble(balance), convertToDouble(amountSent), null,convertToDouble(transactionCost)) )
             }
 
@@ -104,6 +105,7 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
             var (code, amountReceived, sender, date, time, balance) = matchResult!!.destructured
             time = formatTime(time)
             viewModelScope.launch {
+//                TODO:2 Rename to receiveTransaction
                 database.insert(receipt = Receipt(0L, message , code, null, sender, "received", convertDateToLong(date+" "+time), time, convertToDouble(balance), null, convertToDouble(amountReceived), null ) )
             }
 
@@ -115,6 +117,7 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
                  var (code, amountSent, paidSent,recipient, date, time, balance, transactionCost) = matchResult!!.destructured
                  time = formatTime(time)
                  viewModelScope.launch {
+//TODO: Rename
                      database.insert(receipt = Receipt(0L,message, code, recipient, null, "sent", convertDateToLong(date+" "+time), time, convertToDouble(balance), convertToDouble(amountSent), null,convertToDouble(transactionCost)) )
                  }
                  return true
@@ -124,6 +127,7 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
                  var (code, amountReceived, sender, date, time, balance) = matchResult!!.destructured
                  time = formatTime(time)
                  viewModelScope.launch {
+//                     TODO: Rename and remember the bug in the receiver
                      database.insert(receipt = Receipt(0L, message , code, null, sender, "received", convertDateToLong(date+" "+time), time, convertToDouble(balance), null, convertToDouble(amountReceived), null ) )
                  }
                  return true

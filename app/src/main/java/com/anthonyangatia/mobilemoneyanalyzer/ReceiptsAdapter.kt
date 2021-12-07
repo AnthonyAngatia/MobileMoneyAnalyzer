@@ -24,15 +24,35 @@ class ReceiptsAdapter: RecyclerView.Adapter<ReceiptsAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = receiptList[position].toString()
-        holder.smsMessage.text = item
+        val item = receiptList[position]
+        if(item.transactionType == "balance"){
+            holder.recipientName.text = "MPESA BALANCE"
+            holder.amt.text = "Kshs "+item.balance.toString()
+//            TODO:Rename
+        }else if (item.transactionType == "sent"){
+            holder.amt.text = "Kshs "+item.amountSent.toString()
+            holder.recipientName.text = item.recipient
+
+        }
+
+        else if(item.transactionType == "received") {
+            holder.amt.text = "Kshs "+item.amountReceived.toString()
+            holder.recipientName.text = item.sender
+        }
+//        holder.phoneNumber.text = "0791278088"
+
+
+
 
     }
 
     override fun getItemCount() = receiptList.size
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val smsMessage: TextView = itemView.findViewById(R.id.messageTextView)
+//        val smsMessage: TextView = itemView.findViewById(R.id.messageTextView)
+        val recipientName = itemView.findViewById<TextView>(R.id.nameTextView)
+        val phoneNumber: TextView = itemView.findViewById(R.id.phoneNoTextView)//TODO:1 Update the regex
+        val amt: TextView = itemView.findViewById(R.id.amountTextView)
 
 
     }

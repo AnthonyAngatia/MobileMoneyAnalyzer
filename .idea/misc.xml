@@ -3,12 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/drawable-v24/ic_green_rectangle2.xml" value="0.1984375" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/drawable-v24/ic_red_rectangle.xml" value="0.1984375" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/drawable/ic_baseline_account_balance_wallet_24.xml" value="0.2078125" />
-        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/activity_main.xml" value="0.12" />
-        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/fragment_sms_receipts.xml" value="0.1" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/drawable/ic_green_rectangle.xml" value="0.1984375" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/drawable/rectangle.xml" value="0.1984375" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/activity_main.xml" value="0.26005361930294907" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/fragment_sms_receipts.xml" value="0.2" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/monthly_chart_fragment.xml" value="0.33" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/pie_fragment.xml" value="0.1" />
-        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/sms_receipt_item_view.xml" value="0.33" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/sms_receipt_item_view.xml" value="0.45925925925925926" />
       </map>
     </option>
   </component>
