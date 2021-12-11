@@ -19,7 +19,7 @@ const val CREATEFROMPDUFORMAT = "3gpp"
 const val SENT_TO_NUMBER = """(?<code>\w+)\.*\s*Confirmed\.*\s*Ksh(?<amountSent>[\d\.\,]+) sent to (?<recipientName>[A-Z,a-z,\s]+)\s*(?<recipientNo>[0-9]+) on (?<date>\d{1,2}\/\d{1,2}\/\d{2}) at (?<time>\d{1,2}:\d{2} \w{2}).\s*New M-PESA balance is Ksh(?<balance>[\d\.\,]+)\.\s*Transaction cost, Ksh(?<transactionCost>[\d\.\,]+)\.\s*.*"""
 const val SENT_TO_PAYBILL = """(?<code>\w+)\.*\s*Confirmed\.*\s*Ksh(?<amountSent>[\d\.\,]+) sent to (?<paybillNumber>[A-Z,a-z,\s]+)for account (?<accountNo>.+|)on (?<date>\d{1,2}\/\d{1,2}\/\d{2}) at (?<time>\d{1,2}:\d{2} \w{2}).\s*New M-PESA balance is Ksh(?<balance>[\d\.\,]+)\.\s*Transaction cost, Ksh(?<transactionCost>[\d\.\,]+)\.\s*.*"""
 const val SENT_TO_MSHWARI = """(?<code>\w+)\.*\s*Confirmed\.*\s*Ksh(?<amountSent>[\d\.\,]+) transferred to M-Shwari account on (?<date>\d{1,2}\/\d{1,2}\/\d{2}) at (?<time>\d{1,2}:\d{2} \w{2}).\s*M-PESA balance is Ksh(?<mpesaBalance>[\d\.\,\s]+)\.\s*New M-Shwari saving account balance is Ksh(?<mshwariBalance>[\d\.\,\s]+)\.\s*Transaction cost Ksh\.(?<transactionCost>[\d\.\,]+)\.\s*.*"""
-const val  SENT_TO_BUY_GOODS = """(?<code>\w+)\.*\s*Confirmed\.*\s*Ksh(?<amountSent>[\d\.\,]+) (paid|sent) to (?<recipient>.+) on (?<date>\d{1,2}\/\d{1,2}\/\d{2}) at (?<time>\d{1,2}:\d{2} \w{2})\.\s*New M-PESA balance is Ksh(?<balance>[\d\.\,]+)\.\s*Transaction cost, Ksh(?<transactionCost>[\d\.\,]+)\.\s*.*"""
+const val  SENT_TO_BUY_GOODS = """(?<code>\w+)\.*\s*Confirmed\.*\s*Ksh(?<amountSent>[\d\.\,]+) paid to (?<recipient>.+) on (?<date>\d{1,2}\/\d{1,2}\/\d{2}) at (?<time>\d{1,2}:\d{2} \w{2})\.\s*New M-PESA balance is Ksh(?<balance>[\d\.\,]+)\.\s*Transaction cost, Ksh(?<transactionCost>[\d\.\,]+)\.\s*.*"""
 const val RECEIVED_FROM_MSHWARI = """(?<code>\w+)\.*\s*Confirmed\.*\s*Ksh(?<amountSent>[\d\.\,]+) transferred from M-Shwari account on (?<date>\d{1,2}\/\d{1,2}\/\d{2}) at (?<time>\d{1,2}:\d{2} \w{2}).\s*M-Shwari balance is Ksh(?<mshwariBalance>[\d\.\,\s]+)\.\s*M-PESA balance is Ksh(?<mpesaBalance>[\d\.\,\s]+)\.\s*Transaction cost Ksh\.(?<transactionCost>[\d\.\,]+)\.\s*.*"""
 const val ACCOUNT_BALANCE = """(?<code>\w+)\.*\s*Confirmed\.*\s*Your account balance was: M-PESA Account : Ksh(?<mpesaBalance>[\d\.\,]+) Business Account : Ksh(?<businessBalance>[\d\.\,]+) on (?<date>\d{1,2}\/\d{1,2}\/\d{2}) at (?<time>\d{1,2}:\d{2} \w{2})\.\s*Transaction cost, Ksh(?<transactionCost>[\d\.\,]+)\.\s*.*"""
 const val SENT_TO_BUY_AIRTIME = """(?<code>\w+) Confirmed\.*\s*You bought Ksh(?<amountSent>[\d\.\,]+) of airtime on (?<date>\d{1,2}\/\d{1,2}\/\d{2}) at (?<time>\d{1,2}:\d{2} \w{2})\.*\s*New M-PESA balance is Ksh(?<balance>[\d\.\,]+)\.\s*Transaction cost, Ksh(?<transactionCost>[\d\.\,]+)\..*"""
@@ -46,6 +46,16 @@ fun buildReceiptFromSms(message:String): Receipt {
 
             return receipt
         }
+        sentToBuyGoods.matches(message)->{
+            val matchResult = sentToBuyGoods.matchEntire(message)
+            var (code, amountSent, recipientName, date, time, balance, transactionCost) = matchResult!!.destructured
+            time = formatTime(time)
+            val receipt =  Receipt(0L,message, code, recipientName = recipientName, null,
+                account = null, sender =null, transactionType = "sentBuyGoods",
+                date = convertDateToLong(date+" "+time), time = time, balance = convertToDouble(balance),
+                amountSent = convertToDouble(amountSent), amountReceived = null,transactionCost = convertToDouble(transactionCost))
+            return receipt
+        }
         sentToPayBill.matches(message)->{
             val matchResult = sentToPayBill.matchEntire(message)
             var (code, amountSent, paybill,  account, date, time, balance, transactionCost) = matchResult!!.destructured
@@ -63,16 +73,6 @@ fun buildReceiptFromSms(message:String): Receipt {
             val receipt =  Receipt(0L,message, code, recipientName = "MSHWARI", null,
                 account = null, sender =null, transactionType = "sentToMshwari",
                 date = convertDateToLong(date+" "+time), time = time, balance = convertToDouble(mpesaBalance),
-                amountSent = convertToDouble(amountSent), amountReceived = null,transactionCost = convertToDouble(transactionCost))
-            return receipt
-        }
-        sentToBuyGoods.matches(message)->{
-            val matchResult = sentToBuyGoods.matchEntire(message)
-            var (code, amountSent, recipientName, date, time, balance, transactionCost) = matchResult!!.destructured
-            time = formatTime(time)
-            val receipt =  Receipt(0L,message, code, recipientName = recipientName, null,
-                account = null, sender =null, transactionType = "sentBuyGoods",
-                date = convertDateToLong(date+" "+time), time = time, balance = convertToDouble(balance),
                 amountSent = convertToDouble(amountSent), amountReceived = null,transactionCost = convertToDouble(transactionCost))
             return receipt
         }
