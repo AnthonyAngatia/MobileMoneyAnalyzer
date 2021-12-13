@@ -1,13 +1,14 @@
-package com.anthonyangatia.mobilemoneyanalyzer
+package com.anthonyangatia.mobilemoneyanalyzer.ui.search
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.anthonyangatia.mobilemoneyanalyzer.R
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 
-class ReceiptsAdapter: RecyclerView.Adapter<ReceiptsAdapter.ViewHolder>() {
+class SearchAdapter: RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
     var receiptList = listOf<Receipt>()
         set(value) {
             field =value

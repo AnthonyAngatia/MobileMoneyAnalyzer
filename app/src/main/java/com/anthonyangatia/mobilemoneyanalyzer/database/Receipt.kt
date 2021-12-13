@@ -1,8 +1,6 @@
 package com.anthonyangatia.mobilemoneyanalyzer.database
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 import java.sql.Date
 
 @Entity(tableName = "transaction_receipt_table")
@@ -11,39 +9,82 @@ data class Receipt(
     var receiptId: Long = 0L,
 
     @ColumnInfo(name = "receipt_message")
-    var message: String = "default-message",
+    var message: String,
 
     @ColumnInfo(name = "receipt_code")
     var code: String? = null,
 
-    @ColumnInfo(name = "recipient_name")
-    var recipientName: String? = "default-recipient",
-
-    @ColumnInfo(name = "recipient_number")
-    var recipientNumber: Long? = null,
-
-    @ColumnInfo(name = "account_number")
-    var account: String? = null,
-
-    @ColumnInfo(name = "sender")
-    var sender: String? = "default-sender",
-
-    @ColumnInfo(name = "transactionType")
+    @ColumnInfo(name = "transaction_type")
     var transactionType: String? = null,
 
     var date: Long? = null,//TODO: Look for valid type for dates and time
-
-    var time: String? = null,
 
     @ColumnInfo(name = "account_balance")
     var balance: Double? = null,
 
     @ColumnInfo(name = "amount_sent")
-    var amountSent: Double? = 0.0,
+    var amountSent: Double? = null,
 
     @ColumnInfo(name = "amount_received")
-    var amountReceived: Double? = 0.0,
+    var amountReceived: Double? = null,
 
     @ColumnInfo(name="transaction_cost")
-    var transactionCost: Double? =0.0)
+    var transactionCost: Double? = null,
+    var personPhoneNumber: String? = null,
+    var businessName: String? = null
+)
+
+
+data class Person(
+    @PrimaryKey()
+    var phoneNumber: String,
+    @ColumnInfo(name="name")
+    var name: String,
+    @ColumnInfo(name="target_expenditure")
+    var targetExpense:Double? = null
+)
+
+data class Business(
+    @PrimaryKey()
+    var businessName: String, //For pabill, its the paybill concatenated with the account no.
+    @ColumnInfo(name="target_expenditure")
+    var targetExpense:Double? = null
+)
+
+@Entity(
+
+    foreignKeys = [ForeignKey(
+        entity = Person::class,
+        parentColumns = arrayOf("phoneNumber"),
+        childColumns = arrayOf("personPhoneNumber"),
+        onDelete = ForeignKey.CASCADE
+    ),
+        ForeignKey(
+            entity = Business::class,
+            parentColumns = arrayOf("businessName"),
+            childColumns = arrayOf("businessName"),
+            onDelete = ForeignKey.CASCADE
+        )]
+)
+
+data class PersonWithReceipts(
+    @Embedded val user: Person,
+    @Relation(
+        parentColumn = "phoneNumber",
+        entityColumn = "personPhoneNumber"
+    )
+    val receipts: List<Receipt>
+)
+
+data class BusinessWithReceipts(
+    @Embedded val business:Business,
+    @Relation(
+        parentColumn = "businessName",
+        entityColumn = "businessName"
+    )
+    val receipts: List<Receipt>
+)
+
+
+
 
