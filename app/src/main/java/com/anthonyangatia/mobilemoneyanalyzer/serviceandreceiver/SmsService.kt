@@ -4,7 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
-import com.anthonyangatia.mobilemoneyanalyzer.SMS_RECEIVE_ACTION
+import com.anthonyangatia.mobilemoneyanalyzer.util.SMS_RECEIVE_ACTION
 import timber.log.Timber
 
 class SmsService : Service() {
@@ -25,17 +25,31 @@ class SmsService : Service() {
 //        </intent-filter>
 //        </receiver>
         Timber.i("onCreate Service")
-        var smsReceiver = SmsReceiver()
-        var intentFilter = IntentFilter().apply {
-            this.priority = IntentFilter.SYSTEM_HIGH_PRIORITY
-            this.addAction(SMS_RECEIVE_ACTION)
-        }
-        this.registerReceiver(smsReceiver, intentFilter)
+        initializeReceiver()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
          super.onStartCommand(intent, flags, startId)
         Timber.i("onStartCommand")
         return START_STICKY //https://developer.android.com/guide/components/services#ExtendingService
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+//        initializeReceiver()
+        val broadcastIntent = Intent()
+        broadcastIntent.action = "restartservice"
+        broadcastIntent.setClass(this, SmsReceiver::class.java)
+        this.sendBroadcast(broadcastIntent)
+
+    }
+
+    private fun initializeReceiver() {
+        var smsReceiver = SmsReceiver()
+        var intentFilter = IntentFilter().apply {
+            this.priority = IntentFilter.SYSTEM_HIGH_PRIORITY
+            this.addAction(SMS_RECEIVE_ACTION)
+        }
+        this.registerReceiver(smsReceiver, intentFilter)
     }
 }

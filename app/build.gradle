@@ -51,6 +51,8 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
@@ -64,6 +66,8 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     //Debugging
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    implementation 'com.google.code.gson:gson:2.8.9'
 
 
     testImplementation 'junit:junit:4.+'

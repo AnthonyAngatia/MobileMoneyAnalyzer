@@ -38,10 +38,10 @@ class ReceiptsDatabaseTest {
     @Test
     @Throws(Exception::class)
     suspend fun insertAndGetReceipts(){
-        val receipt = Receipt(code="default-code")
+        val receipt = Receipt(code="default-code",message = "Message")
         receiptsDao.insert(receipt)
         val transactionReceipt =receiptsDao.getReceipt("default-code")
-        assertEquals(transactionReceipt?.balance, 0.0)
+        assertEquals(transactionReceipt?.code, "default-code")
 
     }
 

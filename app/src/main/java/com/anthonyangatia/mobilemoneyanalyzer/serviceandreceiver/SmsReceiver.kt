@@ -3,13 +3,16 @@ package com.anthonyangatia.mobilemoneyanalyzer.serviceandreceiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
 import android.telephony.SmsMessage
 import android.util.Log
 import android.widget.Toast
-import com.anthonyangatia.mobilemoneyanalyzer.RECEIVED_MONEY_REGEX_STRING
-import com.anthonyangatia.mobilemoneyanalyzer.SENT_MONEY_REGEX_STRING
+import androidx.annotation.RequiresApi
+import com.anthonyangatia.mobilemoneyanalyzer.*
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
+import com.anthonyangatia.mobilemoneyanalyzer.util.CREATEFROMPDUFORMAT
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -17,61 +20,32 @@ import java.text.SimpleDateFormat
 
 
 class SmsReceiver : BroadcastReceiver() {
+    private val PROCESSMESSAGE = "com.anthonyangatia.mobilemoneyanalyzer.serviceandreceiver.action.PROCESSMESSAGE"
     private val SMS = "android.provider.Telephony.SMS_RECEIVED"
 
-    //    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onReceive(context: Context, intent: Intent) {
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
         Timber.i("onReceive")
-        val database = ReceiptsDatabase.getInstance(context).receiptsDao
-        val sentMoneyRegex = SENT_MONEY_REGEX_STRING.toRegex()
-        val receiveMoneyRegex = RECEIVED_MONEY_REGEX_STRING.toRegex()
-        GlobalScope.launch {
-            if (intent.action == SMS) {
-                val bundle = intent.extras
-                val pduses = bundle!!["pdus"] as Array<Any>?
-                val messages = arrayOfNulls<SmsMessage>(pduses!!.size)
-                for (i in pduses!!.indices) {
-                    messages[i] = SmsMessage.createFromPdu(pduses!![i] as ByteArray)
-                }
-                val broadCastedMessage = messages[0].toString()
-                if (sentMoneyRegex.matches(broadCastedMessage)) {
-                    val matchResult = sentMoneyRegex.matchEntire(broadCastedMessage)
-                    var (code, amountSent, paidSent, recipient, date, time, balance, transactionCost) = matchResult!!.destructured
-                    time = formatTime(time)
-                    Timber.i("Inserting sent message")
-                    database.insert(receipt = Receipt(0L, broadCastedMessage, code, recipient, null, "sent", convertDateToLong(date + " " + time), time, convertToDouble(balance), convertToDouble(amountSent), null, convertToDouble(transactionCost)))
-                } else if (receiveMoneyRegex.matches(broadCastedMessage)) {
-                    val matchResult = receiveMoneyRegex.matchEntire(broadCastedMessage)
-                    var (code, amountReceived, sender, date, time, balance) = matchResult!!.destructured
-                    time = formatTime(time)
-                    Timber.i("Inserting received messages")
-                    database.insert(receipt = Receipt(0L, broadCastedMessage, code, null, sender, "received", convertDateToLong(date + " " + time), time, convertToDouble(balance), null, convertToDouble(amountReceived), null))
-                    Toast.makeText(context, messages[0]!!.messageBody, Toast.LENGTH_SHORT).show()
-                }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            context.startForegroundService(Intent(context, SmsService::class.java))
+        } else {
+            context.startService(Intent(context, SmsService::class.java))
+        }
+        if (intent.action == SMS) {
+            val bundle = intent.extras
+            val pduses = bundle!!["pdus"] as Array<Any>?
+            val messages = arrayOfNulls<SmsMessage>(pduses!!.size)
+            for (i in pduses!!.indices) {
+                messages[i] = SmsMessage.createFromPdu(pduses!![i] as ByteArray, CREATEFROMPDUFORMAT)
+                break
             }
-
-
+            val broadCastedMessage = messages[0]!!.messageBody
+            val intentService = Intent(context, MyIntentService::class.java)
+            intentService.action = PROCESSMESSAGE
+            intentService.putExtra("MESSAGE", broadCastedMessage)
+            context.startService(intentService)
         }
-    }
-    private fun formatTime(date: String): String {
-        var newstring = date.replace("AM", "a.m.")
-        if(newstring.equals(date)){
-            var newstring = date.replace("PM", "p.m.")
-            return newstring
-        }
-        return newstring
-    }
-
-    fun convertToDouble(value: String):Double{
-        return value.replace(",", "").toDouble()
-    }
-
-
-    fun convertDateToLong(dateString: String): Long {
-        val dateFormat = SimpleDateFormat("dd/MM/yy hh:mm aa")
-        val date = dateFormat.parse(dateString)
-        return date.time
     }
 }
 

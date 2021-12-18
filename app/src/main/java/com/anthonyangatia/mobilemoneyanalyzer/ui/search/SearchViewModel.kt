@@ -1,55 +1,24 @@
-package com.anthonyangatia.mobilemoneyanalyzer
+package com.anthonyangatia.mobilemoneyanalyzer.ui.search
 
 import android.app.Application
 import android.provider.Telephony
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.anthonyangatia.mobilemoneyanalyzer.database.Person
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import com.anthonyangatia.mobilemoneyanalyzer.util.buildReceiptFromSms
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
+import java.util.ArrayList
 
-class ReceiptViewModel(val database: ReceiptsDao, application: Application): AndroidViewModel(application) {
-    var receipts:LiveData<List<Receipt>>
-
-//    private val _lastReceipt:MutableLiveData<Receipt> = MutableLiveData()
-
-    var lastReceipt:LiveData<Receipt>?
-//        get() = _lastReceipt
+class SearchViewModel(val database: ReceiptsDao, application: Application): AndroidViewModel(application) {
+    var receipts: LiveData<List<Receipt>>
 
     init {
-        viewModelScope.launch {
-            database.clear()
-        }
-//        val prefs = Prefs(application)
-//        if(prefs.newPhone){
-//            viewModelScope.launch {
-                readSMS(application)
-//                prefs.newPhone = true
-//            }
-//        }else{
-////            TODO: Check whether the last receipt in content provider is the same as the one in my database
-////            If not, write a recursive algorithm that tries to establish the last message
-//        }
-
-
+        readSMS(application)
         receipts = database.getAllReceipts()!!
-//        _lastReceipt.value = database.getLastReceipt()!!
-        lastReceipt = database.getLastReceipt()
-
-    }
-    fun getSms(){
-        Timber.i("getSms called")
-        receipts = database.getAllReceipts()!!
-        Timber.i("Size"+receipts.value?.size)
     }
 
-
-
-    //TODO 100:Read on ContentProviders
     fun readSMS(application: Application){
         val uri = Telephony.Sms.Inbox.CONTENT_URI
         val projection = arrayOf("address", "body")
@@ -64,23 +33,27 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
             val invalidMessages = ArrayList<String>()
             cursor.moveToNext()
 //            cursor.moveToPosition(2000)
+            var y = 0L
             while (cursor.moveToNext()) {
                 address.add(cursor.getString(addressIndex))
                 body.add(cursor.getString(bodyIndex))
                 val (receipt, person, business) = buildReceiptFromSms(cursor.getString(bodyIndex))
                 if (receipt != null){
                     viewModelScope.launch {
-                        database.insert(receipt)
+                         y=  database.insert(receipt)
+
                     }
                 }
                 if(person != null){
                     viewModelScope.launch {
-                        database.insertPerson(person)
+                        val x = database.insertPerson(person)
+                        x
                     }
                 }
                 if(business != null){
                     viewModelScope.launch {
-                        database.insertBusiness(business)
+                        val x = database.insertBusiness(business)
+                        x
                     }
                 }
                 //TODO:80REmove after proof of concept
@@ -92,4 +65,9 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
         }
         cursor?.close()
     }
+
+    fun searchDatabase(searchQuery: String): LiveData<List<Receipt>> {
+        return database.searchReceipt(searchQuery).asLiveData()
+    }
+
 }

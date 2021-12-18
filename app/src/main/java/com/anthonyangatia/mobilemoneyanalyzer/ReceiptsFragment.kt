@@ -8,10 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.FragmentSmsReceiptsBinding
+import timber.log.Timber
 
 
 class ReceiptsFragment : Fragment() {
@@ -38,6 +38,16 @@ class ReceiptsFragment : Fragment() {
                 adapter.receiptList = it
             }
         })
+        var x = false
+        receiptViewModel.lastReceipt?.observe(viewLifecycleOwner, {
+
+            if(x!=false){
+                receiptViewModel.getSms()
+            }
+//            Timber.i("LastReceipt observation status"+ it.toString())
+            x = true
+        })
+
 //        if(receiptViewModel.receipts == null){
 //            adapter.receiptList = listOf(Receipt(), Receipt())
 //        }else{
