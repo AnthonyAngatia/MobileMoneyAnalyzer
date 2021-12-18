@@ -2,9 +2,9 @@ package com.anthonyangatia.mobilemoneyanalyzer.linechart
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.anthonyangatia.mobilemoneyanalyzer.AmountTransacted
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
+import com.anthonyangatia.mobilemoneyanalyzer.util.AmountTransacted
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*

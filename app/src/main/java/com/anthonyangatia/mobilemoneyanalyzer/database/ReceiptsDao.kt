@@ -5,7 +5,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.anthonyangatia.mobilemoneyanalyzer.AmountTransacted
+import com.anthonyangatia.mobilemoneyanalyzer.util.AmountTransacted
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ReceiptsDao{
@@ -49,5 +50,16 @@ interface ReceiptsDao{
 
     @Query("SELECT * from transaction_receipt_table WHERE receiptId = :id ")
     suspend fun getReceipt(id:Long): Receipt?
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertPerson(person: Person) //You can return lo if you want to get the id
+//
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertBusiness(business: Business)
+
+    @Query("SELECT * from transaction_receipt_table WHERE receipt_message LIKE :searchQuery")
+    fun searchReceipt(searchQuery: String): Flow<List<Receipt>>
+
+// LIKE "SELECT * FROM table '%' || :searchQuery || '%' "
 
 }

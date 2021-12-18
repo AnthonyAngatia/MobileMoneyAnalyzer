@@ -5,8 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.anthonyangatia.mobilemoneyanalyzer.AmountTransacted
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
+import com.anthonyangatia.mobilemoneyanalyzer.util.AmountTransacted
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList

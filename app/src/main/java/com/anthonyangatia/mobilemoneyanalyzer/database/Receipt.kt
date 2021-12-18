@@ -5,9 +5,6 @@ import java.sql.Date
 
 @Entity(tableName = "transaction_receipt_table")
 data class Receipt(
-    @PrimaryKey(autoGenerate = true)
-    var receiptId: Long = 0L,
-
     @ColumnInfo(name = "receipt_message")
     var message: String,
 
@@ -15,7 +12,7 @@ data class Receipt(
     var code: String? = null,
 
     @ColumnInfo(name = "transaction_type")
-    var transactionType: String? = null,
+    var transactionType: String? = null, //sentToNumber, sentBuyGoods, sentToPayBill, sentToMshwari, receivedMoney
 
     var date: Long? = null,//TODO: Look for valid type for dates and time
 
@@ -30,11 +27,20 @@ data class Receipt(
 
     @ColumnInfo(name="transaction_cost")
     var transactionCost: Double? = null,
-    var personPhoneNumber: String? = null,
+    var phoneNumber: String? = null,
     var businessName: String? = null
+){
+    @PrimaryKey(autoGenerate = true)
+    var receiptId: Long = 0L
+}
+
+@Entity(foreignKeys = [ForeignKey(
+        entity = Person::class,
+        parentColumns = arrayOf("phoneNumber"),
+        childColumns = arrayOf("phoneNumber"),
+        onDelete = ForeignKey.CASCADE
+    )]
 )
-
-
 data class Person(
     @PrimaryKey()
     var phoneNumber: String,
@@ -44,27 +50,17 @@ data class Person(
     var targetExpense:Double? = null
 )
 
+@Entity(foreignKeys =[ForeignKey(
+    entity = Business::class,
+    parentColumns = arrayOf("businessName"),
+    childColumns = arrayOf("businessName"),
+    onDelete = ForeignKey.CASCADE
+)])
 data class Business(
     @PrimaryKey()
     var businessName: String, //For pabill, its the paybill concatenated with the account no.
     @ColumnInfo(name="target_expenditure")
     var targetExpense:Double? = null
-)
-
-@Entity(
-
-    foreignKeys = [ForeignKey(
-        entity = Person::class,
-        parentColumns = arrayOf("phoneNumber"),
-        childColumns = arrayOf("personPhoneNumber"),
-        onDelete = ForeignKey.CASCADE
-    ),
-        ForeignKey(
-            entity = Business::class,
-            parentColumns = arrayOf("businessName"),
-            childColumns = arrayOf("businessName"),
-            onDelete = ForeignKey.CASCADE
-        )]
 )
 
 data class PersonWithReceipts(
@@ -84,6 +80,8 @@ data class BusinessWithReceipts(
     )
     val receipts: List<Receipt>
 )
+data class PersonReceipt(val person: Person, val receipt: Receipt)
+data class BusinessReceipt(val business:Business, val receipt: Receipt)
 
 
 

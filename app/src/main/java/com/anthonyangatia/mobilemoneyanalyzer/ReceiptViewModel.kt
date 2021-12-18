@@ -7,9 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
+import com.anthonyangatia.mobilemoneyanalyzer.util.buildReceiptFromSms
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.text.SimpleDateFormat
 import java.util.*
 
 class ReceiptViewModel(val database: ReceiptsDao, application: Application): AndroidViewModel(application) {
@@ -67,15 +67,24 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
             while (cursor.moveToNext()) {
                 address.add(cursor.getString(addressIndex))
                 body.add(cursor.getString(bodyIndex))
-                val receipt = buildReceiptFromSms(cursor.getString(bodyIndex))
-                if(receipt.code == null){
-                    invalidMessages.add(cursor.getString(bodyIndex))//Reporting unknown messages
+                val (receipt, person, business) = buildReceiptFromSms(cursor.getString(bodyIndex))
+                if (receipt != null){
+                    viewModelScope.launch {
+                        database.insert(receipt)
+                    }
                 }
-                //Insert into database
-                viewModelScope.launch {
-                    database.insert(receipt)
+                if(person != null){
+                    viewModelScope.launch {
+                        database.insertPerson(person)
+                    }
                 }
-                if(cursor.position > 300)
+                if(business != null){
+                    viewModelScope.launch {
+                        database.insertBusiness(business)
+                    }
+                }
+                //TODO:80REmove after proof of concept
+                if(cursor.position > 50)
                     break
             }
         }else{

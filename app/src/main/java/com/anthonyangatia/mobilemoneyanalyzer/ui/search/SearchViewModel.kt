@@ -2,13 +2,11 @@ package com.anthonyangatia.mobilemoneyanalyzer.ui.search
 
 import android.app.Application
 import android.provider.Telephony
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.anthonyangatia.mobilemoneyanalyzer.buildReceiptFromSms
+import androidx.lifecycle.*
+import com.anthonyangatia.mobilemoneyanalyzer.database.Person
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
+import com.anthonyangatia.mobilemoneyanalyzer.util.buildReceiptFromSms
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.ArrayList
@@ -35,24 +33,41 @@ class SearchViewModel(val database: ReceiptsDao, application: Application): Andr
             val invalidMessages = ArrayList<String>()
             cursor.moveToNext()
 //            cursor.moveToPosition(2000)
+            var y = 0L
             while (cursor.moveToNext()) {
                 address.add(cursor.getString(addressIndex))
                 body.add(cursor.getString(bodyIndex))
-                val receipt = buildReceiptFromSms(cursor.getString(bodyIndex))
-                if(receipt.code == null){
-                    invalidMessages.add(cursor.getString(bodyIndex))//Reporting unknown messages
+                val (receipt, person, business) = buildReceiptFromSms(cursor.getString(bodyIndex))
+                if (receipt != null){
+                    viewModelScope.launch {
+                         y=  database.insert(receipt)
+
+                    }
                 }
-                //Insert into database
-                viewModelScope.launch {
-                    database.insert(receipt)
+                if(person != null){
+                    viewModelScope.launch {
+                        val x = database.insertPerson(person)
+                        x
+                    }
                 }
-                if(cursor.position > 300)
+                if(business != null){
+                    viewModelScope.launch {
+                        val x = database.insertBusiness(business)
+                        x
+                    }
+                }
+                //TODO:80REmove after proof of concept
+                if(cursor.position > 50)
                     break
             }
         }else{
             Timber.i("Cursor is empty")
         }
         cursor?.close()
+    }
+
+    fun searchDatabase(searchQuery: String): LiveData<List<Receipt>> {
+        return database.searchReceipt(searchQuery).asLiveData()
     }
 
 }

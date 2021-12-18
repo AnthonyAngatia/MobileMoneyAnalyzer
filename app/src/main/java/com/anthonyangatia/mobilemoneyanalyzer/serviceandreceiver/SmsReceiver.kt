@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import com.anthonyangatia.mobilemoneyanalyzer.*
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
+import com.anthonyangatia.mobilemoneyanalyzer.util.CREATEFROMPDUFORMAT
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
