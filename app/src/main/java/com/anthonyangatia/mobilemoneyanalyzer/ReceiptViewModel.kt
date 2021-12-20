@@ -21,19 +21,19 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
 //        get() = _lastReceipt
 
     init {
-        viewModelScope.launch {
-            database.clear()
-        }
-//        val prefs = Prefs(application)
-//        if(prefs.newPhone){
-//            viewModelScope.launch {
+
+        val prefs = Prefs(application)
+        if(prefs.newPhone){
+
+            viewModelScope.launch {
+                database.clear()
                 readSMS(application)
-//                prefs.newPhone = true
-//            }
-//        }else{
+                prefs.newPhone = true
+            }
+        }else{
 ////            TODO: Check whether the last receipt in content provider is the same as the one in my database
 ////            If not, write a recursive algorithm that tries to establish the last message
-//        }
+        }
 
 
         receipts = database.getAllReceipts()!!

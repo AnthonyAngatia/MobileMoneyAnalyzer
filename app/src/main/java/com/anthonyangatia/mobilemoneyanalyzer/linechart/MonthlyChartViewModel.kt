@@ -6,6 +6,7 @@ import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import com.anthonyangatia.mobilemoneyanalyzer.util.AmountTransacted
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -13,7 +14,7 @@ import kotlin.collections.ArrayList
 class MonthlyChartViewModel (val database: ReceiptsDao, application: Application): AndroidViewModel(application){
     // TODO: Implement the ViewModel
     var receipts: LiveData<List<Receipt>>
-    var x = ArrayList<AmountTransacted>()
+    var amountTransactedList = ArrayList<AmountTransacted>()
     private var _amountTransactedListLiveData = MutableLiveData<List<AmountTransacted>>()
     val amountTransactedListLiveData:LiveData<List<AmountTransacted>>
         get() = _amountTransactedListLiveData
@@ -32,8 +33,8 @@ class MonthlyChartViewModel (val database: ReceiptsDao, application: Application
     }
 
     fun addAmtTransacted(amtTransacted: AmountTransacted){
-        x.add(amtTransacted)
-        _amountTransactedListLiveData.value = x
+        amountTransactedList.add(amtTransacted)
+        _amountTransactedListLiveData.value = amountTransactedList
 
     }
     fun getDate(calendar:Calendar){
@@ -55,13 +56,15 @@ class MonthlyChartViewModel (val database: ReceiptsDao, application: Application
 
          val minTimeMilli = convertDateToLong(minimumTime)
          val maxTimeMilli = convertDateToLong(maximumTime)
+//         The transactions are not being processed in a serial order
          viewModelScope.launch {
-             var a = database.getAmountTransactedList(minTimeMilli, maxTimeMilli)
-             if (a != null) {
-                 addAmtTransacted(a)
+             var amountTransactedBtwTime = database.getAmountTransactedList(minTimeMilli, maxTimeMilli)
+             if (amountTransactedBtwTime != null) {
+                 addAmtTransacted(amountTransactedBtwTime)//Add amount transacted to the arraylist
              }else{
                  addAmtTransacted(AmountTransacted(0.0,0.0))
              }
+             Timber.i("Day "+ i.toString() +"Amount " + amountTransactedBtwTime.toString())
          }
 
 
