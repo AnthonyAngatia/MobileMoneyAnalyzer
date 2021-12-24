@@ -2,7 +2,6 @@ package com.anthonyangatia.mobilemoneyanalyzer.linechart
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import com.anthonyangatia.mobilemoneyanalyzer.util.AmountTransacted
 import kotlinx.coroutines.launch
@@ -13,7 +12,7 @@ import kotlin.collections.ArrayList
 
 class MonthlyChartViewModel (val database: ReceiptsDao, application: Application): AndroidViewModel(application){
     // TODO: Implement the ViewModel
-    var receipts: LiveData<List<Receipt>>
+//    var receipts: LiveData<List<Receipt>>
     var amountTransactedList = ArrayList<AmountTransacted>()
     private var _amountTransactedListLiveData = MutableLiveData<List<AmountTransacted>>()
     val amountTransactedListLiveData:LiveData<List<AmountTransacted>>
@@ -26,33 +25,27 @@ class MonthlyChartViewModel (val database: ReceiptsDao, application: Application
         val firstDate = getFirstDayOfMonth(calendar)
         val lastDate = getLastDayOfMonth(calendar)
 
-        receipts = database.getReceiptWhereDate(firstDate, lastDate)!!
+//        receipts = database.getReceiptWhereDate(firstDate, lastDate)!!
 
-        getDate(calendar)
+        getAmountTransactedPerDay(calendar)
 
     }
 
     fun addAmtTransacted(amtTransacted: AmountTransacted){
         amountTransactedList.add(amtTransacted)
-        _amountTransactedListLiveData.value = amountTransactedList
+        _amountTransactedListLiveData.value = amountTransactedList //Trigger a change in the live data as we add a new item in the list
 
     }
-    fun getDate(calendar:Calendar){
-        val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-        val date = Date()
-        println(formatter.format(date))
-        val dateRegex = """(\d{1,3})\/(\d{1,3})\/(\d{1,4})\s\d+:\d+:\d+""".toRegex()
-        val matchResult = dateRegex.matchEntire(formatter.format(date))
-        val (dateR) = matchResult!!.destructured
+    fun getAmountTransactedPerDay(calendar:Calendar){
+        val dateI = getTodaysDate()
         val month = calendar.get(Calendar.MONTH) + 1
-        val dateI  = dateR.toInt()
         val year = calendar.get(Calendar.YEAR)
-        val maxTime = "23:59:59"
-        val minTime = "00:00:00"
+        val lastTimeInADay = "23:59:59"
+        val firstTimeInADay = "00:00:00"
 
      for (i in 1..dateI){
-         var maximumTime = "$i/$month/$year $maxTime"
-         var minimumTime = "$i/$month/$year $minTime"
+         var maximumTime = "$i/$month/$year $lastTimeInADay"
+         var minimumTime = "$i/$month/$year $firstTimeInADay"
 
          val minTimeMilli = convertDateToLong(minimumTime)
          val maxTimeMilli = convertDateToLong(maximumTime)
@@ -69,6 +62,16 @@ class MonthlyChartViewModel (val database: ReceiptsDao, application: Application
 
 
      }
+    }
+
+    private fun getTodaysDate(): Int {
+        val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+        val date = Date()
+        println(formatter.format(date))
+        val dateRegex = """(\d{1,3})\/(\d{1,3})\/(\d{1,4})\s\d+:\d+:\d+""".toRegex()
+        val matchResult = dateRegex.matchEntire(formatter.format(date))
+        val (dateR) = matchResult!!.destructured
+        return dateR.toInt()
     }
 
     fun convertDateToLong(dateString: String): Long {

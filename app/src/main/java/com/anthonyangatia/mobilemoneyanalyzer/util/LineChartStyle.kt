@@ -13,9 +13,9 @@ class LineChartStyle @Inject constructor(private val context:Context){
     fun styleChart(lineChart: LineChart){
         lineChart.apply{
             axisRight.isEnabled = false
-
             axisLeft.apply {
-                isEnabled = false
+                isEnabled = true
+
 
             }
             xAxis.apply {
@@ -40,16 +40,14 @@ class LineChartStyle @Inject constructor(private val context:Context){
     }
     fun styleLineDataSet(lineDataSet: LineDataSet){
         lineDataSet.apply {
-            color = ContextCompat.getColor(context, R.color.purple_700)
-            valueTextColor = ContextCompat.getColor(context, R.color.white)
-            setDrawValues(false)
-            lineWidth = 3f
+//            color = ContextCompat.getColor(context, R.color.purple_700)
+//            valueTextColor = ContextCompat.getColor(context, R.color.white)
+//            setDrawValues(false)
+            lineWidth = 1.25f
             isHighlightEnabled = true
             setDrawHighlightIndicators(false)
-            setDrawCircles(false)
-            mode = LineDataSet.Mode.CUBIC_BEZIER
-
-
+//            setDrawCircles(false)
+//            mode = LineDataSet.Mode.CUBIC_BEZIER
         }
     }
 

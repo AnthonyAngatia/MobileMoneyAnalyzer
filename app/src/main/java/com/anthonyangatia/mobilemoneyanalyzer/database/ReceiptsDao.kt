@@ -60,6 +60,23 @@ interface ReceiptsDao{
     @Query("SELECT * from transaction_receipt_table WHERE receipt_message LIKE :searchQuery")
     fun searchReceipt(searchQuery: String): Flow<List<Receipt>>
 
+    @Query("SELECT * from person WHERE phoneNumber = :phoneNo ")
+    suspend fun getPerson(phoneNo: String):Person
+
+    @Query("SELECT * from person")
+    fun getPeople():LiveData<List<Person>>
+
+    @Query("SELECT * from business")
+    fun getBusiness():LiveData<List<Business>>
+
+    @Query("DELETE FROM person")
+    suspend fun clearPerson()
+
+    @Query("DELETE FROM business")
+    suspend fun clearBusiness()
+    
+
+
 // LIKE "SELECT * FROM table '%' || :searchQuery || '%' "
 
 }

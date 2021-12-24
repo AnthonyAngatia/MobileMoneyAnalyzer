@@ -68,8 +68,8 @@ class MonthlyChartFragment : Fragment() {
         val lineDataSet = LineDataSet(lineEntry, "First")
         chartStyle.styleLineDataSet(lineDataSet)
 //        lineDataSet.lineWidth = 1.25f
-//        lineDataSet.color = Color.CYAN
-//        lineDataSet.setCircleColor(Color.RED)
+        lineDataSet.color = Color.CYAN
+        lineDataSet.setCircleColor(Color.RED)
         val data = LineData(lineDataSet )
         chartStyle.styleChart(lineChart)
         lineChart.data = data

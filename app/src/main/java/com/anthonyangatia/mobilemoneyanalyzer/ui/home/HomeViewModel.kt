@@ -7,30 +7,38 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anthonyangatia.mobilemoneyanalyzer.Prefs
+import com.anthonyangatia.mobilemoneyanalyzer.database.Business
+import com.anthonyangatia.mobilemoneyanalyzer.database.Person
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.util.buildReceiptFromSms
+import com.anthonyangatia.mobilemoneyanalyzer.util.getTempReceipts
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.ArrayList
 
 class HomeViewModel(application: Application) : ViewModel() {
+    var business: LiveData<List<Business>>
     val database = ReceiptsDatabase.getInstance(application).receiptsDao
     var receipts:LiveData<List<Receipt>>
+    var persons:LiveData<List<Person>>
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is home Fragment"
     }
     val text: LiveData<String> = _text
     init {
+//        processTempReceipts()
 
         val prefs = Prefs(application)
-        prefs.newPhone = false
+        prefs.newPhone = true //For debugging purpose
         if(prefs.newPhone){
             viewModelScope.launch {
                 database.clear()
+                database.clearPerson()
+                database.clearBusiness()
                 readSMS(application)
-                prefs.newPhone = true
+                prefs.newPhone = false
             }
         }else{
 ////            TODO: Check whether the last receipt in content provider is the same as the one in my database
@@ -40,6 +48,8 @@ class HomeViewModel(application: Application) : ViewModel() {
 
         receipts = database.getAllReceipts()!!
 //        _lastReceipt.value = database.getLastReceipt()!!
+        persons = database.getPeople()
+        business = database.getBusiness()
 
     }
 
@@ -61,23 +71,24 @@ class HomeViewModel(application: Application) : ViewModel() {
                 address.add(cursor.getString(addressIndex))
                 body.add(cursor.getString(bodyIndex))
                 val (receipt, person, business) = buildReceiptFromSms(cursor.getString(bodyIndex))
-                if (receipt != null){
-                    viewModelScope.launch {
+                viewModelScope.launch {
+                    if (receipt != null){
                         database.insert(receipt)
+                        Timber.i("after inserted receipt: Loop"+cursor.position.toString())
                     }
-                }
-                if(person != null){
-                    viewModelScope.launch {
+                    if(person != null){
                         database.insertPerson(person)
+                        Timber.i("after insert person: Loop"+cursor.position.toString())
                     }
-                }
-                if(business != null){
-                    viewModelScope.launch {
+                    if(business != null){
                         database.insertBusiness(business)
+                        Timber.i("after insert business: Loop"+cursor.position.toString())
                     }
                 }
-                //TODO:80REmove after proof of concept
-                if(cursor.position > 300)
+
+
+                //TODO:Remove after proof of concept
+                if(cursor.position > 100)
                     break
             }
         }else{
@@ -85,5 +96,24 @@ class HomeViewModel(application: Application) : ViewModel() {
         }
         cursor?.close()
     }
+
+    private fun processTempReceipts() {
+        val messages =  getTempReceipts()
+        for(message in messages){
+            val (receipt, person, business) = buildReceiptFromSms(message)
+            viewModelScope.launch {
+                if (receipt != null) {
+                    database.insert(receipt)
+                }
+                if (person != null) {
+                    database.insertPerson(person)
+                }
+                if (business != null) {
+                    database.insertBusiness(business)
+                }
+            }
+        }
+    }
+
 
 }

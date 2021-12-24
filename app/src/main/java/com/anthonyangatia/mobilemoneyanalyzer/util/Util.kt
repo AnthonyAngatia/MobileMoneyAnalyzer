@@ -130,6 +130,7 @@ private fun formatTime(date: String): String {
         return newstring
     }
     return newstring
+//    return date
 }
 
 fun convertToDouble(value: String):Double{
