@@ -16,9 +16,7 @@
 
 <!--    cutom colors-->
     <color name="indigo">#4953CF</color>
-
-
-
+    <color name="light_gray_spinner_shade">#3DC4C4C4</color>
 
 
 </resources>

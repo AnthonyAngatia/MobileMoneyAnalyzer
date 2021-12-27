@@ -4,4 +4,8 @@
         <item>Last 7 days</item>
         <item>Last Month</item>
     </array>
+    <array name="targets">
+        <item>Weekly Targets</item>
+        <item>Monthly Targets</item>
+    </array>
 </resources>
