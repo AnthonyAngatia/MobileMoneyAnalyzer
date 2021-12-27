@@ -1,11 +1,8 @@
 package com.anthonyangatia.mobilemoneyanalyzer.linechart
 
-import android.content.ContentResolver
-import android.content.Context
 import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +14,6 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 class MonthlyChartFragment : Fragment() {
@@ -40,7 +36,7 @@ class MonthlyChartFragment : Fragment() {
         val viewModelFactory = MonthlyChartViewModelFactory(dataSource, application)
         val monthlyChartViewModel =ViewModelProvider(this, viewModelFactory).get(
             MonthlyChartViewModel::class.java)
-        binding.monthlyChartFragment = monthlyChartViewModel
+//        binding.monthlyChartFragment = monthlyChartViewModel
         lineChart = binding.chartId
         chartStyle = context?.let { LineChartStyle(it) }!!
         chartStyle.styleChart(lineChart)
