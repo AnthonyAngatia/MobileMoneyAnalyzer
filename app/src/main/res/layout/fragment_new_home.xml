@@ -73,6 +73,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/statsCardView"
+                style="@style/CustomCardViewStyle"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"

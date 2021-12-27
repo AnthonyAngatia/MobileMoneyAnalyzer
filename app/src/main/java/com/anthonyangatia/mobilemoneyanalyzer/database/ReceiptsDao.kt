@@ -1,10 +1,7 @@
 package com.anthonyangatia.mobilemoneyanalyzer.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.anthonyangatia.mobilemoneyanalyzer.util.AmountTransacted
 import kotlinx.coroutines.flow.Flow
 
@@ -77,7 +74,16 @@ interface ReceiptsDao{
 
     @Query("DELETE FROM business")
     suspend fun clearBusiness()
-    
+
+    @Query("SELECT * from transaction_receipt_table WHERE phoneNumber = :phoneNo")
+    fun getReceiptsWherePerson(phoneNo:String): LiveData<List<Receipt>>
+
+    @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived FROM transaction_receipt_table WHERE phoneNumber = :phoneNo")
+    suspend fun getSumOfTransactionOfPerson(phoneNo: String):AmountTransacted?
+
+    @Query("UPDATE person SET target_expenditure = :target WHERE phoneNumber = :phoneNo")
+    suspend fun updateExpense(phoneNo: String, target: Double)
+
 
 
 // LIKE "SELECT * FROM table '%' || :searchQuery || '%' "

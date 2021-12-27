@@ -155,23 +155,24 @@
             app:layout_constraintTop_toBottomOf="@+id/setTargetLabel" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName2"
+            android:id="@+id/targetAmt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
             android:inputType="number"
             android:minHeight="48dp"
-            android:text="Name"
+            android:hint="1000"
             app:layout_constraintStart_toStartOf="@+id/targetSpinner"
-            app:layout_constraintTop_toBottomOf="@+id/targetSpinner" />
+            app:layout_constraintTop_toBottomOf="@+id/targetSpinner"
+            android:importantForAutofill="no" />
 
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button"
-            app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName2"
+            android:text="Set Target"
+            app:layout_constraintBottom_toBottomOf="@+id/targetAmt"
             app:layout_constraintEnd_toEndOf="@+id/targetSpinner" />
 
         <TextView
@@ -184,9 +185,10 @@
             android:text="Transfer History"
             android:textColor="@color/indigo"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+            app:layout_constraintTop_toBottomOf="@+id/targetAmt" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/personTransactionList"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"
