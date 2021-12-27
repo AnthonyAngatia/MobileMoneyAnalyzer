@@ -60,6 +60,9 @@ interface ReceiptsDao{
     @Query("SELECT * from transaction_receipt_table WHERE receipt_message LIKE :searchQuery")
     fun searchReceipt(searchQuery: String): Flow<List<Receipt>>
 
+    @Query("SELECT * from person WHERE name LIKE :searchQuery OR phoneNumber LIKE :searchQuery")
+    fun searchPerson(searchQuery: String): Flow<List<Person>>
+
     @Query("SELECT * from person WHERE phoneNumber = :phoneNo ")
     suspend fun getPerson(phoneNo: String):Person
 
