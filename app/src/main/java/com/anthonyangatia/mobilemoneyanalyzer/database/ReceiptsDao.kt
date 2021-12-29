@@ -84,6 +84,12 @@ interface ReceiptsDao{
     @Query("UPDATE person SET target_expenditure = :target WHERE phoneNumber = :phoneNo")
     suspend fun updateExpense(phoneNo: String, target: Double)
 
+    @Query("SELECT * from target WHERE phoneNumber = :phoneNo")
+    fun getTargetOfPerson(phoneNo:String): LiveData<List<Target>>
+
+    @Query("SELECT * from target")
+    fun getAllTargets(): LiveData<List<Target>>
+
 
 
 // LIKE "SELECT * FROM table '%' || :searchQuery || '%' "

@@ -63,6 +63,30 @@ data class Business(
     var targetExpense:Double? = null
 )
 
+@Entity()
+data class Target(
+    val phoneNumber: String,
+    val targetExpense: Double,
+    val currentExpenditure:Double,
+    val status:Boolean,//If true then it is active else, false
+    val dateSet:Long,
+    val durationStart: Long, //time in milliseconds
+    val durationEnd: Long//time in milliseconds
+
+){
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0L
+}
+
+data class PersonWithTargets(
+    @Embedded val user: Person,
+    @Relation(
+        parentColumn = "phoneNumber",
+        entityColumn = "phoneNumber"
+    )
+    val targets: List<Target>
+)
+
 data class PersonWithReceipts(
     @Embedded val user: Person,
     @Relation(
