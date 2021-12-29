@@ -8,9 +8,11 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.viewModelScope
 import com.anthonyangatia.mobilemoneyanalyzer.*
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
+import com.anthonyangatia.mobilemoneyanalyzer.util.buildReceiptFromSms
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -58,13 +60,22 @@ class MyIntentService : IntentService("MyIntentService") {
 
     }
     private fun handleActionProcessMessage(param: String) {
-        val receipt = buildReceiptFromSms(param)
         val database = ReceiptsDatabase.getInstance(applicationContext).receiptsDao
-        if(receipt.code == null){
-            Timber.i("ALERT:Receipt not constructed appropriately by the regex function")
-        }else{
+
+        val (receipt, person, business) = buildReceiptFromSms(param)
+        if (receipt != null){
             GlobalScope.launch {
                 database.insert(receipt)
+            }
+        }
+        if(person != null){
+            GlobalScope.launch {
+                database.insertPerson(person)
+            }
+        }
+        if(business != null){
+            GlobalScope.launch {
+                database.insertBusiness(business)
             }
         }
     }

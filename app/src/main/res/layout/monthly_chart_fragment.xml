@@ -7,7 +7,7 @@
     <data>
         <variable
             name="monthlyChartFragment"
-            type="com.anthonyangatia.mobilemoneyanalyzer.linechart.MonthlyChartViewModel" />
+            type="com.anthonyangatia.mobilemoneyanalyzer.linechart.BarChartViewModel" />
     </data>
 
 <FrameLayout

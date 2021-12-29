@@ -24,11 +24,7 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes>
-      <connection connection-id="42e01a2f-7713-404b-b0dc-d9e2746b828a">
-        <schema name="main" object-types="table, view" />
-      </connection>
-    </loaded-nodes>
+    <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="42e01a2f-7713-404b-b0dc-d9e2746b828a">
@@ -42,10 +38,17 @@
     <connection id="42e01a2f-7713-404b-b0dc-d9e2746b828a" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="42e01a2f-7713-404b-b0dc-d9e2746b828a" dataset="main.Business" active-filter-id="" />
     <filter-actions connection-id="42e01a2f-7713-404b-b0dc-d9e2746b828a" dataset="main.sqlite_sequence" active-filter-id="" />
     <filter-actions connection-id="42e01a2f-7713-404b-b0dc-d9e2746b828a" dataset="main.transaction_receipt_table" active-filter-id="d74be065-8f72-4c08-8eeb-f829e50ea1ba">
       <filter id="d74be065-8f72-4c08-8eeb-f829e50ea1ba" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND" />
     </filter-actions>
+    <filter-actions connection-id="42e01a2f-7713-404b-b0dc-d9e2746b828a" dataset="main.Person" active-filter-id="e2e00e9f-49bb-41a9-b6a4-e515e8af0cbf">
+      <filter id="e2e00e9f-49bb-41a9-b6a4-e515e8af0cbf" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="phoneNumber" operator="=" value="" active="true" />
+      </filter>
+    </filter-actions>
+    <filter-actions connection-id="42e01a2f-7713-404b-b0dc-d9e2746b828a" dataset="main.android_metadata" active-filter-id="" />
     <filter-actions connection-id="42e01a2f-7713-404b-b0dc-d9e2746b828a" dataset="main.room_master_table" active-filter-id="" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">

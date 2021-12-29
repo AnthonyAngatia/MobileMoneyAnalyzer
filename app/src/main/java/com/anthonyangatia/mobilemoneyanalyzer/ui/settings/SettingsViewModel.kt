@@ -1,13 +1,20 @@
 package com.anthonyangatia.mobilemoneyanalyzer.ui.settings
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
+import com.anthonyangatia.mobilemoneyanalyzer.database.Person
+import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
+import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 
-class SettingsViewModel : ViewModel() {
+class SettingsViewModel(val database: ReceiptsDao, application: Application): AndroidViewModel(application) {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
+    var person: LiveData<List<Person>>
+    init{
+        person = database.getPeople()
     }
-    val text: LiveData<String> = _text
+
+    fun searchDatabase(searchQuery: String): LiveData<List<Person>> {
+        return database.searchPerson(searchQuery).asLiveData()
+    }
+
 }

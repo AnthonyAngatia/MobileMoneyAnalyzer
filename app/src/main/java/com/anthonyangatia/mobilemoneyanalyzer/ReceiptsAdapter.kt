@@ -31,13 +31,13 @@ class ReceiptsAdapter: RecyclerView.Adapter<ReceiptsAdapter.ViewHolder>() {
 //            TODO:Rename
         }else if (item.transactionType == "sent"){
             holder.amt.text = "Kshs "+item.amountSent.toString()
-            holder.recipientName.text = item.recipientName
+            holder.recipientName.text = item.message
 
         }
 
         else if(item.transactionType == "received") {
             holder.amt.text = "Kshs "+item.amountReceived.toString()
-            holder.recipientName.text = item.sender
+            holder.recipientName.text = item.code
         }
 //        holder.phoneNumber.text = "0791278088"
 

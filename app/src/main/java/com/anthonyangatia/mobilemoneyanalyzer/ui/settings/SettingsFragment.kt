@@ -1,44 +1,72 @@
 package com.anthonyangatia.mobilemoneyanalyzer.ui.settings
 
+import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
+import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.FragmentSettingsBinding
+import com.anthonyangatia.mobilemoneyanalyzer.ui.search.onQueryTextChanged
 
 class SettingsFragment : Fragment() {
 
     private lateinit var settingsViewModel: SettingsViewModel
-    private var _binding: FragmentSettingsBinding? = null
+    private lateinit var binding: FragmentSettingsBinding
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    val settingsAdapter = SettingsAdapter()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val application = requireNotNull(this.activity).application
+        val dataSource = ReceiptsDatabase.getInstance(application).receiptsDao
+        val viewModelFactory = SettingsViewModelFactory(dataSource,application)
         settingsViewModel =
-            ViewModelProvider(this).get(SettingsViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory).get(SettingsViewModel::class.java)
 
-        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
-        settingsViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
+        binding.settingsList.adapter = settingsAdapter
+
+        settingsViewModel.person.observe(viewLifecycleOwner, {
+            it?.let{
+                settingsAdapter.personList = it
+//                Timber.i(it.toString())
+            }
         })
+
+        val searchView = binding.settingsSearchView
+        searchView.isSubmitButtonEnabled = true
+        searchView.onQueryTextChanged{
+            searchDatabase(it)
+        }
+
+
         return root
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun searchDatabase(query: String) {
+        val searchQuery = "%$query%"
+        settingsViewModel.searchDatabase(searchQuery).observe(viewLifecycleOwner, {
+            it?.let {
+                settingsAdapter.personList = it
+            }
+        })
     }
+
+}
+
+class SettingsViewModelFactory(val dataSource: ReceiptsDao, val application: Application) :
+    ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(SettingsViewModel::class.java)) {
+            return SettingsViewModel(dataSource, application) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+
 }

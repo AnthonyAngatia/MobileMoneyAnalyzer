@@ -4,7 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
-import com.anthonyangatia.mobilemoneyanalyzer.SMS_RECEIVE_ACTION
+import com.anthonyangatia.mobilemoneyanalyzer.util.SMS_RECEIVE_ACTION
 import timber.log.Timber
 
 class SmsService : Service() {
