@@ -7,12 +7,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
+import com.anthonyangatia.mobilemoneyanalyzer.database.Target
 import kotlinx.coroutines.launch
 
 class PersonalDetailViewModel(val database: ReceiptsDao, application: Application): AndroidViewModel(application)  {
     var receipts: LiveData<List<Receipt>>
     var moneySent: MutableLiveData<Double> = MutableLiveData(0.0)
     var moneyReceived:MutableLiveData<Double> = MutableLiveData(0.0)
+    var targets: LiveData<List<Target>> = database.getTargetOfPerson("0721115067")//TODO:  Create a vieww for this
+
 
 
     init {

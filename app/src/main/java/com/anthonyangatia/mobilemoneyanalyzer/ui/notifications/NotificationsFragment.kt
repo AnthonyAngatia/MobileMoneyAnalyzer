@@ -1,24 +1,25 @@
 package com.anthonyangatia.mobilemoneyanalyzer.ui.notifications
 
+import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.anthonyangatia.mobilemoneyanalyzer.R
+import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
+import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.FragmentNotificationsBinding
+import com.anthonyangatia.mobilemoneyanalyzer.ui.search.SearchViewModel
+import com.anthonyangatia.mobilemoneyanalyzer.ui.search.SearchViewModelFactory
+import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.personaldetails.PersonalDetailViewModel
 
 class NotificationsFragment : Fragment() {
 
     private lateinit var notificationsViewModel: NotificationsViewModel
-    private var _binding: FragmentNotificationsBinding? = null
+    private lateinit var binding: FragmentNotificationsBinding
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,15 +29,28 @@ class NotificationsFragment : Fragment() {
         notificationsViewModel =
             ViewModelProvider(this).get(NotificationsViewModel::class.java)
 
-        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        binding = FragmentNotificationsBinding.inflate(inflater, container, false)
+
+        val application = requireNotNull(this.activity).application
+        val dataSource = ReceiptsDatabase.getInstance(application).receiptsDao
+        val viewModelFactory = NotificationsViewModelFactory(dataSource, application)
+        val notificationsViewModel = ViewModelProvider(this, viewModelFactory).get(NotificationsViewModel::class.java)
 
 //
-        return root
+        return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+
+}
+
+class NotificationsViewModelFactory(val dataSource: ReceiptsDao, val application: Application):ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(NotificationsViewModel::class.java)) {
+            return NotificationsViewModel(dataSource, application) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
+
+
+
 }

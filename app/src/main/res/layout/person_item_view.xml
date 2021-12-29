@@ -22,6 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:fontFamily="@font/roboto_light"
                 android:text="Anthony Angatia"
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@+id/textView"
@@ -45,10 +46,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:fontFamily="@font/roboto_light"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/settingsNameTv"
                 app:layout_constraintTop_toBottomOf="@+id/settingsNameTv"
                 tools:text="0791278088" />
+
+            <TextView
+                android:id="@+id/expenseLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/roboto_light"
+                android:text="TargetExpense"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/targetAmtItemView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/targetAmtItemView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_light"
+                android:text="0.0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="100" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
