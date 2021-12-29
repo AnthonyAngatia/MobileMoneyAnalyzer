@@ -2,18 +2,18 @@ package com.anthonyangatia.mobilemoneyanalyzer.linechart
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import com.anthonyangatia.mobilemoneyanalyzer.util.AmountTransacted
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 class MonthlyChartViewModel (val database: ReceiptsDao, application: Application): AndroidViewModel(application){
     // TODO: Implement the ViewModel
-    var receipts: LiveData<List<Receipt>>
-    var x = ArrayList<AmountTransacted>()
+//    var receipts: LiveData<List<Receipt>>
+    var amountTransactedList = ArrayList<AmountTransacted>()
     private var _amountTransactedListLiveData = MutableLiveData<List<AmountTransacted>>()
     val amountTransactedListLiveData:LiveData<List<AmountTransacted>>
         get() = _amountTransactedListLiveData
@@ -25,47 +25,53 @@ class MonthlyChartViewModel (val database: ReceiptsDao, application: Application
         val firstDate = getFirstDayOfMonth(calendar)
         val lastDate = getLastDayOfMonth(calendar)
 
-        receipts = database.getReceiptWhereDate(firstDate, lastDate)!!
+//        receipts = database.getReceiptWhereDate(firstDate, lastDate)!!
 
-        getDate(calendar)
+        getAmountTransactedPerDay(calendar)
 
     }
 
     fun addAmtTransacted(amtTransacted: AmountTransacted){
-        x.add(amtTransacted)
-        _amountTransactedListLiveData.value = x
+        amountTransactedList.add(amtTransacted)
+        _amountTransactedListLiveData.value = amountTransactedList //Trigger a change in the live data as we add a new item in the list
 
     }
-    fun getDate(calendar:Calendar){
+    fun getAmountTransactedPerDay(calendar:Calendar){
+        val dateI = getTodaysDate()
+        val month = calendar.get(Calendar.MONTH) + 1
+        val year = calendar.get(Calendar.YEAR)
+        val lastTimeInADay = "23:59:59"
+        val firstTimeInADay = "00:00:00"
+
+     for (i in 1..dateI){
+         var maximumTime = "$i/$month/$year $lastTimeInADay"
+         var minimumTime = "$i/$month/$year $firstTimeInADay"
+
+         val minTimeMilli = convertDateToLong(minimumTime)
+         val maxTimeMilli = convertDateToLong(maximumTime)
+//         The transactions are not being processed in a serial order
+         viewModelScope.launch {
+             var amountTransactedBtwTime = database.getAmountTransactedList(minTimeMilli, maxTimeMilli)
+             if (amountTransactedBtwTime != null) {
+                 addAmtTransacted(amountTransactedBtwTime)//Add amount transacted to the arraylist
+             }else{
+                 addAmtTransacted(AmountTransacted(0.0,0.0))
+             }
+             Timber.i("Day "+ i.toString() +"Amount " + amountTransactedBtwTime.toString())
+         }
+
+
+     }
+    }
+
+    private fun getTodaysDate(): Int {
         val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
         val date = Date()
         println(formatter.format(date))
         val dateRegex = """(\d{1,3})\/(\d{1,3})\/(\d{1,4})\s\d+:\d+:\d+""".toRegex()
         val matchResult = dateRegex.matchEntire(formatter.format(date))
         val (dateR) = matchResult!!.destructured
-        val month = calendar.get(Calendar.MONTH) + 1
-        val dateI  = dateR.toInt()
-        val year = calendar.get(Calendar.YEAR)
-        val maxTime = "23:59:59"
-        val minTime = "00:00:00"
-
-     for (i in 1..dateI){
-         var maximumTime = "$i/$month/$year $maxTime"
-         var minimumTime = "$i/$month/$year $minTime"
-
-         val minTimeMilli = convertDateToLong(minimumTime)
-         val maxTimeMilli = convertDateToLong(maximumTime)
-         viewModelScope.launch {
-             var a = database.getAmountTransactedList(minTimeMilli, maxTimeMilli)
-             if (a != null) {
-                 addAmtTransacted(a)
-             }else{
-                 addAmtTransacted(AmountTransacted(0.0,0.0))
-             }
-         }
-
-
-     }
+        return dateR.toInt()
     }
 
     fun convertDateToLong(dateString: String): Long {

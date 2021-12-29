@@ -12,6 +12,9 @@ data class AmountTransacted(
     @ColumnInfo(name = "totalReceived")var amountReceivedTotal:Double?
 )
 
+val daysOfWeek = arrayOf<String>("SUN", "MON","TUE", "WED", "THU", "FRI", "SAT")
+
+
 const val SMS_RECEIVE_ACTION = "android.provider.Telephony.SMS_RECEIVED"
 //const val SENT_MONEY_REGEX_STRING = """(?<code>\w+)\.*\s*Confirmed\.*\s*Ksh(?<amountSent>[\d\.\,]+) (paid|sent) to (?<recipient>.+) on (?<date>\d{1,2}\/\d{1,2}\/\d{2}) at (?<time>\d{1,2}:\d{2} \w{2}).\s*New M-PESA balance is Ksh(?<balance>[\d\.\,]+)\.\s*Transaction cost, Ksh(?<transactionCost>[\d\.\,]+)\.\s*.*"""
 //const val RECEIVED_MONEY_REGEX_STRING = """(?<code>\w+) Confirmed\.*\s*You have received Ksh(?<amountReceived>[\d\.\,]+) from (?<sender>.*) on (?<date>\d{1,2}\/\d{1,2}\/\d{2}) at (?<time>\d{1,2}:\d{2} \w{2})\.*\s*New M-PESA balance is Ksh(?<balance>[\d\.\,]+)\..*"""
@@ -130,6 +133,7 @@ private fun formatTime(date: String): String {
         return newstring
     }
     return newstring
+//    return date
 }
 
 fun convertToDouble(value: String):Double{

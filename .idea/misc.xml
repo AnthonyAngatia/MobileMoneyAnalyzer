@@ -11,13 +11,18 @@
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/drawable/rectangle.xml" value="0.1984375" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/drawable/red_arrow_svg.xml" value="0.1984375" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/drawable/red_rectangle2.xml" value="0.1984375" />
-        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/activity_main.xml" value="0.26005361930294907" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/font/roboto_black.xml" value="0.2125" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/activity_main.xml" value="0.10038610038610038" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/activity_main2.xml" value="0.1490036231884058" />
-        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/fragment_home.xml" value="0.1490036231884058" />
-        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/fragment_notifications.xml" value="0.1" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/bar_chart_fragment.xml" value="0.18229166666666666" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/fragment_home.xml" value="0.2" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/fragment_new_home.xml" value="0.2" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/fragment_notifications.xml" value="0.25" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/fragment_person_detail.xml" value="0.2" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/fragment_settings.xml" value="0.1" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/fragment_sms_receipts.xml" value="0.2" />
-        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/monthly_chart_fragment.xml" value="0.33" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/monthly_chart_fragment.xml" value="0.18799368088467613" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/person_item_view.xml" value="0.33" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/pie_fragment.xml" value="0.1" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/search_fragment.xml" value="0.18" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/sms_receipt_item_view.xml" value="0.33" />

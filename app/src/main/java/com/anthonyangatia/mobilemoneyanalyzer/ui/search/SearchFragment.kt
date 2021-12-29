@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.anthonyangatia.mobilemoneyanalyzer.R
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.SearchFragmentBinding
 
@@ -14,9 +16,7 @@ import com.anthonyangatia.mobilemoneyanalyzer.databinding.SearchFragmentBinding
 
 class SearchFragment : Fragment(){
 
-    private lateinit var viewModel: SearchViewModel
-    private var _binding: SearchFragmentBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding:SearchFragmentBinding
     private lateinit var searchViewModel:SearchViewModel
 
     private val searchAdapter = SearchAdapter()
@@ -24,7 +24,7 @@ class SearchFragment : Fragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        _binding = SearchFragmentBinding.inflate(inflater, container, false)
+        binding = SearchFragmentBinding.inflate(inflater, container, false)
         val application = requireNotNull(this.activity).application
         val dataSource = ReceiptsDatabase.getInstance(application).receiptsDao
         val viewModelFactory = SearchViewModelFactory(dataSource, application)

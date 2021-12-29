@@ -1,16 +1,16 @@
 package com.anthonyangatia.mobilemoneyanalyzer.linechart
 
-import android.content.ContentResolver
 import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.MonthlyChartFragmentBinding
+import com.anthonyangatia.mobilemoneyanalyzer.util.LineChartStyle
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -18,15 +18,17 @@ import kotlin.collections.ArrayList
 
 class MonthlyChartFragment : Fragment() {
 
-    private var _binding: MonthlyChartFragmentBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var viewModel: MonthlyChartViewModel
-    private lateinit var resolver: ContentResolver
+    private lateinit var binding: MonthlyChartFragmentBinding
     var lineEntry = ArrayList<Entry>()
+
+//    @Inject
+    lateinit var chartStyle: LineChartStyle
+
+    lateinit var lineChart:LineChart
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        _binding = MonthlyChartFragmentBinding.inflate(inflater,container,false)
+        binding = MonthlyChartFragmentBinding.inflate(inflater,container,false)
 
 //TODO: edit the parameters of the viewmodel
         val application = requireNotNull(this.activity).application
@@ -34,11 +36,14 @@ class MonthlyChartFragment : Fragment() {
         val viewModelFactory = MonthlyChartViewModelFactory(dataSource, application)
         val monthlyChartViewModel =ViewModelProvider(this, viewModelFactory).get(
             MonthlyChartViewModel::class.java)
-        binding.monthlyChartFragment = monthlyChartViewModel
+//        binding.monthlyChartFragment = monthlyChartViewModel
+        lineChart = binding.chartId
+        chartStyle = context?.let { LineChartStyle(it) }!!
+        chartStyle.styleChart(lineChart)
         monthlyChartViewModel.amountTransactedListLiveData.observe(viewLifecycleOwner, {
             lineEntry.clear()
             for(index in it.indices){
-                var amountSentTotal = it[index].amountSentTotal
+                var amountSentTotal: Double?
                 if(it[index].amountSentTotal == null){
                      amountSentTotal = 0.0
                 }else{
@@ -49,7 +54,6 @@ class MonthlyChartFragment : Fragment() {
                 lineEntry.add(Entry(index.toFloat(), amountSentTotal.toFloat()))
                 binding.monthlyReceipts.text = it[index].toString() + index
             }
-            Log.d(javaClass.simpleName, "Out loop")
 
             drawGraph()
         })
@@ -58,14 +62,14 @@ class MonthlyChartFragment : Fragment() {
 
     fun drawGraph(){
         val lineDataSet = LineDataSet(lineEntry, "First")
-        lineDataSet.lineWidth = 1.25f
+        chartStyle.styleLineDataSet(lineDataSet)
+//        lineDataSet.lineWidth = 1.25f
         lineDataSet.color = Color.CYAN
         lineDataSet.setCircleColor(Color.RED)
         val data = LineData(lineDataSet )
-        binding.chartId.data = data
-        binding.chartId.setDrawGridBackground(false)
-        binding.chartId.setDrawBorders(false)
-        binding.chartId.invalidate()
+        chartStyle.styleChart(lineChart)
+        lineChart.data = data
+        lineChart.invalidate()
 
     }
 }
