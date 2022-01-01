@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="CustomCardViewStyle" parent="@style/Widget.MaterialComponents.CardView">
+    <style name="CustomCardViewStyle" parent="@style/CardView">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay_card_custom_corners" parent="">
+    <style name="ShapeAppearanceOverlay_card_custom_corners" parent="CardView">
+        <item name="backgroundTint">#00ff00</item>
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopRight">4dp</item>
         <item name="cornerSizeTopLeft">8dp</item>
         <item name="cornerSizeBottomRight">16dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <style name="CustomCardView" parent="@style/CardView">
+        <item name="backgroundTint">#00ff00</item>
+        <item name="cardCornerRadius">1dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="android:backgroundTint">@color/indigo</item>
+    </style>
+
+    <style name="WhiteRobotoBlack12" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#FFFF</item>
+        <item name="fontFamily">@font/roboto_black</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

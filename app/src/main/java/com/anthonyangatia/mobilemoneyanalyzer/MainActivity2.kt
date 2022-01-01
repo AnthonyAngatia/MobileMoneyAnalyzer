@@ -27,19 +27,9 @@ class MainActivity2 : AppCompatActivity() {
 
         binding = ActivityMain2Binding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        Timber.plant(Timber.DebugTree())//Using timber for debuging
+        Timber.plant(Timber.DebugTree())//Setup timber for debuging
         checkForSmsPermission()
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) !=
-            PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.READ_SMS),
-                PackageManager.PERMISSION_GRANTED
-            )
-        } else {
-            Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-        }
+
         Intent(this, SmsService::class.java).also {
             startService(it)
         }
@@ -49,34 +39,30 @@ class MainActivity2 : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main2)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_settings, R.id.navigation_notifications,R.id.navigation_search
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+//        val appBarConfiguration = AppBarConfiguration(
+//            setOf(
+//                R.id.navigation_home, R.id.navigation_settings, R.id.navigation_notifications,R.id.navigation_search
+//            )
+//        )
+//        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
     private fun checkForSmsPermission() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.RECEIVE_SMS
-            ) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
+        //Permission to Read SMS
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) !=
+            PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.READ_SMS), PackageManager.PERMISSION_GRANTED)
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) !=
+            PackageManager.PERMISSION_GRANTED) {
             Timber.i("Permission not granted")
             // Permission not yet granted. Use requestPermissions().
             // MY_PERMISSIONS_REQUEST_SEND_SMS is an
             // app-defined int constant. The callback method gets the
             // result of the request.
-            ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.RECEIVE_SMS),
-                MY_PERMISSIONS_REQUEST_RECEIVE_SMS
-            )
-        } else {
-            // Permission already granted. Enable the message button.
-//            enableSmsButton();
-            Toast.makeText(this, "Permission Already granted", Toast.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECEIVE_SMS),
+                MY_PERMISSIONS_REQUEST_RECEIVE_SMS)
         }
     }
 }

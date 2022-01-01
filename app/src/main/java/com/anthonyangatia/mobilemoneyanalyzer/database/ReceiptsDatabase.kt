@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 
-@Database(entities = [Receipt::class, Person::class, Business::class], version = 1, exportSchema = false)
+@Database(entities = [Receipt::class, Person::class, Business::class, Target::class], version = 1, exportSchema = false)
 abstract class ReceiptsDatabase: RoomDatabase() {
 
     abstract val receiptsDao:ReceiptsDao
