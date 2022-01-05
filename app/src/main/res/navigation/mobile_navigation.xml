@@ -15,7 +15,11 @@
         android:id="@+id/navigation_settings"
         android:name="com.anthonyangatia.mobilemoneyanalyzer.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_navigation_settings_to_compareFragment"
+            app:destination="@id/compareFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -27,4 +31,9 @@
         android:name="com.anthonyangatia.mobilemoneyanalyzer.ui.search.SearchFragment"
         android:label="search_fragment"
         tools:layout="@layout/search_fragment" />
+    <fragment
+        android:id="@+id/compareFragment"
+        android:name="com.anthonyangatia.mobilemoneyanalyzer.ui.settings.compare.CompareFragment"
+        android:label="CompareFragment"
+        tools:layout="@layout/compare_fragment" />
 </navigation>

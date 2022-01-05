@@ -5,10 +5,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="person"
+            type="com.anthonyangatia.mobilemoneyanalyzer.database.Person"/>
+
+        <variable
+            name="clickListener"
+            type="com.anthonyangatia.mobilemoneyanalyzer.ui.settings.PersonListener" />
+    </data>
+
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(person)}"
         android:layout_marginBottom="2dp"
         android:padding="16dp">
 

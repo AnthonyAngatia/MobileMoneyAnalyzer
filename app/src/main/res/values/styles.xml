@@ -25,6 +25,21 @@
         <item name="fontFamily">@font/roboto_black</item>
         <item name="android:textSize">12sp</item>
     </style>
+    <style name="WhiteRobotoBlack16" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#FFFF</item>
+        <item name="fontFamily">@font/roboto_black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="WhiteRobotoRegular14" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#FFFF</item>
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="WhiteRobotoBold14" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#FFFF</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
     <style name="IndigoRobotoBlack14" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/indigo</item>
         <item name="fontFamily">@font/roboto_black</item>

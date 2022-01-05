@@ -196,7 +196,7 @@
             app:layout_constraintStart_toStartOf="@+id/textView10"
             app:layout_constraintTop_toBottomOf="@+id/textView10"
             tools:itemCount="3"
-            tools:listitem="@layout/sms_receipt_item_view" />
+            tools:listitem="@layout/item_view_sms_receipt" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

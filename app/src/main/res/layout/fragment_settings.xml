@@ -6,26 +6,124 @@
     android:layout_height="match_parent"
     tools:context=".ui.settings.SettingsFragment">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/settingsSearchView"
-        android:layout_width="0dp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/classifyCardView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/blue_700"
+        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/settingsList"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="4dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingsSearchView"
-        tools:listitem="@layout/person_item_view" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/classifyTransactions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/roboto_light"
+                android:text="Classify Transactions"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/classifyImage"
+                app:layout_constraintStart_toEndOf="@+id/classifyImage"
+                app:layout_constraintTop_toTopOf="@+id/classifyImage" />
+
+            <ImageView
+                android:id="@+id/classifyImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/classify_24" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/compareCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/classifyCardView">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            tools:layout_editor_absoluteX="25dp">
+
+            <TextView
+                android:id="@+id/compareTrans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/roboto_light"
+                android:text="Compare Transactions"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/compareImage"
+                app:layout_constraintStart_toEndOf="@+id/compareImage"
+                app:layout_constraintTop_toTopOf="@+id/compareImage" />
+
+            <ImageView
+                android:id="@+id/compareImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/compare_24" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/setTargetCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/compareCardView">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/classifyCardView"
+            tools:layout_editor_absoluteX="3dp">
+
+            <TextView
+                android:id="@+id/setTarget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/roboto_light"
+                android:text="Set Target"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/targetImage"
+                app:layout_constraintStart_toEndOf="@+id/targetImage"
+                app:layout_constraintTop_toTopOf="@+id/targetImage" />
+
+            <ImageView
+                android:id="@+id/targetImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/target_24" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

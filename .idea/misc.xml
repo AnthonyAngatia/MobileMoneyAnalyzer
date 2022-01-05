@@ -24,14 +24,17 @@
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/fragment_settings.xml" value="0.1" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/fragment_sms_receipts.xml" value="0.2" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/item_view_exp_inc.xml" value="0.16" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/item_view_person.xml" value="0.17028985507246377" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/item_view_transaction_summary.xml" value="0.33" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/monthly_chart_fragment.xml" value="0.18799368088467613" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/person_item_view.xml" value="0.33" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/pie_fragment.xml" value="0.1" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/search_fragment.xml" value="0.18" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/settings1_fragment.xml" value="0.31226053639846746" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/layout/sms_receipt_item_view.xml" value="0.33" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/menu/bottom_nav_menu.xml" value="0.18229166666666666" />
         <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/menu/main2_menu.xml" value="0.33" />
+        <entry key="..\:/Users/Omi1/AndroidStudioProjects/MobileMoneyAnalyzer/app/src/main/res/xml/root_preferences.xml" value="0.1" />
       </map>
     </option>
   </component>

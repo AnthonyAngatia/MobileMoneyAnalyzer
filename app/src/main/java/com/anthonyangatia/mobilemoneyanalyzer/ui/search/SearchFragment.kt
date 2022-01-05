@@ -10,8 +10,7 @@ import androidx.lifecycle.Observer
 import com.anthonyangatia.mobilemoneyanalyzer.R
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.SearchFragmentBinding
-
-
+import com.anthonyangatia.mobilemoneyanalyzer.util.onQueryTextChanged
 
 
 class SearchFragment : Fragment(){
@@ -31,7 +30,7 @@ class SearchFragment : Fragment(){
         searchViewModel =ViewModelProvider(this, viewModelFactory).get(SearchViewModel::class.java)
 
 //        val adapter = searchAdapter
-        binding.searchList.adapter = searchAdapter
+        binding.personSearchListSearch.adapter = searchAdapter
 
 
 
@@ -84,20 +83,5 @@ class SearchFragment : Fragment(){
             }
         })
     }
-}
-
-inline fun  SearchView.onQueryTextChanged( crossinline listener: (String) -> Unit) {
-    this.setOnQueryTextListener(object:SearchView.OnQueryTextListener{
-        override fun onQueryTextSubmit(query: String?): Boolean {
-            return true
-        }
-        override fun onQueryTextChange(query: String?): Boolean {
-            if(query != null){
-                listener(query)
-            }
-            return true
-        }
-
-    })
 }
 

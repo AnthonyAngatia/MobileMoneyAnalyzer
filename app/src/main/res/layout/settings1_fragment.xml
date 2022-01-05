@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.search.SearchFragment">
+    android:layout_height="match_parent">
+
+
 
     <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchView"
+        android:id="@+id/settingsSearchView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/blue_700"
@@ -17,7 +18,7 @@
         tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/personSearchListSearch"
+        android:id="@+id/settingsList"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="4dp"
@@ -25,7 +26,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView"
-        tools:listitem="@layout/item_view_sms_receipt" />
+        app:layout_constraintTop_toBottomOf="@+id/settingsSearchView"
+        tools:listitem="@layout/item_view_person" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
