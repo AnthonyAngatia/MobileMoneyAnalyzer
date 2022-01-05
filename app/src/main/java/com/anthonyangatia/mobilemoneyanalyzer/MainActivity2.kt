@@ -31,7 +31,7 @@ class MainActivity2 : AppCompatActivity() {
         checkForSmsPermission()
 
         Intent(this, SmsService::class.java).also {
-            startService(it)
+//            startService(it)
         }
 
         val navView: BottomNavigationView = binding.navView

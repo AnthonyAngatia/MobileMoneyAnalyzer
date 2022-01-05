@@ -5,6 +5,7 @@ import com.anthonyangatia.mobilemoneyanalyzer.database.Business
 import com.anthonyangatia.mobilemoneyanalyzer.database.Person
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import java.text.SimpleDateFormat
+import java.util.*
 
 
 data class AmountTransacted(
@@ -12,7 +13,36 @@ data class AmountTransacted(
     @ColumnInfo(name = "totalReceived")var amountReceivedTotal:Double?
 )
 
+data class PersonAmountTransacted(var person: Person, var amountTransacted: AmountTransacted)
+
+fun getFirstDayOfMonth(calendar: Calendar): Long{
+    calendar.set(
+        Calendar.DAY_OF_MONTH,
+        calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+    calendar.set(Calendar.HOUR_OF_DAY, 0);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MILLISECOND, 0);
+    return calendar.timeInMillis
+
+}
+
+fun getLastDayOfMonth(calendar: Calendar):Long{
+    // set day to maximum
+    calendar.set(
+        Calendar.DAY_OF_MONTH,
+        calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+    calendar.set(Calendar.HOUR_OF_DAY, 0);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MILLISECOND, 0);
+    return calendar.timeInMillis
+
+}
+
+
 val daysOfWeek = arrayOf<String>("SUN", "MON","TUE", "WED", "THU", "FRI", "SAT")
+val months = arrayOf<String>("January", "February","March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
 
 
 const val SMS_RECEIVE_ACTION = "android.provider.Telephony.SMS_RECEIVED"
@@ -130,10 +160,9 @@ private fun formatTime(date: String): String {
     var newstring = date.replace("AM", "a.m.")
     if(newstring.equals(date)){
         var newstring = date.replace("PM", "p.m.")
-        return newstring
+//        return newstring
     }
-    return newstring
-//    return date
+    return date //Rreturn type for android 11
 }
 
 fun convertToDouble(value: String):Double{
@@ -143,6 +172,10 @@ fun convertToDouble(value: String):Double{
 
 fun convertDateToLong(dateString: String): Long {
     val dateFormat = SimpleDateFormat("dd/MM/yy hh:mm aa")
+    val date = dateFormat.parse(dateString)
+    return date.time
+}
+fun convertDateToLong(dateString: String, dateFormat: SimpleDateFormat): Long {
     val date = dateFormat.parse(dateString)
     return date.time
 }

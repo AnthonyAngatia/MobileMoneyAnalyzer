@@ -27,6 +27,9 @@ class HomeFragment : Fragment() {
         homeViewModel =
             ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
 
+        binding.homeViewModel = homeViewModel
+
+
         val adapter = ReceiptsAdapter()
 
         observeReceipts(adapter)
