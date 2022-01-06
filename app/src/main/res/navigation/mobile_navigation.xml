@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_navigation_settings_to_compareFragment"
             app:destination="@id/compareFragment" />
+        <action
+            android:id="@+id/action_navigation_settings_to_personListFragment"
+            app:destination="@id/personListFragment" />
     </fragment>
 
     <fragment
@@ -36,4 +39,18 @@
         android:name="com.anthonyangatia.mobilemoneyanalyzer.ui.settings.compare.CompareFragment"
         android:label="CompareFragment"
         tools:layout="@layout/compare_fragment" />
+    <fragment
+        android:id="@+id/personListFragment"
+        android:name="com.anthonyangatia.mobilemoneyanalyzer.ui.settings.PersonListFragment"
+        android:label="PersonListFragment"
+        tools:layout="@layout/person_list_fragment">
+        <action
+            android:id="@+id/action_personListFragment_to_personDetailFragment"
+            app:destination="@id/personDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/personDetailFragment"
+        android:name="com.anthonyangatia.mobilemoneyanalyzer.ui.settings.target.PersonDetailFragment"
+        android:label="fragment_person_detail"
+        tools:layout="@layout/fragment_person_detail" />
 </navigation>

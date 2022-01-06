@@ -36,6 +36,9 @@ class SettingsFragment : Fragment() {
             view.findNavController().navigate(R.id.action_navigation_settings_to_compareFragment)
 
         }
+        binding.setTargetCardView.setOnClickListener {
+            it.findNavController().navigate(R.id.action_navigation_settings_to_personListFragment)
+        }
 
 //        binding.settingsList.adapter = personsAdapter
 //

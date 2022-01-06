@@ -31,15 +31,9 @@ class CompareFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(CompareViewModel::class.java)
 
-        personsAdapter = PersonsAdapter(PersonListener { phoneNo ->
-            Timber.i("At adapter"+phoneNo)
-            Toast.makeText(context, phoneNo, Toast.LENGTH_SHORT).show()
-            viewModel.onPersonClicked(phoneNo)
-
-        })
 
 
-        binding.personSearchListCompare.adapter = personsAdapter
+//        binding.fragmentPersonList.personSearchListCompare.adapter = personsAdapter
 
 
         viewModel.person.observe(viewLifecycleOwner, {
@@ -48,14 +42,11 @@ class CompareFragment : Fragment() {
             }
         })
 
-        val searchView = binding.searchViewComparison
-        searchView.isSubmitButtonEnabled = true
-        searchView.onQueryTextChanged{
-            searchDatabase(it)
-        }
-
-
-
+//        val searchView = binding.searchViewComparison
+//        searchView.isSubmitButtonEnabled = true
+//        searchView.onQueryTextChanged{
+//            searchDatabase(it)
+//        }
 
         return binding.root
     }

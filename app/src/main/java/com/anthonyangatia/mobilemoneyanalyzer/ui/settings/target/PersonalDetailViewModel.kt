@@ -1,4 +1,4 @@
-package com.anthonyangatia.mobilemoneyanalyzer.ui.settings.personaldetails
+package com.anthonyangatia.mobilemoneyanalyzer.ui.settings.target
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

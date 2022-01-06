@@ -11,9 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.FragmentNotificationsBinding
-import com.anthonyangatia.mobilemoneyanalyzer.ui.search.SearchViewModel
-import com.anthonyangatia.mobilemoneyanalyzer.ui.search.SearchViewModelFactory
-import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.personaldetails.PersonalDetailViewModel
 
 class NotificationsFragment : Fragment() {
 

@@ -2,6 +2,7 @@ package com.anthonyangatia.mobilemoneyanalyzer.ui.settings
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -22,8 +23,18 @@ class PersonsAdapter(private val clickListener: PersonListener): ListAdapter< Pe
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item,clickListener)
+        val personItem = getItem(position)
+
+        holder.bind(personItem,clickListener)
+        holder.itemView.setOnClickListener {
+//            Timber.i("OnbindViewHolder"+personItem.toString())
+            it.findNavController().navigate()
+            clickListener.onClick(personItem)
+        }
+//        holder.itemView.setOnClickListener{
+//            Timber.i("2")
+//            onClickListener.onClick(personItem)
+//        }
     }
 
 //    override fun getItemCount() = personList.size
@@ -32,7 +43,6 @@ class PersonsAdapter(private val clickListener: PersonListener): ListAdapter< Pe
     class ViewHolder(val binding: ItemViewPersonBinding): RecyclerView.ViewHolder(binding.root){
 
         fun bind(item: Person, clickListener: PersonListener) {
-            binding.clickListener = clickListener
             item.let {
                 binding.settingsNameTv.text = it.name
                 binding.settingsPhoneNo.text = it.phoneNumber
@@ -62,11 +72,11 @@ class PersonDiffCallback : DiffUtil.ItemCallback<Person>() {
     }
 
 }
-class PersonListener(val clickListener: (phoneNo: String) -> Unit) {
+class PersonListener(val clickListener: (person: Person) -> Unit) {
     fun onClick(person:Person?) {
-        Timber.i(person.toString())
+//        Timber.i(person.toString())
         person?.let {
-            clickListener(person.phoneNumber)
+            clickListener(person)
         }
     }
 
