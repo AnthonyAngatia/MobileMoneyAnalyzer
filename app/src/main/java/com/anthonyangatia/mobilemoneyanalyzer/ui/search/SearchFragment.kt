@@ -46,32 +46,6 @@ class SearchFragment : Fragment(){
             searchDatabase(it)
         }
 
-
-//        searchView.setOnQueryTextListener( object : SearchView.OnQueryTextListener{
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                return true
-//            }
-//
-//            override fun onQueryTextChange(query: String?): Boolean {
-//                if(query != null){
-//                    searchDatabase(query)
-//                }
-//                return true
-//            }
-//        })
-
-//        searchView.setOnQueryTextListener(object :
-//            SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String): Boolean {
-//// do something on text submit
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String): Boolean {
-//// do something when text changes
-//                return false
-//            }
-//        })
         return binding.root
     }
 

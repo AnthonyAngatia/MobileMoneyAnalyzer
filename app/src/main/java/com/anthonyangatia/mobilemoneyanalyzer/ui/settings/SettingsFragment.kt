@@ -39,6 +39,9 @@ class SettingsFragment : Fragment() {
         binding.setTargetCardView.setOnClickListener {
             it.findNavController().navigate(R.id.action_navigation_settings_to_personListFragment)
         }
+        binding.classifyCardView.setOnClickListener {
+            it.findNavController().navigate(R.id.action_navigation_settings_to_navigation_search)
+        }
 
 //        binding.settingsList.adapter = personsAdapter
 //

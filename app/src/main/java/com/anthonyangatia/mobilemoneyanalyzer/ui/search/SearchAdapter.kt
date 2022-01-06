@@ -5,8 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.anthonyangatia.mobilemoneyanalyzer.R
+import com.anthonyangatia.mobilemoneyanalyzer.database.Person
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 
 class SearchAdapter: RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
@@ -25,9 +27,12 @@ class SearchAdapter: RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = receiptList[position]
         holder.arrow.setImageResource(when(item.amountSent){
-            null -> R.drawable.red_arrow_svg
-            else -> R.drawable.green_arrow_svg
+            null -> R.drawable.rotated_green
+            else -> R.drawable.red_arrow_svg
         })
+        holder.itemView.setOnClickListener {
+            it.findNavController().navigate(SearchFragmentDirections.actionNavigationSearchToClassifyFragment(item.receiptId))
+        }
 
         if(item.transactionType == "sentToNumber"){
             holder.amt.text = "Kshs "+item.amountSent.toString()
@@ -73,5 +78,14 @@ class SearchAdapter: RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
     }
 
+
+}
+class SearchListener(val clickListener: (receipt: Receipt) -> Unit) {
+    fun onClick(receipt: Receipt?) {
+//        Timber.i(person.toString())
+        receipt?.let {
+            clickListener(receipt)
+        }
+    }
 
 }

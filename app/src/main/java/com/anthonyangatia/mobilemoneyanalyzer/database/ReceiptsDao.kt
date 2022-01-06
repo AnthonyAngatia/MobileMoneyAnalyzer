@@ -52,7 +52,7 @@ interface ReceiptsDao{
     suspend fun getReceipt(code:String): Receipt?
 
     @Query("SELECT * from transaction_receipt_table WHERE receiptId = :id ")
-    suspend fun getReceipt(id:Long): Receipt?
+    fun getReceipt(id:Long): LiveData<Receipt>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPerson(person: Person) //You can return lo if you want to get the id

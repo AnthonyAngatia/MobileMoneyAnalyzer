@@ -35,6 +35,11 @@
         <item name="fontFamily">@font/roboto</item>
         <item name="android:textSize">14sp</item>
     </style>
+    <style name="WhiteRobotoRegular12" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#FFFF</item>
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textSize">12sp</item>
+    </style>
     <style name="WhiteRobotoBold14" parent="TextAppearance.AppCompat">
         <item name="android:textColor">#FFFF</item>
         <item name="fontFamily">@font/roboto_bold</item>

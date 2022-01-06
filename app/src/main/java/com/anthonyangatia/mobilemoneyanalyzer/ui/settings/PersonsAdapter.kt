@@ -28,8 +28,8 @@ class PersonsAdapter(private val clickListener: PersonListener): ListAdapter< Pe
         holder.bind(personItem,clickListener)
         holder.itemView.setOnClickListener {
 //            Timber.i("OnbindViewHolder"+personItem.toString())
-            it.findNavController().navigate()
-            clickListener.onClick(personItem)
+            it.findNavController().navigate(PersonListFragmentDirections.actionPersonListFragmentToPersonDetailFragment(personItem.phoneNumber))
+//            clickListener.onClick(personItem)
         }
 //        holder.itemView.setOnClickListener{
 //            Timber.i("2")
