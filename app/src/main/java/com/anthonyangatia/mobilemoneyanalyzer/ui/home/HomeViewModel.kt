@@ -7,8 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anthonyangatia.mobilemoneyanalyzer.Prefs
-import com.anthonyangatia.mobilemoneyanalyzer.database.Business
-import com.anthonyangatia.mobilemoneyanalyzer.database.Person
+import com.anthonyangatia.mobilemoneyanalyzer.database.PersonAndBusiness
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.util.*
@@ -16,14 +15,12 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.properties.Delegates
 
 class HomeViewModel(val application: Application) : ViewModel() {
     val database = ReceiptsDatabase.getInstance(application).receiptsDao
     private val calendar: Calendar = Calendar.getInstance()
-    var business: LiveData<List<Business>> = database.getBusiness()
     var receipts:LiveData<List<Receipt>> = database.getAllReceipts()!!
-    var persons:LiveData<List<Person>> = database.getPeople()
+    var persons:LiveData<List<PersonAndBusiness>> = database.getPeopleAndBusiness()
     var month: String
     var weekExpense:MutableLiveData<Double> = amountTransactedWeek()
     var monthIncome:String = "12309"
@@ -40,8 +37,7 @@ class HomeViewModel(val application: Application) : ViewModel() {
         if(prefs.newPhone){
             viewModelScope.launch {
                 database.clear()
-                database.clearPerson()
-                database.clearBusiness()
+                database.clearPersonAndBusiness()
 //                readSMS()
                 prefs.newPhone = false
             }
@@ -122,7 +118,7 @@ class HomeViewModel(val application: Application) : ViewModel() {
 //                } while (cursor.moveToNext());
 //            }
             while (cursor.moveToNext()) {
-                val (receipt, person, business) = buildReceiptFromSms(cursor.getString(bodyIndex))
+                val (receipt, person) = buildReceiptFromSms(cursor.getString(bodyIndex))
                 viewModelScope.launch {
                     if (receipt != null){
                         database.insert(receipt)
@@ -131,10 +127,6 @@ class HomeViewModel(val application: Application) : ViewModel() {
                     if(person != null){
                         database.insertPerson(person)
                         Timber.i("after insert person: Loop"+cursor.position.toString())
-                    }
-                    if(business != null){
-                        database.insertBusiness(business)
-                        Timber.i("after insert business: Loop"+cursor.position.toString())
                     }
                 }
                 //TODO:Remove after proof of concept
@@ -149,7 +141,7 @@ class HomeViewModel(val application: Application) : ViewModel() {
     private fun processTempReceipts() {
         val messages =  getTempReceipts()
         for(message in messages){
-            val (receipt, person, business) = buildReceiptFromSms(message)
+            val (receipt, person) = buildReceiptFromSms(message)
             viewModelScope.launch {
                 if (receipt != null) {
                     database.insert(receipt)
@@ -157,9 +149,7 @@ class HomeViewModel(val application: Application) : ViewModel() {
                 if (person != null) {
                     database.insertPerson(person)
                 }
-                if (business != null) {
-                    database.insertBusiness(business)
-                }
+
             }
         }
     }

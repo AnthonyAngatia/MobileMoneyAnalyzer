@@ -8,7 +8,7 @@
     <data>
         <variable
             name="person"
-            type="com.anthonyangatia.mobilemoneyanalyzer.database.Person"/>
+            type="com.anthonyangatia.mobilemoneyanalyzer.database.PersonAndBusiness"/>
 
     </data>
 

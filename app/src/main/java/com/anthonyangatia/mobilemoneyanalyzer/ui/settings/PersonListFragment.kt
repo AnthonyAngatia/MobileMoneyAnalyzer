@@ -6,10 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.anthonyangatia.mobilemoneyanalyzer.R
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.PersonListFragmentBinding
-import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.compare.CompareViewModel
 import com.anthonyangatia.mobilemoneyanalyzer.util.onQueryTextChanged
 import timber.log.Timber
 
@@ -33,18 +30,19 @@ class PersonListFragment : Fragment() {
 //            Toast.makeText(context, person.toString(), Toast.LENGTH_SHORT).show()
 
 
-            viewModel.onPersonClicked(person.phoneNumber)
+            viewModel.onPersonClicked(person.name)
 
         })
         binding.personSearchListCompare.adapter = personsAdapter
-        viewModel.person.observe(viewLifecycleOwner, {
+        viewModel.personAndBusiness.observe(viewLifecycleOwner, {
             it?.let{
                 personsAdapter.submitList(it)
             }
         })
         val searchView = binding.searchViewComparison
         searchView.isSubmitButtonEnabled = true
-        searchView.onQueryTextChanged{
+        searchView.
+        onQueryTextChanged{
             searchDatabase(it)
         }
         return binding.root

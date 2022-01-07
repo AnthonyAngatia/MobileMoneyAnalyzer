@@ -6,12 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.CompareFragmentBinding
-import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.PersonListener
 import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.PersonsAdapter
-import com.anthonyangatia.mobilemoneyanalyzer.util.onQueryTextChanged
-import timber.log.Timber
 
 class CompareFragment : Fragment() {
 
@@ -36,7 +32,7 @@ class CompareFragment : Fragment() {
 //        binding.fragmentPersonList.personSearchListCompare.adapter = personsAdapter
 
 
-        viewModel.person.observe(viewLifecycleOwner, {
+        viewModel.personAndBusiness.observe(viewLifecycleOwner, {
             it?.let{
                 personsAdapter.submitList(it)
             }
