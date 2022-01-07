@@ -28,11 +28,17 @@ interface ReceiptsDao{
     @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived FROM transaction_receipt_table WHERE date BETWEEN :beginningDate AND :endDate AND transaction_type = :transactionType")
     suspend fun getSumOfTransactionType(beginningDate:Long , endDate:Long, transactionType:String):AmountTransacted?
 
-    @Query("SELECT * FROM transaction_receipt_table LIMIT 1")
-    fun getLastReceipt():LiveData<Receipt>?
+    @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived FROM transaction_receipt_table WHERE phoneNumber = :phoneNo")
+    suspend fun amountTransactedByPerson(phoneNo: String):List<AmountTransacted>?
+
+    @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived FROM transaction_receipt_table WHERE phoneNumber = :phoneNo AND date BETWEEN :beginningDate AND :endDate")
+    suspend fun amountTransactedByPersonBetweenTime(phoneNo: String, beginningDate: Long, endDate: Long): List<AmountTransacted>?
+
+    @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived FROM transaction_receipt_table WHERE phoneNumber = :phoneNo AND date BETWEEN :beginningDate AND :endDate")
+    suspend fun highestAmountSent(phoneNo: String, beginningDate: Long, endDate: Long):List<AmountTransacted>?//Not sure of this query
 
     @Query("SELECT * FROM transaction_receipt_table LIMIT 1")
-    fun getLastReceipt2():Receipt?
+    fun getLastReceipt():LiveData<Receipt>?
 
     @Query("DELETE FROM transaction_receipt_table")
     suspend fun clear()
@@ -46,7 +52,7 @@ interface ReceiptsDao{
     suspend fun getReceipt(code:String): Receipt?
 
     @Query("SELECT * from transaction_receipt_table WHERE receiptId = :id ")
-    suspend fun getReceipt(id:Long): Receipt?
+    fun getReceipt(id:Long): LiveData<Receipt>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPerson(person: Person) //You can return lo if you want to get the id
@@ -89,6 +95,8 @@ interface ReceiptsDao{
 
     @Query("SELECT * from target")
     fun getAllTargets(): LiveData<List<Target>>
+    @Query("SELECT account_balance from transaction_receipt_table LIMIT 1")//The query should change and get where the balance is not null
+    suspend fun getBalance():Double?
 
 
 

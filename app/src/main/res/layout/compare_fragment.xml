@@ -7,10 +7,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/compareCard"
+        style="@style/CustomCardView"
         android:layout_width="0dp"
-        android:layout_height="300dp"
-        android:backgroundTint="@color/indigo"
-        app:cardCornerRadius="16dp"
+        android:layout_height="250dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -33,13 +32,14 @@
             <View
                 android:id="@+id/view"
                 android:layout_width="2dp"
-                android:layout_height="90dp"
+                android:layout_height="190dp"
                 android:background="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/imageLeft"
                 app:layout_constraintEnd_toStartOf="@+id/imageLeft2"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/imageLeft"
-                app:layout_constraintTop_toTopOf="@+id/imageLeft" />
+                app:layout_constraintTop_toTopOf="@+id/imageLeft"
+                app:layout_constraintVertical_bias="0.0" />
 
             <ImageView
                 android:id="@+id/imageLeft2"
@@ -54,10 +54,12 @@
 
             <TextView
                 android:id="@+id/nameLeft"
+                style="@style/WhiteRobotoBlack16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+
+                android:text="Empty"
                 app:layout_constraintEnd_toEndOf="@+id/imageLeft"
                 app:layout_constraintStart_toStartOf="@+id/imageLeft"
                 app:layout_constraintTop_toBottomOf="@+id/imageLeft"
@@ -65,10 +67,11 @@
 
             <TextView
                 android:id="@+id/nameRight"
+                style="@style/WhiteRobotoBlack16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:text="Empty"
                 app:layout_constraintEnd_toEndOf="@+id/imageLeft2"
                 app:layout_constraintStart_toStartOf="@+id/imageLeft2"
                 app:layout_constraintTop_toBottomOf="@+id/imageLeft2"
@@ -76,6 +79,7 @@
 
             <TextView
                 android:id="@+id/textView5"
+                style="@style/WhiteRobotoBold14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -86,6 +90,7 @@
 
             <TextView
                 android:id="@+id/textView6"
+                style="@style/WhiteRobotoBold14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -96,6 +101,7 @@
 
             <TextView
                 android:id="@+id/moneySentLeft"
+                style="@style/WhiteRobotoRegular14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -106,6 +112,7 @@
 
             <TextView
                 android:id="@+id/moneySentRight"
+                style="@style/WhiteRobotoRegular14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -116,6 +123,7 @@
 
             <TextView
                 android:id="@+id/textView9"
+                style="@style/WhiteRobotoBold14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -126,6 +134,7 @@
 
             <TextView
                 android:id="@+id/moneyReceivedLeft"
+                style="@style/WhiteRobotoRegular14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -136,6 +145,7 @@
 
             <TextView
                 android:id="@+id/textView12"
+                style="@style/WhiteRobotoBold14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -146,6 +156,7 @@
 
             <TextView
                 android:id="@+id/moneyReceivedRight"
+                style="@style/WhiteRobotoRegular14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -157,28 +168,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchViewComparison"
-        android:layout_width="0dp"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentPersonList"
+        android:name="com.anthonyangatia.mobilemoneyanalyzer.ui.settings.PersonListFragment"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/blue_700"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/compareCard"
-        tools:visibility="visible" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchList"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="4dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchViewComparison"
-        tools:listitem="@layout/sms_receipt_item_view" />
-
-
+        tools:layout="@layout/person_list_fragment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

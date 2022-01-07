@@ -1,11 +1,10 @@
-package com.anthonyangatia.mobilemoneyanalyzer.ui.settings.personaldetails
+package com.anthonyangatia.mobilemoneyanalyzer.ui.settings.target
 
 import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -13,6 +12,7 @@ import com.anthonyangatia.mobilemoneyanalyzer.ReceiptsAdapter
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.FragmentPersonDetailBinding
+import timber.log.Timber
 
 class PersonDetailFragment : Fragment() {
     
@@ -26,8 +26,14 @@ class PersonDetailFragment : Fragment() {
         binding.personTransactionList.adapter = adapter
         val application = requireNotNull(this.activity).application
         val database = ReceiptsDatabase.getInstance(application).receiptsDao
-        val viewModelFactory = PersonalDetailViewModelFactory(database, application)
+        val args = PersonDetailFragmentArgs.fromBundle(requireArguments())
+        val phoneNumber = args.phoneNumber
+        val viewModelFactory = PersonalDetailViewModelFactory(database, application, phoneNumber)
         personalDetailViewModel = ViewModelProvider(this, viewModelFactory).get(PersonalDetailViewModel::class.java)
+
+
+
+
 
         binding.personNameTv.text = "Set Name From Args"
         binding.button.setOnClickListener {
@@ -61,10 +67,10 @@ class PersonDetailFragment : Fragment() {
     }
 }
 
-class PersonalDetailViewModelFactory(val database: ReceiptsDao, val application: Application):ViewModelProvider.Factory {
+class PersonalDetailViewModelFactory(val database: ReceiptsDao, val application: Application, val phoneNumber:String):ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PersonalDetailViewModel::class.java)) {
-            return PersonalDetailViewModel(database, application) as T
+            return PersonalDetailViewModel(database, application, phoneNumber) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

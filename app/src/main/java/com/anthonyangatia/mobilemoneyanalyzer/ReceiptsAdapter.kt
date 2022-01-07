@@ -19,7 +19,7 @@ class ReceiptsAdapter: RecyclerView.Adapter<ReceiptsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.sms_receipt_item_view, parent, false)
+        val view = layoutInflater.inflate(R.layout.item_view_sms_receipt, parent, false)
         return ViewHolder(view)
     }
 
@@ -29,7 +29,7 @@ class ReceiptsAdapter: RecyclerView.Adapter<ReceiptsAdapter.ViewHolder>() {
             holder.recipientName.text = "MPESA BALANCE"
             holder.amt.text = "Kshs "+item.balance.toString()
 //            TODO:Rename
-        }else if (item.transactionType == "sent"){
+        }else if (item.transactionType == "sentToNumber"){
             holder.amt.text = "Kshs "+item.amountSent.toString()
             holder.recipientName.text = item.message
 

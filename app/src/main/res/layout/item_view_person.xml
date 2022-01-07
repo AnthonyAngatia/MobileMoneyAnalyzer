@@ -5,6 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="person"
+            type="com.anthonyangatia.mobilemoneyanalyzer.database.Person"/>
+
+    </data>
+
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

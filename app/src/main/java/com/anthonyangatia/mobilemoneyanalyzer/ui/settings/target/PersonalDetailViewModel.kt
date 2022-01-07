@@ -1,4 +1,4 @@
-package com.anthonyangatia.mobilemoneyanalyzer.ui.settings.personaldetails
+package com.anthonyangatia.mobilemoneyanalyzer.ui.settings.target
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -10,26 +10,25 @@ import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import com.anthonyangatia.mobilemoneyanalyzer.database.Target
 import kotlinx.coroutines.launch
 
-class PersonalDetailViewModel(val database: ReceiptsDao, application: Application): AndroidViewModel(application)  {
-    var receipts: LiveData<List<Receipt>>
+class PersonalDetailViewModel(val database: ReceiptsDao, application: Application, val phoneNumber: String): AndroidViewModel(application)  {
+    var receipts: LiveData<List<Receipt>> = database.getReceiptsWherePerson(phoneNumber)
     var moneySent: MutableLiveData<Double> = MutableLiveData(0.0)
     var moneyReceived:MutableLiveData<Double> = MutableLiveData(0.0)
-    var targets: LiveData<List<Target>> = database.getTargetOfPerson("0721115067")//TODO:  Create a vieww for this
+    var targets: LiveData<List<Target>> = database.getTargetOfPerson(phoneNumber)//TODO:  Create a vieww for this
 
 
 
     init {
-        receipts = database.getReceiptsWherePerson("0721115067")
         viewModelScope.launch {
-            val amountTransacted = database.getSumOfTransactionOfPerson("0721115067")
-            moneySent.value = amountTransacted?.amountSentTotal!!
-            moneyReceived.value = amountTransacted.amountReceivedTotal!!
+            val amountTransacted = database.getSumOfTransactionOfPerson(phoneNumber)
+            moneySent.value = amountTransacted?.amountSentTotal ?: 199.0
+            moneyReceived.value = amountTransacted?.amountReceivedTotal ?:199.2
         }
     }
 
     fun updateExpense(target:Double){
         viewModelScope.launch {
-            database.updateExpense("0721115067", target)
+            database.updateExpense(phoneNumber, target)
         }
     }
 

@@ -8,10 +8,7 @@ import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 
 class SettingsViewModel(val database: ReceiptsDao, application: Application): AndroidViewModel(application) {
 
-    var person: LiveData<List<Person>>
-    init{
-        person = database.getPeople()
-    }
+    var person: LiveData<List<Person>> = database.getPeople()
 
     fun searchDatabase(searchQuery: String): LiveData<List<Person>> {
         return database.searchPerson(searchQuery).asLiveData()

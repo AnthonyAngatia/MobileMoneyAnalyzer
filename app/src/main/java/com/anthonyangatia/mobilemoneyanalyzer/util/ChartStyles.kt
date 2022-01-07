@@ -3,8 +3,10 @@ package com.anthonyangatia.mobilemoneyanalyzer.util
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.anthonyangatia.mobilemoneyanalyzer.R
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.LineDataSet
 import javax.inject.Inject
 
@@ -15,8 +17,6 @@ class LineChartStyle @Inject constructor(private val context:Context){
             axisRight.isEnabled = false
             axisLeft.apply {
                 isEnabled = true
-
-
             }
             xAxis.apply {
                 axisMinimum = 1f
@@ -50,6 +50,39 @@ class LineChartStyle @Inject constructor(private val context:Context){
 //            mode = LineDataSet.Mode.CUBIC_BEZIER
         }
     }
+}
+class BarChartStyle(private val context:Context){
+    fun styleChart(barChart: BarChart){
+        barChart.apply {
+            axisRight.isEnabled = false
+            axisLeft.apply {
+                isEnabled = true
+                setDrawGridLines(false)
+            }
+            xAxis.apply {
+//                axisMinimum = 1f
+//                axisMaximum = 30f
+                isGranularityEnabled = true
+//                granularity = 4f
+                setDrawGridLines(false)
+                setDrawAxisLine(true)
+                position = XAxis.XAxisPosition.BOTTOM
 
+            }
+
+            setTouchEnabled(true)
+            isDragEnabled = true
+            setScaleEnabled(false)
+            setPinchZoom(false)
+            description = null
+            legend.isEnabled = false
+        }
+    }
+    fun styleDataSet(dataSet: BarDataSet){
+        dataSet.apply {
+            color = ContextCompat.getColor(context, R.color.indigo)
+        }
+
+    }
 
 }

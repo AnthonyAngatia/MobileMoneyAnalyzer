@@ -5,20 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import com.anthonyangatia.mobilemoneyanalyzer.R
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.FragmentSettingsBinding
-import com.anthonyangatia.mobilemoneyanalyzer.ui.search.onQueryTextChanged
 
 class SettingsFragment : Fragment() {
 
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var binding: FragmentSettingsBinding
 
-    val settingsAdapter = SettingsAdapter()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,31 +32,34 @@ class SettingsFragment : Fragment() {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        binding.settingsList.adapter = settingsAdapter
+        binding.compareCardView.setOnClickListener{ view->
+            view.findNavController().navigate(R.id.action_navigation_settings_to_compareFragment)
 
-        settingsViewModel.person.observe(viewLifecycleOwner, {
-            it?.let{
-                settingsAdapter.personList = it
-//                Timber.i(it.toString())
-            }
-        })
-
-        val searchView = binding.settingsSearchView
-        searchView.isSubmitButtonEnabled = true
-        searchView.onQueryTextChanged{
-            searchDatabase(it)
         }
+        binding.setTargetCardView.setOnClickListener {
+            it.findNavController().navigate(R.id.action_navigation_settings_to_personListFragment)
+        }
+        binding.classifyCardView.setOnClickListener {
+            it.findNavController().navigate(R.id.action_navigation_settings_to_navigation_search)
+        }
+
+//        binding.settingsList.adapter = personsAdapter
+//
+//        settingsViewModel.person.observe(viewLifecycleOwner, {
+//            it?.let{
+//                personsAdapter.personList = it
+////                Timber.i(it.toString())
+//            }
+//        })
+//
+//        val searchView = binding.settingsSearchView
+//        searchView.isSubmitButtonEnabled = true
+//        searchView.onQueryTextChanged{
+//            searchDatabase(it)
+//        }
 
 
         return root
-    }
-    private fun searchDatabase(query: String) {
-        val searchQuery = "%$query%"
-        settingsViewModel.searchDatabase(searchQuery).observe(viewLifecycleOwner, {
-            it?.let {
-                settingsAdapter.personList = it
-            }
-        })
     }
 
 }
