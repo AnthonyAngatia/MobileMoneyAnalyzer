@@ -4,9 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import com.anthonyangatia.mobilemoneyanalyzer.database.Person
-import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
+import com.anthonyangatia.mobilemoneyanalyzer.database.PersonAndBusiness
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import org.junit.After
@@ -52,7 +50,7 @@ class ReceiptsDatabaseTest {
     @Test
     @Throws(Exception::class)
     suspend fun insertAndGetPerson(): Unit {
-        val person = Person("0791", "Anthony")
+        val person = PersonAndBusiness("0791", "Anthony")
         receiptsDao.insertPerson(person)
         val personR =receiptsDao.getPerson("0791")
         assertEquals(personR.phoneNumber, person.phoneNumber)

@@ -6,12 +6,14 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.anthonyangatia.mobilemoneyanalyzer.database.Person
+import com.anthonyangatia.mobilemoneyanalyzer.database.PersonAndBusiness
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.ItemViewPersonBinding
+import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.compare.CompareFragment
+import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.compare.CompareViewModel
 import timber.log.Timber
 
 
-class PersonsAdapter(private val clickListener: PersonListener): ListAdapter< Person,PersonsAdapter.ViewHolder>(PersonDiffCallback()){
+class PersonsAdapter(private val clickListener: PersonListener, val from: String, val viewModel:CompareViewModel?=null): ListAdapter< PersonAndBusiness,PersonsAdapter.ViewHolder>(PersonDiffCallback()){
 //    var personList = listOf<Person>()
 //        set(value) {
 //            field =value
@@ -26,15 +28,22 @@ class PersonsAdapter(private val clickListener: PersonListener): ListAdapter< Pe
         val personItem = getItem(position)
 
         holder.bind(personItem,clickListener)
+
         holder.itemView.setOnClickListener {
-//            Timber.i("OnbindViewHolder"+personItem.toString())
-            it.findNavController().navigate(PersonListFragmentDirections.actionPersonListFragmentToPersonDetailFragment(personItem.phoneNumber))
+            if (from == "CompareFragment"){
+                if(viewModel?.isPersonASet == false){
+                    Timber.i("reaching the ifs")
+                    viewModel.getPersonA(personItem.name)
+                }else if(viewModel?.isPersonBSet == false){
+                    viewModel.getPersonB(personItem.name)
+                }else{
+                    Timber.i("More than 2 selected")
+                }
+            }else if(from == "PersonListFragment") {
+                it.findNavController().navigate(PersonListFragmentDirections.actionPersonListFragmentToPersonDetailFragment(personItem.name))
+            }
 //            clickListener.onClick(personItem)
         }
-//        holder.itemView.setOnClickListener{
-//            Timber.i("2")
-//            onClickListener.onClick(personItem)
-//        }
     }
 
 //    override fun getItemCount() = personList.size
@@ -42,10 +51,13 @@ class PersonsAdapter(private val clickListener: PersonListener): ListAdapter< Pe
 
     class ViewHolder(val binding: ItemViewPersonBinding): RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: Person, clickListener: PersonListener) {
+        fun bind(item: PersonAndBusiness, clickListener: PersonListener) {
             item.let {
                 binding.settingsNameTv.text = it.name
                 binding.settingsPhoneNo.text = it.phoneNumber
+                if (it.targetExpense != null){
+                    binding.targetAmtItemView.text="Target Expense  "+it.targetExpense.toString()
+                }
             }
              //TODO:1 Update the regex
         }
@@ -62,21 +74,21 @@ class PersonsAdapter(private val clickListener: PersonListener): ListAdapter< Pe
         }
     }
 }
-class PersonDiffCallback : DiffUtil.ItemCallback<Person>() {
-    override fun areItemsTheSame(oldItem: Person, newItem: Person): Boolean {
+class PersonDiffCallback : DiffUtil.ItemCallback<PersonAndBusiness>() {
+    override fun areItemsTheSame(oldItem: PersonAndBusiness, newItem: PersonAndBusiness): Boolean {
         return oldItem.phoneNumber == newItem.phoneNumber
     }
 
-    override fun areContentsTheSame(oldItem: Person, newItem: Person): Boolean {
+    override fun areContentsTheSame(oldItem: PersonAndBusiness, newItem: PersonAndBusiness): Boolean {
         return oldItem == newItem
     }
 
 }
-class PersonListener(val clickListener: (person: Person) -> Unit) {
-    fun onClick(person:Person?) {
+class PersonListener(val clickListener: (personAndBusiness: PersonAndBusiness) -> Unit) {
+    fun onClick(personAndBusiness:PersonAndBusiness?) {
 //        Timber.i(person.toString())
-        person?.let {
-            clickListener(person)
+        personAndBusiness?.let {
+            clickListener(personAndBusiness)
         }
     }
 

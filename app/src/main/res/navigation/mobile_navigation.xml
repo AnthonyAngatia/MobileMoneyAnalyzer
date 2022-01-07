@@ -60,8 +60,11 @@
         android:name="com.anthonyangatia.mobilemoneyanalyzer.ui.settings.target.PersonDetailFragment"
         android:label="fragment_person_detail"
         tools:layout="@layout/fragment_person_detail" >
-        <argument android:name="phoneNumber"
+        <argument android:name="name"
             app:argType="string" />
+        <action
+            android:id="@+id/action_personDetailFragment_to_classifyFragment"
+            app:destination="@id/classifyFragment" />
     </fragment>
     <fragment
         android:id="@+id/classifyFragment"

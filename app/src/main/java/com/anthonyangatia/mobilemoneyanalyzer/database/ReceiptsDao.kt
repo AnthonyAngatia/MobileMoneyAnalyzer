@@ -28,14 +28,14 @@ interface ReceiptsDao{
     @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived FROM transaction_receipt_table WHERE date BETWEEN :beginningDate AND :endDate AND transaction_type = :transactionType")
     suspend fun getSumOfTransactionType(beginningDate:Long , endDate:Long, transactionType:String):AmountTransacted?
 
-    @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived FROM transaction_receipt_table WHERE phoneNumber = :phoneNo")
-    suspend fun amountTransactedByPerson(phoneNo: String):List<AmountTransacted>?
+    @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived FROM transaction_receipt_table WHERE name = :name")
+    suspend fun amountTransactedByPerson(name: String):List<AmountTransacted>?
 
-    @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived FROM transaction_receipt_table WHERE phoneNumber = :phoneNo AND date BETWEEN :beginningDate AND :endDate")
-    suspend fun amountTransactedByPersonBetweenTime(phoneNo: String, beginningDate: Long, endDate: Long): List<AmountTransacted>?
+    @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived FROM transaction_receipt_table WHERE name = :name AND date BETWEEN :beginningDate AND :endDate")
+    suspend fun amountTransactedByPersonBetweenTime(name: String, beginningDate: Long, endDate: Long): List<AmountTransacted>?
 
-    @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived FROM transaction_receipt_table WHERE phoneNumber = :phoneNo AND date BETWEEN :beginningDate AND :endDate")
-    suspend fun highestAmountSent(phoneNo: String, beginningDate: Long, endDate: Long):List<AmountTransacted>?//Not sure of this query
+    @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived FROM transaction_receipt_table WHERE name = :name AND date BETWEEN :beginningDate AND :endDate")
+    suspend fun highestAmountSent(name: String, beginningDate: Long, endDate: Long):List<AmountTransacted>?//Not sure of this query
 
     @Query("SELECT * FROM transaction_receipt_table LIMIT 1")
     fun getLastReceipt():LiveData<Receipt>?
@@ -55,48 +55,51 @@ interface ReceiptsDao{
     fun getReceipt(id:Long): LiveData<Receipt>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertPerson(person: Person) //You can return lo if you want to get the id
+    suspend fun insertPerson(personAndBusiness: PersonAndBusiness) //You can return lo if you want to get the id
 //
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertBusiness(business: Business)
+//    @Insert(onConflict = OnConflictStrategy.IGNORE) //Deprecated
+//    suspend fun insertBusiness(business: Business)
 
     @Query("SELECT * from transaction_receipt_table WHERE receipt_message LIKE :searchQuery")
     fun searchReceipt(searchQuery: String): Flow<List<Receipt>>
 
-    @Query("SELECT * from person WHERE name LIKE :searchQuery OR phoneNumber LIKE :searchQuery")
-    fun searchPerson(searchQuery: String): Flow<List<Person>>
+    @Query("SELECT * from personandbusiness WHERE name LIKE :searchQuery OR phoneNumber LIKE :searchQuery")
+    fun searchPerson(searchQuery: String): Flow<List<PersonAndBusiness>>
 
-    @Query("SELECT * from person WHERE phoneNumber = :phoneNo ")
-    suspend fun getPerson(phoneNo: String):Person
+    @Query("SELECT * from personandbusiness WHERE name = :name ")
+    suspend fun getPerson(name: String):PersonAndBusiness
 
-    @Query("SELECT * from person")
-    fun getPeople():LiveData<List<Person>>
+    @Query("SELECT * from personandbusiness")
+    fun getPeopleAndBusiness():LiveData<List<PersonAndBusiness>>
 
-    @Query("SELECT * from business")
-    fun getBusiness():LiveData<List<Business>>
+//    @Query("SELECT * from business") //Deprecated
+//    fun getBusiness():LiveData<List<Business>>
 
-    @Query("DELETE FROM person")
-    suspend fun clearPerson()
+    @Query("DELETE FROM personandbusiness")
+    suspend fun clearPersonAndBusiness()
 
-    @Query("DELETE FROM business")
-    suspend fun clearBusiness()
+//    @Query("DELETE FROM business") // deprecated
+//    suspend fun clearBusiness()
 
-    @Query("SELECT * from transaction_receipt_table WHERE phoneNumber = :phoneNo")
-    fun getReceiptsWherePerson(phoneNo:String): LiveData<List<Receipt>>
+    @Query("SELECT * from transaction_receipt_table WHERE name = :name")
+    fun getReceiptsWherePerson(name: String): LiveData<List<Receipt>>
 
-    @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived FROM transaction_receipt_table WHERE phoneNumber = :phoneNo")
-    suspend fun getSumOfTransactionOfPerson(phoneNo: String):AmountTransacted?
+    @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived FROM transaction_receipt_table WHERE name = :name")
+    suspend fun getSumOfTransactionOfPerson(name: String):AmountTransacted?
 
-    @Query("UPDATE person SET target_expenditure = :target WHERE phoneNumber = :phoneNo")
-    suspend fun updateExpense(phoneNo: String, target: Double)
+    @Query("UPDATE personandbusiness SET target_expenditure = :target WHERE name = :name")
+    suspend fun updateExpense(name: String, target: Double)
 
-    @Query("SELECT * from target WHERE phoneNumber = :phoneNo")
-    fun getTargetOfPerson(phoneNo:String): LiveData<List<Target>>
+    @Query("SELECT * from target WHERE name = :name")
+    fun getTargetOfPerson(name: String): LiveData<List<Target>>
 
     @Query("SELECT * from target")
     fun getAllTargets(): LiveData<List<Target>>
     @Query("SELECT account_balance from transaction_receipt_table LIMIT 1")//The query should change and get where the balance is not null
     suspend fun getBalance():Double?
+
+    @Query("UPDATE transaction_receipt_table SET  category= :category WHERE receiptId = :id")
+    suspend fun classify(category:String, id:Long)
 
 
 

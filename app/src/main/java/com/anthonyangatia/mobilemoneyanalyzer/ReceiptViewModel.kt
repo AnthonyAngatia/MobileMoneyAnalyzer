@@ -67,7 +67,7 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
             while (cursor.moveToNext()) {
                 address.add(cursor.getString(addressIndex))
                 body.add(cursor.getString(bodyIndex))
-                val (receipt, person, business) = buildReceiptFromSms(cursor.getString(bodyIndex))
+                val (receipt, person) = buildReceiptFromSms(cursor.getString(bodyIndex))
                 if (receipt != null){
                     viewModelScope.launch {
                         database.insert(receipt)
@@ -76,11 +76,6 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
                 if(person != null){
                     viewModelScope.launch {
                         database.insertPerson(person)
-                    }
-                }
-                if(business != null){
-                    viewModelScope.launch {
-                        database.insertBusiness(business)
                     }
                 }
                 //TODO:80REmove after proof of concept

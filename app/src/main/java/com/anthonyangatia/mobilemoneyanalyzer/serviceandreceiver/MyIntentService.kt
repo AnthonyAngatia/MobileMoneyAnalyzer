@@ -62,7 +62,7 @@ class MyIntentService : IntentService("MyIntentService") {
     private fun handleActionProcessMessage(param: String) {
         val database = ReceiptsDatabase.getInstance(applicationContext).receiptsDao
 
-        val (receipt, person, business) = buildReceiptFromSms(param)
+        val (receipt, person) = buildReceiptFromSms(param)
         if (receipt != null){
             GlobalScope.launch {
                 database.insert(receipt)
@@ -71,11 +71,6 @@ class MyIntentService : IntentService("MyIntentService") {
         if(person != null){
             GlobalScope.launch {
                 database.insertPerson(person)
-            }
-        }
-        if(business != null){
-            GlobalScope.launch {
-                database.insertBusiness(business)
             }
         }
     }

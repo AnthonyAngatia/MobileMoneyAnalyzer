@@ -29,16 +29,18 @@ class HomeFragment : Fragment() {
 
         binding.homeViewModel = homeViewModel
 
+        homeViewModel.weekExpense.observe(viewLifecycleOwner, {
+            it?.let{
+                binding.amtSpentTextView.text = it.toString()
+            }
+        })
+
 
         val adapter = ReceiptsAdapter()
 
         observeReceipts(adapter)
 //        observePeople()
-        homeViewModel.business.observe(viewLifecycleOwner, {
-            for (business in it) {
-                Timber.i(business.toString())
-            }
-        })
+
 
 
 

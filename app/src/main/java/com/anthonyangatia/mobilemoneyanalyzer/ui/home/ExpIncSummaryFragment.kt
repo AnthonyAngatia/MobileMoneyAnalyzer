@@ -82,14 +82,14 @@ class ExpIncAdapter(val income:Boolean): RecyclerView.Adapter<ExpIncAdapter.View
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //All this will generate a bug
         val item = pATList[position]
-        holder.phoneNumber.text = item.person.phoneNumber
+        holder.phoneNumber.text = item.personAndBusiness.phoneNumber
         if(income){
             holder.amt.text = item.amountTransacted.amountReceivedTotal.toString()
         }else{
             holder.amt.text = item.amountTransacted.amountSentTotal.toString()
         }
 
-        holder.name.text = item.person.name
+        holder.name.text = item.personAndBusiness.name
     }
 
     override fun getItemCount() = pATList.size

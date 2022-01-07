@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.CompareFragmentBinding
 import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.PersonListener
 import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.PersonsAdapter
@@ -18,8 +17,7 @@ class CompareFragment : Fragment() {
     private lateinit var viewModel: CompareViewModel
     private lateinit var binding:CompareFragmentBinding
 
-    lateinit var personsAdapter:PersonsAdapter
-
+    lateinit var adapter:PersonsAdapter
 
 
     override fun onCreateView(
@@ -30,24 +28,52 @@ class CompareFragment : Fragment() {
         binding = CompareFragmentBinding.inflate(inflater, container, false)
 
         viewModel = ViewModelProvider(this).get(CompareViewModel::class.java)
+        binding.compareViewModel = viewModel
+        adapter = PersonsAdapter(PersonListener { person ->
+            Timber.i("At adapter"+person.toString())
+//            Toast.makeText(context, person.toString(), Toast.LENGTH_SHORT).show()
+            viewModel.onPersonClicked(person.name)
 
+        },"CompareFragment", viewModel)
+        binding.personSearchListCompare.adapter = adapter
 
-
-//        binding.fragmentPersonList.personSearchListCompare.adapter = personsAdapter
-
-
-        viewModel.person.observe(viewLifecycleOwner, {
+        viewModel.personAndBusiness.observe(viewLifecycleOwner, {
             it?.let{
-                personsAdapter.submitList(it)
+                adapter.submitList(it)
             }
         })
-
-//        val searchView = binding.searchViewComparison
-//        searchView.isSubmitButtonEnabled = true
-//        searchView.onQueryTextChanged{
-//            searchDatabase(it)
-//        }
-
+        viewModel.personA.observe(viewLifecycleOwner, {
+            it?.let {
+                val name = it.name
+                binding.nameLeft.text = name
+                viewModel.getAmountTransactedA(name)
+            }
+        })
+        viewModel.personB.observe(viewLifecycleOwner, {
+            it?.let {
+                val name = it.name
+                binding.nameRight.text = name
+                viewModel.getAmountTransactedB(name)
+            }
+        })
+        viewModel.amtTransA.observe(viewLifecycleOwner, {
+            it?.let {
+              binding.moneySentLeft.text = it.amountSentTotal.toString()
+                binding.moneyReceivedLeft.text = it.amountReceivedTotal.toString()
+            }
+        })
+        viewModel.amtTransB.observe(viewLifecycleOwner, {
+            it?.let {
+                binding.moneySentRight.text = it.amountSentTotal.toString()
+                binding.moneyReceivedRight.text = it.amountReceivedTotal.toString()
+            }
+        })
+        val searchView = binding.searchViewComparison
+        searchView.isSubmitButtonEnabled = true
+        searchView.
+        onQueryTextChanged{
+            searchDatabase(it)
+        }
         return binding.root
     }
 
@@ -55,7 +81,8 @@ class CompareFragment : Fragment() {
         val searchQuery = "%$query%"
         viewModel.searchDatabase(searchQuery).observe(viewLifecycleOwner, {
             it?.let {
-                personsAdapter.submitList(it)
+                Timber.i(query)
+                adapter.submitList(it)
             }
         })
     }

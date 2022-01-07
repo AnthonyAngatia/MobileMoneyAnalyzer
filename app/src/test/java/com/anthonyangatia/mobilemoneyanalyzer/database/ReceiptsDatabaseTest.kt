@@ -26,7 +26,7 @@ class ReceiptsDatabaseTest {
     @Test
     @Throws(Exception::class)
     suspend fun insertAndGetPerson(){
-        val person = Person("0791", "Anthony")
+        val person = PersonAndBusiness("0791", "Anthony")
         receiptsDao.insertPerson(person)
         val personR =receiptsDao.getPerson("0791")
         assertEquals(personR.phoneNumber, person.phoneNumber)

@@ -2,7 +2,9 @@ package com.anthonyangatia.mobilemoneyanalyzer.ui.settings.classify
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ClassifyViewModel(application: Application, val receiptId: Long): AndroidViewModel(application)  {
@@ -10,8 +12,10 @@ class ClassifyViewModel(application: Application, val receiptId: Long): AndroidV
     var receipt = database.getReceipt(receiptId)
     val message = receipt.value?.message ?: "Message default"
 
-    fun classifyReceipt(text:String?){
-        Timber.i("Class func called")
+    fun classifyReceipt(category:String){
+        viewModelScope.launch {
+            database.classify(category, receiptId)
+        }
     }
 
 

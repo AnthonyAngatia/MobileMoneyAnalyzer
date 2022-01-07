@@ -7,14 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
-import com.anthonyangatia.mobilemoneyanalyzer.R
-import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
-import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.ClassifyFragmentBinding
-import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.SettingsViewModelFactory
-import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.target.PersonDetailFragmentArgs
-import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.target.PersonalDetailViewModel
+import timber.log.Timber
 
 class ClassifyFragment : Fragment() {
     private lateinit var viewModel: ClassifyViewModel
@@ -25,6 +21,7 @@ class ClassifyFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         val args = ClassifyFragmentArgs.fromBundle(requireArguments())
         val receiptId = args.receiptId
+        Timber.i(receiptId.toString())
         val viewModelFactory = ClassifyViewModelFactory(application, receiptId)
 
         viewModel = ViewModelProvider(this,viewModelFactory).get(ClassifyViewModel::class.java)
@@ -36,8 +33,15 @@ class ClassifyFragment : Fragment() {
         })
 
         binding.classifyButton.setOnClickListener {
-            val text = binding.classEditText.text?.toString()
-            viewModel.classifyReceipt(text)
+            val category = binding.classEditText.text.toString()
+            if (category != null) {
+                viewModel.classifyReceipt(category)
+                Toast.makeText(context,"Category field is empty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"Category saved", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context,"Category field is empty", Toast.LENGTH_SHORT).show()
+
+            }
         }
 
         return binding.root

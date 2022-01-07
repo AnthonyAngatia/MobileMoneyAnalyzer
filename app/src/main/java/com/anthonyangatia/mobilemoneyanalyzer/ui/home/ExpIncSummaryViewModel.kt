@@ -5,14 +5,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.anthonyangatia.mobilemoneyanalyzer.database.Person
+import com.anthonyangatia.mobilemoneyanalyzer.database.PersonAndBusiness
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.util.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ExpIncSummaryViewModel(application: Application) : AndroidViewModel(application) {
     val database = ReceiptsDatabase.getInstance(application).receiptsDao
@@ -65,7 +64,7 @@ class ExpIncSummaryViewModel(application: Application) : AndroidViewModel(applic
                amountReceived = it
            }
            val amountTransacted = AmountTransacted(amountSent, amountReceived)
-           receipt.phoneNumber?.let {
+           receipt.name?.let {
                viewModelScope.launch {
                    val person = database.getPerson(it)
                    addToPATList(person, amountTransacted, personAmountTransactedList)
@@ -88,14 +87,14 @@ class ExpIncSummaryViewModel(application: Application) : AndroidViewModel(applic
     }
 
     private fun addToPATList(
-        person: Person,
+        personAndBusiness: PersonAndBusiness,
         amountTransacted: AmountTransacted,
         personAmountTransactedList: MutableList<PersonAmountTransacted>
     ) {
-        var personAmountTransacted = PersonAmountTransacted(person, amountTransacted)
+        var personAmountTransacted = PersonAmountTransacted(personAndBusiness, amountTransacted)
         var personFound = false
         for (pAT in personAmountTransactedList) {
-            if (pAT.person == personAmountTransacted.person) {
+            if (pAT.personAndBusiness == personAmountTransacted.personAndBusiness) {
                 pAT.amountTransacted.amountSentTotal.let {
                     it!! + personAmountTransacted.amountTransacted.amountSentTotal!!
                 }
