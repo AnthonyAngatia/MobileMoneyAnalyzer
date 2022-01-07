@@ -1,181 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/compareCard"
-        style="@style/CustomCardView"
-        android:layout_width="0dp"
-        android:layout_height="250dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <data>
+        <variable
+            name="compareViewModel"
+            type="com.anthonyangatia.mobilemoneyanalyzer.ui.settings.compare.CompareViewModel" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    </data>
 
-            <ImageView
-                android:id="@+id/imageLeft"
-                android:layout_width="64dp"
-                android:layout_height="56dp"
-                android:layout_marginTop="32dp"
-                android:src="@drawable/user_avatar"
-                app:layout_constraintEnd_toStartOf="@+id/view"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="2dp"
-                android:layout_height="190dp"
-                android:background="@color/white"
-                app:layout_constraintBottom_toBottomOf="@+id/imageLeft"
-                app:layout_constraintEnd_toStartOf="@+id/imageLeft2"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/imageLeft"
-                app:layout_constraintTop_toTopOf="@+id/imageLeft"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <ImageView
-                android:id="@+id/imageLeft2"
-                android:layout_width="64dp"
-                android:layout_height="56dp"
-                android:layout_marginTop="32dp"
-                android:src="@drawable/user_avatar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/view"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/nameLeft"
-                style="@style/WhiteRobotoBlack16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-
-                android:text="Empty"
-                app:layout_constraintEnd_toEndOf="@+id/imageLeft"
-                app:layout_constraintStart_toStartOf="@+id/imageLeft"
-                app:layout_constraintTop_toBottomOf="@+id/imageLeft"
-                tools:text="Anthony Angatia" />
-
-            <TextView
-                android:id="@+id/nameRight"
-                style="@style/WhiteRobotoBlack16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Empty"
-                app:layout_constraintEnd_toEndOf="@+id/imageLeft2"
-                app:layout_constraintStart_toStartOf="@+id/imageLeft2"
-                app:layout_constraintTop_toBottomOf="@+id/imageLeft2"
-                tools:text="Andrew Angatia" />
-
-            <TextView
-                android:id="@+id/textView5"
-                style="@style/WhiteRobotoBold14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Money Sent"
-                app:layout_constraintEnd_toStartOf="@+id/view"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nameLeft" />
-
-            <TextView
-                android:id="@+id/textView6"
-                style="@style/WhiteRobotoBold14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Money Sent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/nameRight" />
-
-            <TextView
-                android:id="@+id/moneySentLeft"
-                style="@style/WhiteRobotoRegular14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="100"
-                app:layout_constraintEnd_toEndOf="@+id/textView5"
-                app:layout_constraintStart_toStartOf="@+id/textView5"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-            <TextView
-                android:id="@+id/moneySentRight"
-                style="@style/WhiteRobotoRegular14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="280"
-                app:layout_constraintEnd_toEndOf="@+id/textView6"
-                app:layout_constraintStart_toStartOf="@+id/textView6"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-            <TextView
-                android:id="@+id/textView9"
-                style="@style/WhiteRobotoBold14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Money Received"
-                app:layout_constraintEnd_toStartOf="@+id/view"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/moneySentLeft" />
-
-            <TextView
-                android:id="@+id/moneyReceivedLeft"
-                style="@style/WhiteRobotoRegular14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="100"
-                app:layout_constraintEnd_toEndOf="@+id/textView9"
-                app:layout_constraintStart_toStartOf="@+id/textView9"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-            <TextView
-                android:id="@+id/textView12"
-                style="@style/WhiteRobotoBold14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Money Received"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/moneySentRight" />
-
-            <TextView
-                android:id="@+id/moneyReceivedRight"
-                style="@style/WhiteRobotoRegular14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="280"
-                app:layout_constraintEnd_toEndOf="@+id/textView12"
-                app:layout_constraintStart_toStartOf="@+id/textView12"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentPersonList"
-        android:name="com.anthonyangatia.mobilemoneyanalyzer.ui.settings.PersonListFragment"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/compareCard"
-        tools:layout="@layout/person_list_fragment" />
+        android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/compareCard"
+            style="@style/CustomCardView"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageLeft"
+                    android:layout_width="64dp"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="32dp"
+                    android:src="@drawable/user_avatar"
+                    app:layout_constraintEnd_toStartOf="@+id/view"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="2dp"
+                    android:layout_height="190dp"
+                    android:background="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageLeft"
+                    app:layout_constraintEnd_toStartOf="@+id/imageLeft2"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/imageLeft"
+                    app:layout_constraintTop_toTopOf="@+id/imageLeft"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <ImageView
+                    android:id="@+id/imageLeft2"
+                    android:layout_width="64dp"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="32dp"
+                    android:src="@drawable/user_avatar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/nameLeft"
+                    style="@style/WhiteRobotoBlack16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+
+                    app:layout_constraintEnd_toEndOf="@+id/imageLeft"
+                    app:layout_constraintStart_toStartOf="@+id/imageLeft"
+                    app:layout_constraintTop_toBottomOf="@+id/imageLeft"
+                    tools:text="Anthony Angatia" />
+
+                <TextView
+                    android:id="@+id/nameRight"
+                    style="@style/WhiteRobotoBlack16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Empty"
+                    app:layout_constraintEnd_toEndOf="@+id/imageLeft2"
+                    app:layout_constraintStart_toStartOf="@+id/imageLeft2"
+                    app:layout_constraintTop_toBottomOf="@+id/imageLeft2"
+                    tools:text="Andrew Angatia" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    style="@style/WhiteRobotoBold14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Money Sent"
+                    app:layout_constraintEnd_toStartOf="@+id/view"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/nameLeft" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    style="@style/WhiteRobotoBold14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Money Sent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view"
+                    app:layout_constraintTop_toBottomOf="@+id/nameRight" />
+
+                <TextView
+                    android:id="@+id/moneySentLeft"
+                    style="@style/WhiteRobotoRegular14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="NIL"
+                    app:layout_constraintEnd_toEndOf="@+id/textView5"
+                    app:layout_constraintStart_toStartOf="@+id/textView5"
+                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+                <TextView
+                    android:id="@+id/moneySentRight"
+                    style="@style/WhiteRobotoRegular14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="NIL"
+                    app:layout_constraintEnd_toEndOf="@+id/textView6"
+                    app:layout_constraintStart_toStartOf="@+id/textView6"
+                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    style="@style/WhiteRobotoBold14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Money Received"
+                    app:layout_constraintEnd_toStartOf="@+id/view"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/moneySentLeft" />
+
+                <TextView
+                    android:id="@+id/moneyReceivedLeft"
+                    style="@style/WhiteRobotoRegular14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="NIL"
+                    app:layout_constraintEnd_toEndOf="@+id/textView9"
+                    app:layout_constraintStart_toStartOf="@+id/textView9"
+                    app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+                <TextView
+                    android:id="@+id/textView12"
+                    style="@style/WhiteRobotoBold14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Money Received"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/view"
+                    app:layout_constraintTop_toBottomOf="@+id/moneySentRight" />
+
+                <TextView
+                    android:id="@+id/moneyReceivedRight"
+                    style="@style/WhiteRobotoRegular14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="NIL"
+                    app:layout_constraintEnd_toEndOf="@+id/textView12"
+                    app:layout_constraintStart_toStartOf="@+id/textView12"
+                    app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchViewComparison"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/blue_700"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/compareCard"
+            tools:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/personSearchListCompare"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchViewComparison"
+            tools:listitem="@layout/item_view_person" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

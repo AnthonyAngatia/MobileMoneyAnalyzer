@@ -8,9 +8,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.anthonyangatia.mobilemoneyanalyzer.database.PersonAndBusiness
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.ItemViewPersonBinding
+import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.compare.CompareFragment
+import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.compare.CompareViewModel
+import timber.log.Timber
 
 
-class PersonsAdapter(private val clickListener: PersonListener): ListAdapter< PersonAndBusiness,PersonsAdapter.ViewHolder>(PersonDiffCallback()){
+class PersonsAdapter(private val clickListener: PersonListener, val from: String, val viewModel:CompareViewModel?=null): ListAdapter< PersonAndBusiness,PersonsAdapter.ViewHolder>(PersonDiffCallback()){
 //    var personList = listOf<Person>()
 //        set(value) {
 //            field =value
@@ -25,15 +28,22 @@ class PersonsAdapter(private val clickListener: PersonListener): ListAdapter< Pe
         val personItem = getItem(position)
 
         holder.bind(personItem,clickListener)
+
         holder.itemView.setOnClickListener {
-//            Timber.i("OnbindViewHolder"+personItem.toString())
-            it.findNavController().navigate(PersonListFragmentDirections.actionPersonListFragmentToPersonDetailFragment(personItem.name))
+            if (from == "CompareFragment"){
+                if(viewModel?.isPersonASet == false){
+                    Timber.i("reaching the ifs")
+                    viewModel.getPersonA(personItem.name)
+                }else if(viewModel?.isPersonBSet == false){
+                    viewModel.getPersonB(personItem.name)
+                }else{
+                    Timber.i("More than 2 selected")
+                }
+            }else if(from == "PersonListFragment") {
+                it.findNavController().navigate(PersonListFragmentDirections.actionPersonListFragmentToPersonDetailFragment(personItem.name))
+            }
 //            clickListener.onClick(personItem)
         }
-//        holder.itemView.setOnClickListener{
-//            Timber.i("2")
-//            onClickListener.onClick(personItem)
-//        }
     }
 
 //    override fun getItemCount() = personList.size
@@ -45,6 +55,9 @@ class PersonsAdapter(private val clickListener: PersonListener): ListAdapter< Pe
             item.let {
                 binding.settingsNameTv.text = it.name
                 binding.settingsPhoneNo.text = it.phoneNumber
+                if (it.targetExpense != null){
+                    binding.targetAmtItemView.text="Target Expense  "+it.targetExpense.toString()
+                }
             }
              //TODO:1 Update the regex
         }

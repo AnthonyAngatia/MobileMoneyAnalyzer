@@ -29,10 +29,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/roboto"
-                android:text="Anthony Angatia"
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@+id/textView"
-                app:layout_constraintTop_toTopOf="@+id/textView" />
+                app:layout_constraintTop_toTopOf="@+id/textView"
+                tools:text="Anthony Angatia" />
 
             <TextView
                 android:id="@+id/dayTextView"
@@ -62,7 +62,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="0791278088"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/nameTextView"
                 app:layout_constraintTop_toBottomOf="@+id/nameTextView"
@@ -74,10 +73,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:fontFamily="@font/roboto"
-                android:text="Kshs 100,000"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toStartOf="@+id/dayTextView"
-                app:layout_constraintTop_toTopOf="@+id/nameTextView" />
+                app:layout_constraintTop_toTopOf="@+id/nameTextView"
+                tools:text="Kshs 100,000" />
 
             <TextView
                 android:id="@+id/timeTextView"

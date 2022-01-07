@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -17,7 +18,7 @@ class PersonDetailFragment : Fragment() {
     
     lateinit var binding:FragmentPersonDetailBinding
     lateinit var personalDetailViewModel:PersonalDetailViewModel
-    val adapter:ReceiptsAdapter = ReceiptsAdapter()
+    val adapter = ReceiptsAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentPersonDetailBinding.inflate(inflater, container, false)
@@ -34,10 +35,13 @@ class PersonDetailFragment : Fragment() {
 
 
 
-        binding.personNameTv.text = "Set Name From Args"
+        binding.personNameTv.text = name
         binding.button.setOnClickListener {
             if(binding.targetAmt.text != null){
                 personalDetailViewModel.updateExpense(binding.targetAmt.text.toString().toDouble())
+                Toast.makeText(context, "Target Set", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context,"Target is null", Toast.LENGTH_SHORT).show()
             }
         }
 

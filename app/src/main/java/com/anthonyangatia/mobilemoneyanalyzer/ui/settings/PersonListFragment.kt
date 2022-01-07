@@ -24,18 +24,16 @@ class PersonListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = PersonListFragmentBinding.inflate(inflater, container, false)
-
         personsAdapter = PersonsAdapter(PersonListener { person ->
             Timber.i("At adapter"+person.toString())
 //            Toast.makeText(context, person.toString(), Toast.LENGTH_SHORT).show()
-
-
             viewModel.onPersonClicked(person.name)
 
-        })
+        }, "PersonListFragment")
         binding.personSearchListCompare.adapter = personsAdapter
         viewModel.personAndBusiness.observe(viewLifecycleOwner, {
             it?.let{
+                Timber.i("PersonListFragment at subit"+it.size.toString())
                 personsAdapter.submitList(it)
             }
         })
