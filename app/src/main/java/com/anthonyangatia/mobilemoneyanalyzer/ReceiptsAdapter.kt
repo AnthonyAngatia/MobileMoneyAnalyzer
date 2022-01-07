@@ -8,9 +8,10 @@ import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
+import com.anthonyangatia.mobilemoneyanalyzer.ui.search.SearchFragmentDirections
 import com.anthonyangatia.mobilemoneyanalyzer.ui.settings.target.PersonDetailFragmentDirections
 
-class ReceiptsAdapter: RecyclerView.Adapter<ReceiptsAdapter.ViewHolder>() {
+class ReceiptsAdapter(private val className:String? = null): RecyclerView.Adapter<ReceiptsAdapter.ViewHolder>() {
     var receiptList = listOf<Receipt>()
         set(value) {
             field =value
@@ -29,9 +30,17 @@ class ReceiptsAdapter: RecyclerView.Adapter<ReceiptsAdapter.ViewHolder>() {
             null -> R.drawable.rotated_green
             else -> R.drawable.red_arrow_svg
         })
-        holder.itemView.setOnClickListener {
-            it.findNavController().navigate(PersonDetailFragmentDirections.actionPersonDetailFragmentToClassifyFragment(item.receiptId))
+        if(className == "SearchFragment"){
+            holder.itemView.setOnClickListener {
+                it.findNavController().navigate(SearchFragmentDirections.actionNavigationSearchToClassifyFragment(item.receiptId))
+            }
+
+        }else{
+            holder.itemView.setOnClickListener {
+                it.findNavController().navigate(PersonDetailFragmentDirections.actionPersonDetailFragmentToClassifyFragment(item.receiptId))
+            }
         }
+
 
         if(item.transactionType == "sentToNumber"){
             holder.amt.text = "Kshs "+item.amountSent.toString()

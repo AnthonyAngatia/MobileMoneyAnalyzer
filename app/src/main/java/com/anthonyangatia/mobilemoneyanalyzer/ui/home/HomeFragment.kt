@@ -1,11 +1,13 @@
 package com.anthonyangatia.mobilemoneyanalyzer.ui.home
 
+import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.anthonyangatia.mobilemoneyanalyzer.ReceiptsAdapter
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.FragmentHomeBinding
@@ -16,8 +18,6 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var binding: FragmentHomeBinding
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -28,33 +28,18 @@ class HomeFragment : Fragment() {
             ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
 
         binding.homeViewModel = homeViewModel
-
-        homeViewModel.weekExpense.observe(viewLifecycleOwner, {
-            it?.let{
-                binding.amtSpentTextView.text = it.toString()
-            }
-        })
-
-
-        val adapter = ReceiptsAdapter()
-
-        observeReceipts(adapter)
-//        observePeople()
-
-
-
-
+        binding.lifecycleOwner = this
 
         return this.binding.root
     }
 
-    private fun observeReceipts(adapter: ReceiptsAdapter) {
-        homeViewModel.receipts?.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                adapter.receiptList = it
-            }
-        })
-    }
+//    private fun observeReceipts(adapter: ReceiptsAdapter) {
+//        homeViewModel.receipts.observe(viewLifecycleOwner, Observer {
+//            it?.let {
+//                adapter.receiptList = it
+//            }
+//        })
+//    }
 
     private fun observePeople() {
 //        homeViewModel.persons.observe(viewLifecycleOwner, {
@@ -63,5 +48,14 @@ class HomeFragment : Fragment() {
 //                Timber.i(person.toString())
 //            }
 //        })
+    }
+}
+class HomeViewModelFactory(val application: Application): ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+            return HomeViewModel(application) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+
     }
 }

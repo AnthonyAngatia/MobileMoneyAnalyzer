@@ -4,10 +4,8 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.appcompat.widget.SearchView
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.anthonyangatia.mobilemoneyanalyzer.R
+import com.anthonyangatia.mobilemoneyanalyzer.ReceiptsAdapter
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.SearchFragmentBinding
 import com.anthonyangatia.mobilemoneyanalyzer.util.onQueryTextChanged
@@ -18,7 +16,7 @@ class SearchFragment : Fragment(){
     private lateinit var binding:SearchFragmentBinding
     private lateinit var searchViewModel:SearchViewModel
 
-    private val searchAdapter = SearchAdapter()
+    private val receiptsAdapter = ReceiptsAdapter("SearchFragment")
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -30,13 +28,13 @@ class SearchFragment : Fragment(){
         searchViewModel =ViewModelProvider(this, viewModelFactory).get(SearchViewModel::class.java)
 
 //        val adapter = searchAdapter
-        binding.personSearchListSearch.adapter = searchAdapter
+        binding.personSearchListSearch.adapter = receiptsAdapter
 
 
 
         searchViewModel.receipts?.observe(viewLifecycleOwner, Observer{
             it?.let{
-                searchAdapter.receiptList = it
+                receiptsAdapter.receiptList = it
 //                Timber.i(it.toString())
             }
         })
@@ -53,7 +51,7 @@ class SearchFragment : Fragment(){
         val searchQuery = "%$query%"
         searchViewModel.searchDatabase(searchQuery).observe(viewLifecycleOwner, {
             it?.let {
-                searchAdapter.receiptList = it
+                receiptsAdapter.receiptList = it
             }
         })
     }

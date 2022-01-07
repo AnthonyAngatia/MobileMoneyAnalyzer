@@ -21,42 +21,41 @@ class HomeViewModel(val application: Application) : ViewModel() {
     private val calendar: Calendar = Calendar.getInstance()
     var receipts:LiveData<List<Receipt>> = database.getAllReceipts()!!
     var persons:LiveData<List<PersonAndBusiness>> = database.getPeopleAndBusiness()
-    var month: String
+    var month: String = "Stats for "+months[calendar.get(Calendar.MONTH)]
     var weekExpense:MutableLiveData<Double> = amountTransactedWeek()
-    var monthIncome:String = "12309"
-     var monthExpenditure:String = "120"
-     var balance:Int = getBalanceM()
+    var monthIncome:MutableLiveData<Double> = MutableLiveData(0.0)
+     var monthExpenditure:MutableLiveData<Double> = MutableLiveData(0.0)
+     var balance:MutableLiveData<Double> = getBalanceM()
     private val prefs = Prefs(application)
 
     init {
 
-        prefs.newPhone = true //For debugging purpose
+//        prefs.newPhone = true //For debugging purpose
 
         calendar.time = Date()
-        month = "Stats for "+months[calendar.get(Calendar.MONTH)]
         if(prefs.newPhone){
             viewModelScope.launch {
                 database.clear()
                 database.clearPersonAndBusiness()
-//                readSMS()
+                readSMS()
                 prefs.newPhone = false
             }
         }else{
 //            TODO: Check whether the last receipt in content provider is the same as the one in my database
 //            If not, write a recursive algorithm that tries to establish the last message
         }
-        processTempReceipts()//For debugging
+//        processTempReceipts()//For debugging
         amountTransactedMonth()
 
     }
 
-    private fun getBalanceM(): Int {
-        var bal:Double? = null
+    private fun getBalanceM(): MutableLiveData<Double> {
         viewModelScope.launch {
-            bal = database.getBalance()
-            if (bal == null) bal = 200.0
+            database.getBalance()?.let {
+                balance.value = it
+            }
         }
-        return bal?.toInt() ?: 190
+        return MutableLiveData(0.0)
     }
 
     fun amountTransactedWeek(): MutableLiveData<Double> {
@@ -73,10 +72,10 @@ class HomeViewModel(val application: Application) : ViewModel() {
         var amtTransacted:AmountTransacted? = AmountTransacted(null,null)
         viewModelScope.launch {
             amtTransacted = database.getAmountTransactedList(convertDateToLong(minimumTime,dateFormat), convertDateToLong(maximumTime,dateFormat))
-//            weekExpense.value = amtTransacted?.amountSentTotal ?: 2800.0 //elvis expression
+            weekExpense.value = amtTransacted?.amountSentTotal ?: 2800.0 //elvis expression
 //            Timber.i("WEEK expense ${weekExpense.value}")
         }
-        return MutableLiveData(amtTransacted?.amountSentTotal ?: 190.0)
+        return MutableLiveData(0.0)
     }
 
     private fun amountTransactedMonth(){
@@ -84,8 +83,8 @@ class HomeViewModel(val application: Application) : ViewModel() {
         val lastDateMilli = getLastDayOfMonth(calendar)
         viewModelScope.launch {
             val amountTransacted = database.getAmountTransactedList(firstDateMilli,lastDateMilli)
-            monthIncome = amountTransacted?.amountReceivedTotal?.toString() ?: "0.0"
-            monthExpenditure = amountTransacted?.amountSentTotal?.toString() ?: "0.0"
+            monthIncome.value = amountTransacted?.amountReceivedTotal ?: 0.0
+            monthExpenditure.value = amountTransacted?.amountSentTotal ?: 0.0
         }
 
     }
