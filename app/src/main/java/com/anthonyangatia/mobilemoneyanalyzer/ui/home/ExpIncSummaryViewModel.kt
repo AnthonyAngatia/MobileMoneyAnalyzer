@@ -10,7 +10,7 @@ import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.util.*
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
+import timber.log.Timber
 import java.util.*
 
 class ExpIncSummaryViewModel(application: Application) : AndroidViewModel(application) {
@@ -18,42 +18,54 @@ class ExpIncSummaryViewModel(application: Application) : AndroidViewModel(applic
     private val calendar: Calendar = Calendar.getInstance()
     val expenseListLiveData: MutableLiveData<List<PersonAmountTransacted>> = MutableLiveData() //Get Person with highest expenses
     val incomeListLiveData: MutableLiveData<List<PersonAmountTransacted>> = MutableLiveData()
-    val weekReceipts:LiveData<List<Receipt>>? = getReceiptsWeek()
+    val weekReceipts:MutableLiveData<List<Receipt>> = MutableLiveData()
+    val personAmountTransactedList:MutableList<PersonAmountTransacted> = mutableListOf()
+
 
     init{
         //Pass receipt to get income and expense list
-        if (weekReceipts != null) {
-            weekReceipts.value?.let { expenseIncomeList(it) }
-        }
+        getReceiptsWeek()
+//        if (weekReceipts != null) {
+//            weekReceipts.value?.let { expenseIncomeList(it) }
+//        }
 
     }
 
-
-
-    fun getReceiptsWeek(): LiveData<List<Receipt>>? {
+    fun getReceiptsWeek() {
         val todaysDate = getTodaysDate()
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)-1
         val firstDateOfWeek = todaysDate-dayOfWeek
-        val month = calendar.get(Calendar.MONTH) + 1
-        val year = calendar.get(Calendar.YEAR)
-        val lastTimeInADay = "23:59:59"
-        val firstTimeInADay = "00:00:00"
-        var maximumTime = "$todaysDate/$month/$year $lastTimeInADay"
-        var minimumTime = "$firstDateOfWeek/$month/$year $firstTimeInADay"
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-        return database.getReceiptWhereDate(convertDateToLong(minimumTime, dateFormat), convertDateToLong(maximumTime, dateFormat))
+//        val (minTimeMilli, maxTimeMilli) = getMinMaxTimeWeek( todaysDate, firstDateOfWeek)
+        val minTimeMilli = getFirstDayOfMonth(calendar)
+        val maxTimeMilli = getLastDayOfMonth(calendar)
+        Timber.i("minTime:"+ minTimeMilli.toString())//1641502800000
+        Timber.i("maxTime:"+ maxTimeMilli.toString())//1641157199000
+
+        viewModelScope.launch {
+            database.getReceiptWhereDate(minTimeMilli, maxTimeMilli)?.let {
+                weekReceipts.value = it
+                Timber.i("Size of it"+it.size.toString())
+                expenseIncomeList(it)
+            }
+        }
     }
-    fun getReceiptsMonth(): LiveData<List<Receipt>>? {
-        val firstDateMilli = getFirstDayOfMonth(calendar)
-        val lastDateMilli = getLastDayOfMonth(calendar)
-        return database.getReceiptWhereDate(firstDateMilli, lastDateMilli)
+    fun getReceiptsMonth(){
+        val minTimeMilli = getFirstDayOfMonth(calendar)
+        val maxTimeMilli = getLastDayOfMonth(calendar)
+        viewModelScope.launch {
+            Timber.i("Inviewmodelscope")
+            database.getReceiptWhereDate(minTimeMilli, maxTimeMilli)?.let {
+                Timber.i("Some receipts are in")
+                weekReceipts.value = it
+                expenseIncomeList(it)
+            }
+        }
     }
 
     fun expenseIncomeList(receipts:List<Receipt>){
         //Get all receitps
         //Push receipts to PersonAndAmountTransacted, where phoneNumber is the same, sum the amount sent or amount received
         //Set personAmountTransacted as the livedata
-        val personAmountTransactedList:MutableList<PersonAmountTransacted> = mutableListOf()
        for(receipt in receipts){
            var amountSent = 0.0
            var amountReceived = 0.0
@@ -66,35 +78,25 @@ class ExpIncSummaryViewModel(application: Application) : AndroidViewModel(applic
            val amountTransacted = AmountTransacted(amountSent, amountReceived)
            receipt.name?.let {
                viewModelScope.launch {
+                   Timber.i("Getting person viewmodelscopelaunch:"+it)
                    val person = database.getPerson(it)
-                   addToPATList(person, amountTransacted, personAmountTransactedList)
+                   addToPATList(person, amountTransacted)
                }
            }
        }
-        personAmountTransactedList.sortByDescending {
-            it.amountTransacted.amountReceivedTotal
-        }
-        val incomeList = personAmountTransactedList
-        incomeListLiveData.value = incomeList
-
-        personAmountTransactedList.sortByDescending {
-            it.amountTransacted.amountSentTotal
-        }
-        val expenseList = personAmountTransactedList
-        expenseListLiveData.value = expenseList
-
-
     }
 
-    private fun addToPATList(
-        personAndBusiness: PersonAndBusiness,
-        amountTransacted: AmountTransacted,
-        personAmountTransactedList: MutableList<PersonAmountTransacted>
-    ) {
-        var personAmountTransacted = PersonAmountTransacted(personAndBusiness, amountTransacted)
+    private fun addToPATList(personAndBusiness: PersonAndBusiness, amountTransacted: AmountTransacted) {
+        val personAmountTransacted = PersonAmountTransacted(personAndBusiness, amountTransacted)
         var personFound = false
+        Timber.i("Approaching for loop empty then wont work")
         for (pAT in personAmountTransactedList) {
-            if (pAT.personAndBusiness == personAmountTransacted.personAndBusiness) {
+            Timber.i("Checking if person is in the list")
+            if (pAT.personAndBusiness.name == personAmountTransacted.personAndBusiness.name) {//In the real world we can have people with similar names
+                pAT.amountTransacted.apply {
+                    amountSentTotal = 100.0
+                    amountReceivedTotal = 20.0
+                }
                 pAT.amountTransacted.amountSentTotal.let {
                     it!! + personAmountTransacted.amountTransacted.amountSentTotal!!
                 }
@@ -107,17 +109,25 @@ class ExpIncSummaryViewModel(application: Application) : AndroidViewModel(applic
 
             }
         }
-        if (!personFound) personAmountTransactedList.add(personAmountTransacted)
-    }
+        if (!personFound){
+            Timber.i("Person Added to list")
+            personAmountTransactedList.add(personAmountTransacted)
+        }
+        //TODO: The idea of sorting is very buggy and should be relooked in the feature
+        personAmountTransactedList.sortByDescending {
+            it.amountTransacted.amountReceivedTotal
+        }
+        val incomeList = personAmountTransactedList
+        Timber.i("Size of income list:"+incomeList.size.toString())//
+        incomeListLiveData.value = incomeList
 
-    private fun getTodaysDate(): Int {
-        val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-        val date = Date()
-        println(formatter.format(date))
-        val dateRegex = """(\d{1,3})\/(\d{1,3})\/(\d{1,4})\s\d+:\d+:\d+""".toRegex()
-        val matchResult = dateRegex.matchEntire(formatter.format(date))
-        val (dateR) = matchResult!!.destructured
-        return dateR.toInt()
+        personAmountTransactedList.sortByDescending {
+            it.amountTransacted.amountSentTotal
+        }
+        val expenseList = personAmountTransactedList
+        Timber.i("Size of expense list:"+expenseList.size.toString())
+        expenseListLiveData.value = expenseList
+
     }
 
 

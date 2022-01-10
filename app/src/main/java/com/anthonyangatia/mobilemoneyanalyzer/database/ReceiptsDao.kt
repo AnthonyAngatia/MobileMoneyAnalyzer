@@ -20,7 +20,7 @@ interface ReceiptsDao{
     fun getAllReceipts(): LiveData<List<Receipt>>?
 
     @Query("SELECT * from transaction_receipt_table WHERE date BETWEEN :beginningDate AND :endDate")
-    fun getReceiptWhereDate(beginningDate:Long , endDate:Long ): LiveData<List<Receipt>>?
+    suspend fun getReceiptWhereDate(beginningDate:Long , endDate:Long ): List<Receipt>?
 
     @Query("SELECT SUM(amount_sent) as totalSent, SUM(amount_received) as totalReceived from transaction_receipt_table WHERE date BETWEEN :beginningDate AND :endDate")
     suspend fun getAmountTransactedList(beginningDate:Long , endDate:Long ): AmountTransacted?

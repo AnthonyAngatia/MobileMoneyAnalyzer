@@ -5,11 +5,11 @@ import androidx.lifecycle.*
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import com.anthonyangatia.mobilemoneyanalyzer.util.AmountTransacted
 import com.anthonyangatia.mobilemoneyanalyzer.util.daysOfWeek
+import com.anthonyangatia.mobilemoneyanalyzer.util.getMinMaxTimeDay
+import com.anthonyangatia.mobilemoneyanalyzer.util.getTodaysDate
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class BarChartViewModel (val database: ReceiptsDao, application: Application): AndroidViewModel(application){
@@ -19,20 +19,14 @@ class BarChartViewModel (val database: ReceiptsDao, application: Application): A
 //        get() = _amountTransactedListLiveData
     var amtTransactedWeekLive: MutableLiveData<HashMap<String, AmountTransacted>> = MutableLiveData()
     var amtTransactedWeek: HashMap<String, AmountTransacted> = HashMap()
-//    val calendar = Calendar.getInstance().time.let {
-//        it = Date()
-//    }
+    val calendar = Calendar.getInstance()
 
 
 
     init{
-        val calendar = Calendar.getInstance()
-        calendar.time = Date()
-
 //        receipts = database.getReceiptWhereDate(firstDate, lastDate)!!
-
 //        getAmountTransactedPerDay(calendar)
-        getAmountTransactedWeek(calendar)
+        getAmountTransactedWeek()
         amtTransactedWeekLive.value = amtTransactedWeek
 
     }
@@ -44,14 +38,14 @@ class BarChartViewModel (val database: ReceiptsDao, application: Application): A
 
 
 
-    fun getAmountTransactedWeek(calendar: Calendar){
+    fun getAmountTransactedWeek(){
         val dateI = getTodaysDate()
         viewModelScope.launch {
         var dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) -1
         for (day in dateI downTo (dateI-6)){
             if(dayOfWeek < 0) dayOfWeek = 6
             if (day > 0){
-                val (minTimeMilli, maxTimeMilli) = getMinMaxTime(calendar, day)
+                val (minTimeMilli, maxTimeMilli) = getMinMaxTimeDay(day)
                 //         The transactions are not being processed in a serial order
                     var amountTransactedBtwTime = database.getAmountTransactedList(minTimeMilli, maxTimeMilli)
                     if (amountTransactedBtwTime != null) {
@@ -73,36 +67,10 @@ class BarChartViewModel (val database: ReceiptsDao, application: Application): A
 
     }
 
-    fun getMinMaxTime(calendar:Calendar, day:Int):Pair<Long, Long>{
-//        val month = calendar.get(Calendar.MONTH) + 1
-        //For debugging purposes
-        val month = 12
-        val year = 2021
-//        val year = calendar.get(Calendar.YEAR)
-        val lastTimeInADay = "23:59:59"
-        val firstTimeInADay = "00:00:00"
-        var minimumTime = "$day/$month/$year $firstTimeInADay"
-        var maximumTime = "$day/$month/$year $lastTimeInADay"
-        val minTimeMilli = convertDateToLong(minimumTime)
-        val maxTimeMilli = convertDateToLong(maximumTime)
-
-        return Pair(minTimeMilli, maxTimeMilli)
-
-    }
      fun dayOfWeekStr(index:Int):String{
          return daysOfWeek[index]
     }
 
-    private fun getTodaysDate(): Int {
-        val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-        val date = Date()
-        println(formatter.format(date))
-        val dateRegex = """(\d{1,3})\/(\d{1,3})\/(\d{1,4})\s\d+:\d+:\d+""".toRegex()
-        val matchResult = dateRegex.matchEntire("10/12/2021 23:11:32")//For debug purposes
-//        val matchResult = dateRegex.matchEntire(formatter.format(date))
-        val (dateR) = matchResult!!.destructured
-        return dateR.toInt()
-    }
 
     fun convertDateToLong(dateString: String): Long {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")

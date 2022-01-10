@@ -14,7 +14,7 @@ import com.anthonyangatia.mobilemoneyanalyzer.databinding.FragmentNotificationsB
 
 class NotificationsFragment : Fragment() {
 
-    private lateinit var notificationsViewModel: NotificationsViewModel
+    private val notificationsViewModel: NotificationsViewModel by lazy { ViewModelProvider(this).get(NotificationsViewModel::class.java)  }
     private lateinit var binding: FragmentNotificationsBinding
 
 
@@ -23,31 +23,12 @@ class NotificationsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        notificationsViewModel =
-            ViewModelProvider(this).get(NotificationsViewModel::class.java)
-
         binding = FragmentNotificationsBinding.inflate(inflater, container, false)
 
-        val application = requireNotNull(this.activity).application
-        val dataSource = ReceiptsDatabase.getInstance(application).receiptsDao
-        val viewModelFactory = NotificationsViewModelFactory(dataSource, application)
-        val notificationsViewModel = ViewModelProvider(this, viewModelFactory).get(NotificationsViewModel::class.java)
 
 //
         return binding.root
     }
-
-
-}
-
-class NotificationsViewModelFactory(val dataSource: ReceiptsDao, val application: Application):ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(NotificationsViewModel::class.java)) {
-            return NotificationsViewModel(dataSource, application) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-
 
 
 }

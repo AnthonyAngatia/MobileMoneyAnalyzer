@@ -3,6 +3,7 @@ package com.anthonyangatia.mobilemoneyanalyzer.util
 import androidx.room.ColumnInfo
 import com.anthonyangatia.mobilemoneyanalyzer.database.PersonAndBusiness
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -13,6 +14,60 @@ data class AmountTransacted(
 )
 
 data class PersonAmountTransacted(var personAndBusiness: PersonAndBusiness, var amountTransacted: AmountTransacted)
+
+fun getTodaysDate(): Int {
+    val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+    val date = Date()
+    println(formatter.format(date))
+    val dateRegex = """(\d{1,3})\/(\d{1,3})\/(\d{1,4})\s\d+:\d+:\d+""".toRegex()
+//        val matchResult = dateRegex.matchEntire("10/12/2021 23:11:32")//For debug purposes
+    val matchResult = dateRegex.matchEntire(formatter.format(date))
+    val (dateR) = matchResult!!.destructured
+    return dateR.toInt()
+}
+
+fun getMinMaxTimeDay(day:Int):Pair<Long, Long>{
+    val calendar = Calendar.getInstance()
+    val month = calendar.get(Calendar.MONTH) + 1
+    //For debugging purposes
+//        val month = 12
+//        val year = 2021
+    val year = calendar.get(Calendar.YEAR)
+    val lastTimeInADay = "23:59:59"
+    val firstTimeInADay = "00:00:00"
+    var minimumTime = "$day/$month/$year $firstTimeInADay"
+    var maximumTime = "$day/$month/$year $lastTimeInADay"
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+    val minTimeMilli = convertDateToLong(minimumTime, dateFormat )
+    val maxTimeMilli = convertDateToLong(maximumTime, dateFormat)
+
+    return Pair(minTimeMilli, maxTimeMilli)
+
+}
+
+fun getMinMaxTimeWeek(day:Int, firstDateOfWeek:Int):Pair<Long, Long>{
+    val calendar = Calendar.getInstance()
+    val month = calendar.get(Calendar.MONTH) + 1
+    //For debugging purposes
+//        val month = 12
+//        val year = 2021
+    val year = calendar.get(Calendar.YEAR)
+    val lastTimeInADay = "23:59:59"
+    val firstTimeInADay = "00:00:00"
+    var minimumTime = "$firstDateOfWeek/$month/$year $firstTimeInADay"
+    var maximumTime = "$day/$month/$year $lastTimeInADay"
+    Timber.i("Min Time String"+minimumTime)
+    Timber.i("Max Time String"+maximumTime)
+
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+    val minTimeMilli = convertDateToLong(minimumTime, dateFormat )
+    val maxTimeMilli = convertDateToLong(maximumTime, dateFormat)
+
+    return Pair(minTimeMilli, maxTimeMilli)
+
+}
+
+
 
 fun getFirstDayOfMonth(calendar: Calendar): Long{
     calendar.set(
