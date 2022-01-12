@@ -14,6 +14,8 @@ data class AmountTransacted(
 )
 
 data class PersonAmountTransacted(var personAndBusiness: PersonAndBusiness, var amountTransacted: AmountTransacted)
+val transactionTypeArray = arrayOf<String>("sentToNumber", "sentToBuyGoods","sentToPayBill","sentToMshwari", "receivedMoney", "receivedMoneyMshwari", "sentToBuyAirTime")
+
 
 fun getTodaysDate(): Int {
     val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
@@ -124,6 +126,19 @@ fun buildReceiptFromSms(message:String): Pair<Receipt?, PersonAndBusiness?> {
     val receivedMoneyMshwari = RECEIVED_FROM_MSHWARI.toRegex()
     val accountBalance = ACCOUNT_BALANCE.toRegex()
     when(true){
+//        sentToPayBill always has to be befor sentToNumber
+        sentToPayBill.matches(message)->{
+            val matchResult = sentToPayBill.matchEntire(message)
+            var (code, amountSent, paybill,  account, date, time, balance, transactionCost) = matchResult!!.destructured
+            time = formatTime(time)
+            val businessName = paybill
+//            val businessName = paybill + "*" + account
+            val person = PersonAndBusiness(businessName) //Insert person
+            val receipt =  Receipt(message, code, transactionType = "sentToPayBill",
+                date = convertDateToLong(date+" "+time), balance = convertToDouble(balance),
+                amountSent = convertToDouble(amountSent),transactionCost = convertToDouble(transactionCost), name = person.name)
+            return Pair(receipt, person )
+        }
         sentToNumber.matches(message)->{
             val matchResult = sentToNumber.matchEntire(message)
             var (code, amountSent,recipientName, recipientNumber, date, time, balance, transactionCost) = matchResult!!.destructured
@@ -145,18 +160,6 @@ fun buildReceiptFromSms(message:String): Pair<Receipt?, PersonAndBusiness?> {
                 amountSent = convertToDouble(amountSent),transactionCost = convertToDouble(transactionCost),name = person.name)
             return Pair(receipt,person)
         }
-        sentToPayBill.matches(message)->{
-            val matchResult = sentToPayBill.matchEntire(message)
-            var (code, amountSent, paybill,  account, date, time, balance, transactionCost) = matchResult!!.destructured
-            time = formatTime(time)
-            val businessName = paybill
-//            val businessName = paybill + "*" + account
-            val person = PersonAndBusiness(businessName) //Insert person
-            val receipt =  Receipt(message, code, transactionType = "sentToPayBill",
-                date = convertDateToLong(date+" "+time), balance = convertToDouble(balance),
-                amountSent = convertToDouble(amountSent),transactionCost = convertToDouble(transactionCost), name = person.name)
-            return Pair(receipt, person )
-        }
         sentToMshwari.matches(message)->{
             val matchResult = sentToMshwari.matchEntire(message)
             var (code, amountSent, date, time, mpesaBalance, mshwariBalance,  transactionCost) = matchResult!!.destructured
@@ -173,7 +176,7 @@ fun buildReceiptFromSms(message:String): Pair<Receipt?, PersonAndBusiness?> {
             time = formatTime(time)
             val person = PersonAndBusiness(sender) // e.g ALOICE  OLOO 0719249474, CITIBANK N.A KENYA 100200
             val receipt =  Receipt(message, code,transactionType = "receivedMoney",
-                date = convertDateToLong(date+" "+time), balance = convertToDouble(balance),
+            date = convertDateToLong(date+" "+time), balance = convertToDouble(balance),
                 amountReceived = convertToDouble(amountReceived), name = person.name)
             return Pair(receipt, person)
         }

@@ -101,6 +101,9 @@ interface ReceiptsDao{
     @Query("UPDATE transaction_receipt_table SET  category= :category WHERE receiptId = :id")
     suspend fun classify(category:String, id:Long)
 
+    @Query("SELECT SUM(amount_sent) as totalSent FROM transaction_receipt_table WHERE transaction_type = :transactionType")
+    suspend fun getTotalAmountByTransactionType(transactionType: String):Double?
+
 
 
 // LIKE "SELECT * FROM table '%' || :searchQuery || '%' "

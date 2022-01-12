@@ -2,12 +2,12 @@ package com.anthonyangatia.mobilemoneyanalyzer.ui.home
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.anthonyangatia.mobilemoneyanalyzer.database.PersonAndBusiness
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
+import com.anthonyangatia.mobilemoneyanalyzer.database.TransactionSummary
 import com.anthonyangatia.mobilemoneyanalyzer.util.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -20,14 +20,45 @@ class ExpIncSummaryViewModel(application: Application) : AndroidViewModel(applic
     val incomeListLiveData: MutableLiveData<List<PersonAmountTransacted>> = MutableLiveData()
     val weekReceipts:MutableLiveData<List<Receipt>> = MutableLiveData()
     val personAmountTransactedList:MutableList<PersonAmountTransacted> = mutableListOf()
-
+    var transSummaryList = ArrayList<TransactionSummary>()
+    val transSummaryLiveData:MutableLiveData<List<TransactionSummary>> = MutableLiveData()
 
     init{
-        //Pass receipt to get income and expense list
         getReceiptsWeek()
-//        if (weekReceipts != null) {
-//            weekReceipts.value?.let { expenseIncomeList(it) }
-//        }
+        getSummary()
+    }
+
+    private fun getSummary(){
+            for (type in transactionTypeArray){
+                Timber.i(type)
+                when(type){
+                    "sentToNumber"-> addTypeAndAmount(type, "Sent to Number")
+                    "sentToBuyGoods"-> addTypeAndAmount(type,"Buy Goods" )
+                    "sentToPayBill" -> addTypeAndAmount(type, "Pay Bill")
+                    "sentToMshwari" ->addTypeAndAmount(type, "Sent to MSHWARI")
+                }
+            }
+    }
+
+    private  fun addTypeAndAmount(type: String, key:String) {
+        Timber.i(type)
+        viewModelScope.launch {
+            database.getTotalAmountByTransactionType(type).let {
+                Timber.i(key +":"+ it.toString())
+                addSummary(TransactionSummary(key, it ?: 0.0))
+
+            }
+        }
+
+    }
+
+    fun addSummary(transactionSummary: TransactionSummary){
+        Timber.i("addinf to list")
+        transSummaryList.add(transactionSummary)
+        transSummaryList.sortByDescending{
+            it.amount
+        }
+        transSummaryLiveData.value = transSummaryList //Trigger a change in the live data as we add a new item in the list
 
     }
 
@@ -78,7 +109,7 @@ class ExpIncSummaryViewModel(application: Application) : AndroidViewModel(applic
            val amountTransacted = AmountTransacted(amountSent, amountReceived)
            receipt.name?.let {
                viewModelScope.launch {
-                   Timber.i("Getting person viewmodelscopelaunch:"+it)
+//                   Timber.i("Getting person viewmodelscopelaunch:"+it)
                    val person = database.getPerson(it)
                    addToPATList(person, amountTransacted)
                }
@@ -89,14 +120,13 @@ class ExpIncSummaryViewModel(application: Application) : AndroidViewModel(applic
     private fun addToPATList(personAndBusiness: PersonAndBusiness, amountTransacted: AmountTransacted) {
         val personAmountTransacted = PersonAmountTransacted(personAndBusiness, amountTransacted)
         var personFound = false
-        Timber.i("Approaching for loop empty then wont work")
         for (pAT in personAmountTransactedList) {
-            Timber.i("Checking if person is in the list")
+//            Timber.i("Checking if person is in the list")
             if (pAT.personAndBusiness.name == personAmountTransacted.personAndBusiness.name) {//In the real world we can have people with similar names
-                pAT.amountTransacted.apply {
-                    amountSentTotal = 100.0
-                    amountReceivedTotal = 20.0
-                }
+//                pAT.amountTransacted.apply {
+//                    amountSentTotal = 100.0
+//                    amountReceivedTotal = 20.0
+//                }
                 pAT.amountTransacted.amountSentTotal.let {
                     it!! + personAmountTransacted.amountTransacted.amountSentTotal!!
                 }
@@ -113,21 +143,35 @@ class ExpIncSummaryViewModel(application: Application) : AndroidViewModel(applic
             Timber.i("Person Added to list")
             personAmountTransactedList.add(personAmountTransacted)
         }
+        sortAndSetListValues()
+
+
+    }
+
+    private fun sortAndSetListValues() {
         //TODO: The idea of sorting is very buggy and should be relooked in the feature
         personAmountTransactedList.sortByDescending {
             it.amountTransacted.amountReceivedTotal
         }
         val incomeList = personAmountTransactedList
-        Timber.i("Size of income list:"+incomeList.size.toString())//
-        incomeListLiveData.value = incomeList
+        Timber.i("Size of income list:" + incomeList.size.toString())//
+        incomeListLiveData.value = getFirstNItems(incomeList)
 
         personAmountTransactedList.sortByDescending {
             it.amountTransacted.amountSentTotal
         }
         val expenseList = personAmountTransactedList
-        Timber.i("Size of expense list:"+expenseList.size.toString())
-        expenseListLiveData.value = expenseList
+        Timber.i("Size of expense list:" + expenseList.size.toString())
+        expenseListLiveData.value = getFirstNItems(expenseList)
+    }
 
+    fun getFirstNItems(items:List<PersonAmountTransacted>, n:Int=5): MutableList<PersonAmountTransacted> {
+        val newList = mutableListOf<PersonAmountTransacted>()
+        for (i in 0 until n){
+            if(items.size < 5) break
+            newList.add(items[i])
+        }
+        return newList
     }
 
 

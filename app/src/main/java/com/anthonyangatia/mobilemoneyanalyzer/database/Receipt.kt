@@ -84,6 +84,8 @@ data class PersonWithReceipts(
 
 data class PersonReceipt(val personAndBusiness: PersonAndBusiness, val receipt: Receipt)
 
+data class TransactionSummary(val transactionType:String, val amount: Double)
+
 
 
 
