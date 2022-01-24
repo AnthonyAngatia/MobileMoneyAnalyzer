@@ -16,6 +16,9 @@ data class AmountTransacted(
 data class PersonAmountTransacted(var personAndBusiness: PersonAndBusiness, var amountTransacted: AmountTransacted)
 val transactionTypeArray = arrayOf<String>("sentToNumber", "sentToBuyGoods","sentToPayBill","sentToMshwari", "receivedMoney", "receivedMoneyMshwari", "sentToBuyAirTime")
 
+data class CategoryAmount(var category :String, var amount: Double)
+// Key for the string that's delivered in the action's intent.
+val KEY_TEXT_REPLY = "key_text_reply"
 
 fun getTodaysDate(): Int {
     val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")

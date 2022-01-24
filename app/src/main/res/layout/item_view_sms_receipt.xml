@@ -34,15 +34,7 @@
                 app:layout_constraintTop_toTopOf="@+id/textView"
                 tools:text="Anthony Angatia" />
 
-            <TextView
-                android:id="@+id/dayTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto"
-                android:text="Mon 15"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/amountTextView" />
+
 
             <TextView
                 android:id="@+id/textView"
@@ -77,6 +69,15 @@
                 app:layout_constraintEnd_toStartOf="@+id/dayTextView"
                 app:layout_constraintTop_toTopOf="@+id/nameTextView"
                 tools:text="Kshs 100,000" />
+            <TextView
+                android:id="@+id/dayTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="Mon 15"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/amountTextView" />
 
             <TextView
                 android:id="@+id/timeTextView"

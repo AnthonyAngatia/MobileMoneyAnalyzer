@@ -11,7 +11,7 @@ data class Receipt(
     var code: String? = null,
 
     @ColumnInfo(name = "transaction_type")
-    var transactionType: String? = null, //sentToNumber, sentBuyGoods, sentToPayBill, sentToMshwari, receivedMoney
+    var transactionType: String? = null, //sentToNumber, sentBuyGoods, sentToPayBill, sentToMshwari, receivedMoney, accountBalance
 
     var category: String? = null,
 

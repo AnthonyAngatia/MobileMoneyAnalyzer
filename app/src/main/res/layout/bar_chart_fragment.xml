@@ -18,6 +18,7 @@
             android:id="@+id/appCompatSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/light_gray_spinner_shade"
             android:entries="@array/testArray"
             android:minHeight="32dp"
             android:padding="4dp"

@@ -3,6 +3,7 @@ package com.anthonyangatia.mobilemoneyanalyzer.database
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.anthonyangatia.mobilemoneyanalyzer.util.AmountTransacted
+import com.anthonyangatia.mobilemoneyanalyzer.util.CategoryAmount
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -104,7 +105,11 @@ interface ReceiptsDao{
     @Query("SELECT SUM(amount_sent) as totalSent FROM transaction_receipt_table WHERE transaction_type = :transactionType")
     suspend fun getTotalAmountByTransactionType(transactionType: String):Double?
 
+    @Query("SELECT DISTINCT category FROM transaction_receipt_table")
+    suspend fun getAllCategories():List<String?>
 
+    @Query("SELECT SUM(amount_sent) as amount FROM transaction_receipt_table WHERE category = :category")
+    suspend fun getCategoryAndAmount(category:String?):Double
 
 // LIKE "SELECT * FROM table '%' || :searchQuery || '%' "
 

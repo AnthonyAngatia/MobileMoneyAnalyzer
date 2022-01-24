@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.anthonyangatia.mobilemoneyanalyzer.R
 import com.anthonyangatia.mobilemoneyanalyzer.database.TransactionSummary
+import com.anthonyangatia.mobilemoneyanalyzer.util.CategoryAmount
 import com.anthonyangatia.mobilemoneyanalyzer.util.PersonAmountTransacted
 import timber.log.Timber
 import java.util.*
@@ -79,6 +80,41 @@ class TransSummaryAdapter(): RecyclerView.Adapter<TransSummaryAdapter.ViewHolder
     }
 
     override fun getItemCount() = transSummaryList.size
+
+    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+        val transactionType: TextView = itemView.findViewById(R.id.transactionType)
+        val amount: TextView = itemView.findViewById(R.id.amtTransSum)
+
+    }
+
+}
+class CategoryAdapter(): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+    var categoryAmountList:List<CategoryAmount>  = listOf()
+        set(value) {
+            field =value
+            notifyDataSetChanged()
+        }
+
+
+
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val view = layoutInflater.inflate(R.layout.item_view_transaction_summary, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        //All this will generate a bug
+        val item = categoryAmountList[position]
+        Timber.i(item.category)
+        holder.transactionType.text = item.category
+//        Timber.i("Bind holder:"+ position.toString())
+        holder.amount.text = item.amount.toString()
+    }
+
+    override fun getItemCount() = categoryAmountList.size
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val transactionType: TextView = itemView.findViewById(R.id.transactionType)

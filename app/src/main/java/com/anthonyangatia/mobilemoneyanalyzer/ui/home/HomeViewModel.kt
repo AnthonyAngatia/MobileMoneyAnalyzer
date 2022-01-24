@@ -81,6 +81,9 @@ class HomeViewModel(val application: Application) : ViewModel() {
     private fun amountTransactedMonth(){
         val firstDateMilli = getFirstDayOfMonth(calendar)
         val lastDateMilli = getLastDayOfMonth(calendar)
+        Timber.i("FirstDateMilli:"+ firstDateMilli)
+        Timber.i("LastDateMilli:"+ lastDateMilli)
+
         viewModelScope.launch {
             val amountTransacted = database.getAmountTransactedList(firstDateMilli,lastDateMilli)
             monthIncome.value = amountTransacted?.amountReceivedTotal ?: 0.0
