@@ -19,8 +19,7 @@ import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.util.KEY_TEXT_REPLY
 import com.anthonyangatia.mobilemoneyanalyzer.util.buildReceiptFromSms
 import com.google.gson.Gson
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
 import kotlin.concurrent.schedule
@@ -90,10 +89,17 @@ class MyIntentService : IntentService("MyIntentService") {
         }
     }
 
-    private fun insertReceipt(
+     fun insertReceipt(
         database: ReceiptsDao,
         receipt: Receipt?
     ) {
+         //TODO: eXPERIMENT WITH making the function be suspended
+//        withContext(Dispatchers.IO){
+//
+//        }
+//        coroutineScope {
+//
+//        }
         GlobalScope.launch {
             Timber.i("Inserting receipt to the database")
             if (receipt != null) {

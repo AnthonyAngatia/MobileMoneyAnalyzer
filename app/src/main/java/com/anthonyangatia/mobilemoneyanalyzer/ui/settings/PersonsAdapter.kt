@@ -52,14 +52,13 @@ class PersonsAdapter(private val clickListener: PersonListener, val from: String
     class ViewHolder(val binding: ItemViewPersonBinding): RecyclerView.ViewHolder(binding.root){
 
         fun bind(item: PersonAndBusiness, clickListener: PersonListener) {
-            item.let {
-                binding.settingsNameTv.text = it.name
-                binding.settingsPhoneNo.text = it.phoneNumber
-                if (it.targetExpense != null){
-                    binding.targetAmtItemView.text="Target Expense  "+it.targetExpense.toString()
-                }
+            //TODO: rEFACTOR THIS CODE TO USE DATABINDING....REFER TO GDG CODELABS PROJECT LAB 10
+            binding.settingsNameTv.text = item.name
+            binding.settingsPhoneNo.text = item.phoneNumber
+            if (item.targetExpense != null){
+                binding.targetAmtItemView.text="Target Expense  "+item.targetExpense.toString()
             }
-             //TODO:1 Update the regex
+        //TODO:1 Update the regex
         }
 
 //        private fun ViewHolder.bind(item: Person) { }
@@ -76,7 +75,7 @@ class PersonsAdapter(private val clickListener: PersonListener, val from: String
 }
 class PersonDiffCallback : DiffUtil.ItemCallback<PersonAndBusiness>() {
     override fun areItemsTheSame(oldItem: PersonAndBusiness, newItem: PersonAndBusiness): Boolean {
-        return oldItem.phoneNumber == newItem.phoneNumber
+        return oldItem.phoneNumber === newItem.phoneNumber //Referential equality operator
     }
 
     override fun areContentsTheSame(oldItem: PersonAndBusiness, newItem: PersonAndBusiness): Boolean {

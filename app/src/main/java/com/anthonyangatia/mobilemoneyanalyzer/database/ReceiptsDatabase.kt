@@ -32,3 +32,24 @@ abstract class ReceiptsDatabase: RoomDatabase() {
     }
 //    TODO:Write DB test as in codelabs
 }
+//TODO: Read the below code to understand initialization of databasein another way
+//@Dao
+//interface VideoDao {
+//    ...
+//}
+//abstract class VideosDatabase: RoomDatabase() {
+//    ...
+//}
+//
+//private lateinit var INSTANCE: VideosDatabase
+//
+//fun getDatabase(context: Context): VideosDatabase {
+//    synchronized(VideosDatabase::class.java) {
+//        if (!::INSTANCE.isInitialized) {
+//            INSTANCE = Room.databaseBuilder(context.applicationContext,
+//                VideosDatabase::class.java,
+//                "videos").build()
+//        }
+//    }
+//    return INSTANCE
+//}

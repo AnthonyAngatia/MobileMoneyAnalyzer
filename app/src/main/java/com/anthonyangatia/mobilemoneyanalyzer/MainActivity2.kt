@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -26,15 +27,14 @@ class MainActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMain2Binding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(binding.root) //Alternatively u can use a one liner as below
+//        binding = DataBindingUtil.setContentView(this, R.layout.activity_main2)//This line doesnot work with viewbinding. Only waorks with data binding
         Timber.plant(Timber.DebugTree())//Setup timber for debuging
         checkForSmsPermission()
 
         Intent(this, SmsService::class.java).also {
             startService(it)
         }
-
-        val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main2)
         // Passing each menu ID as a set of Ids because each
@@ -45,7 +45,7 @@ class MainActivity2 : AppCompatActivity() {
 //            )
 //        )
 //        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        binding.navView.setupWithNavController(navController)
     }
     private fun checkForSmsPermission() {
         //Permission to Read SMS

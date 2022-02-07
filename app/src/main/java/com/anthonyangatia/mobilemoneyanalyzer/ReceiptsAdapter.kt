@@ -19,67 +19,83 @@ class ReceiptsAdapter(private val className:String? = null): RecyclerView.Adapte
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.item_view_sms_receipt, parent, false)
-        return ViewHolder(view)
+        return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = receiptList[position]
-        holder.arrow.setImageResource(when(item.amountSent){
-            null -> R.drawable.rotated_green
-            else -> R.drawable.red_arrow_svg
-        })
-        if(className == "SearchFragment"){
+//        bind(holder, item)
+        holder.bind(item)
+        if (className == "SearchFragment") {
             holder.itemView.setOnClickListener {
-                it.findNavController().navigate(SearchFragmentDirections.actionNavigationSearchToClassifyFragment(item.receiptId))
+                it.findNavController()
+                    .navigate(SearchFragmentDirections.actionNavigationSearchToClassifyFragment(item.receiptId))
             }
 
-        }else{
+        } else {
             holder.itemView.setOnClickListener {
-                it.findNavController().navigate(PersonDetailFragmentDirections.actionPersonDetailFragmentToClassifyFragment(item.receiptId))
+                it.findNavController().navigate(
+                    PersonDetailFragmentDirections.actionPersonDetailFragmentToClassifyFragment(item.receiptId)
+                )
             }
         }
-
-
-        if(item.transactionType == "sentToNumber"){
-            holder.amt.text = "Kshs "+item.amountSent.toString()
-            holder.personBusinessName.text = item.name
-        }else if (item.transactionType == "sentToBuyGoods"){
-            holder.amt.text = "Kshs "+item.amountSent.toString()
-            holder.personBusinessName.text = item.name
-        }else if(item.transactionType == "sentToPayBill"){
-            holder.amt.text = "Kshs "+item.amountSent.toString()
-            holder.personBusinessName.text = item.name
-        } else if(item.transactionType == "sentToMshwari") {
-            holder.amt.text = "Kshs "+item.amountSent.toString()
-            holder.personBusinessName.text = "MSHWARI"
-        }else if(item.transactionType == "receivedMoney") {
-            holder.amt.text = "Kshs "+item.amountReceived.toString()
-            holder.personBusinessName.text = item.name
-        }else if(item.transactionType == "receivedMoneyMshwari") {
-            holder.amt.text = "Kshs "+item.amountReceived.toString()
-            holder.personBusinessName.text = "MSHWARI"
-        }else if(item.transactionType == "accountBalance") {
-            holder.amt.text = "Kshs "+item.balance.toString()
-            holder.personBusinessName.text = "Account Balance"
-        }else if(item.transactionType == "sentToBuyAirTime") {
-            holder.amt.text = "Kshs "+item.amountReceived.toString()
-            holder.personBusinessName.text = "AIRTIME"
-        }
-//        holder.phoneNumber.text = "0791278088"
     }
 
     override fun getItemCount() = receiptList.size
 
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    class ViewHolder private constructor(itemView: View): RecyclerView.ViewHolder(itemView){
         //        val smsMessage: TextView = itemView.findViewById(R.id.messageTextView)
         val personBusinessName: TextView = itemView.findViewById(R.id.nameTextView)
         val phoneNumber: TextView = itemView.findViewById(R.id.phoneNoTextView)//TODO:1 Update the regex
         val amt: TextView = itemView.findViewById(R.id.amountTextView)
         val arrow: ImageView = itemView.findViewById(R.id.arrowImage)
 
+        fun bind(item:Receipt){
+            arrow.setImageResource(
+                when (item.amountSent) {
+                    null -> R.drawable.rotated_green
+                    else -> R.drawable.red_arrow_svg
+                }
+            )
 
+
+
+            if (item.transactionType == "sentToNumber") {
+                amt.text = "Kshs " + item.amountSent.toString()
+                personBusinessName.text = item.name
+            } else if (item.transactionType == "sentToBuyGoods") {
+                amt.text = "Kshs " + item.amountSent.toString()
+                personBusinessName.text = item.name
+            } else if (item.transactionType == "sentToPayBill") {
+                amt.text = "Kshs " + item.amountSent.toString()
+                personBusinessName.text = item.name
+            } else if (item.transactionType == "sentToMshwari") {
+                amt.text = "Kshs " + item.amountSent.toString()
+                personBusinessName.text = "MSHWARI"
+            } else if (item.transactionType == "receivedMoney") {
+                amt.text = "Kshs " + item.amountReceived.toString()
+                personBusinessName.text = item.name
+            } else if (item.transactionType == "receivedMoneyMshwari") {
+                amt.text = "Kshs " + item.amountReceived.toString()
+                personBusinessName.text = "MSHWARI"
+            } else if (item.transactionType == "accountBalance") {
+                amt.text = "Kshs " + item.balance.toString()
+                personBusinessName.text = "Account Balance"
+            } else if (item.transactionType == "sentToBuyAirTime") {
+                amt.text = "Kshs " + item.amountReceived.toString()
+                personBusinessName.text = "AIRTIME"
+            }
+            //        phoneNumber.text = "0791278088"
+        }
+
+
+        companion object {
+            fun from(parent: ViewGroup): ViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val view = layoutInflater.inflate(R.layout.item_view_sms_receipt, parent, false)
+                return ViewHolder(view)
+            }
+        }
     }
 
 
