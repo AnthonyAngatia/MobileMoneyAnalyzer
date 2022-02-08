@@ -1,6 +1,7 @@
 package com.anthonyangatia.mobilemoneyanalyzer.ui.settings
 
 import android.app.Application
+import android.database.Cursor
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,11 @@ import com.anthonyangatia.mobilemoneyanalyzer.R
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.FragmentSettingsBinding
+import android.os.Environment
+import java.io.File
+import java.io.FileWriter
+import java.lang.Exception
+
 
 class SettingsFragment : Fragment() {
 
@@ -29,6 +35,16 @@ class SettingsFragment : Fragment() {
         settingsViewModel =
             ViewModelProvider(this, viewModelFactory).get(SettingsViewModel::class.java)
 
+        settingsViewModel.navigateToExport.observe(viewLifecycleOwner,{
+            it?.let{
+                if (it){
+                    //Navigateorexport
+//                        exportData()
+                    Toast.makeText(activity, "Implement Export receipts",Toast.LENGTH_SHORT).show()
+                    settingsViewModel.onNavigationComplete()
+                }
+            }
+        })
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -42,6 +58,7 @@ class SettingsFragment : Fragment() {
         binding.classifyCardView.setOnClickListener {
             it.findNavController().navigate(R.id.action_navigation_settings_to_navigation_search)
         }
+
 
 //        binding.settingsList.adapter = personsAdapter
 //

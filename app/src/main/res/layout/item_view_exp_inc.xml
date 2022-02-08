@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:fontFamily="@font/roboto_light"
+            android:fontFamily="@font/roboto_bold"
             android:text="Anthony Angatia"
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/textView"
