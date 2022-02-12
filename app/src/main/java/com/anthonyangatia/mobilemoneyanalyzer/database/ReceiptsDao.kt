@@ -18,7 +18,7 @@ interface ReceiptsDao{
 //    suspend fun getReceipt(id:Long): Receipt?
 
     @Query("SELECT * from transaction_receipt_table")
-    fun getAllReceipts(): LiveData<List<Receipt>>?
+    fun getAllReceipts(): LiveData<List<Receipt>?>
 
     @Query("SELECT * from transaction_receipt_table WHERE date BETWEEN :beginningDate AND :endDate")
     suspend fun getReceiptWhereDate(beginningDate:Long , endDate:Long ): List<Receipt>?

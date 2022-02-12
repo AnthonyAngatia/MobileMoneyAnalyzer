@@ -13,7 +13,7 @@ import timber.log.Timber
 import java.util.*
 
 class ReceiptViewModel(val database: ReceiptsDao, application: Application): AndroidViewModel(application) {
-    var receipts:LiveData<List<Receipt>>
+    var receipts:LiveData<List<Receipt>?>
 
 //    private val _lastReceipt:MutableLiveData<Receipt> = MutableLiveData()
 

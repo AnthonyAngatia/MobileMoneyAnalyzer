@@ -11,7 +11,7 @@ import timber.log.Timber
 import java.util.ArrayList
 
 class SearchViewModel(val database: ReceiptsDao, application: Application): AndroidViewModel(application) {
-    var receipts: LiveData<List<Receipt>>
+    var receipts: LiveData<List<Receipt>?>
 
     init {
         receipts = database.getAllReceipts()!!

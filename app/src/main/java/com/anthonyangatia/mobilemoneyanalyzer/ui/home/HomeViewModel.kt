@@ -19,7 +19,7 @@ import java.util.*
 class HomeViewModel(val application: Application) : ViewModel() {
     val database = ReceiptsDatabase.getInstance(application).receiptsDao
     private val calendar: Calendar = Calendar.getInstance()
-    var receipts:LiveData<List<Receipt>> = database.getAllReceipts()!!
+    var receipts:LiveData<List<Receipt>?> = database.getAllReceipts()!!
     var persons:LiveData<List<PersonAndBusiness>> = database.getPeopleAndBusiness()
     var month: String = "Stats for "+months[calendar.get(Calendar.MONTH)]
     var weekExpense:MutableLiveData<Double> = amountTransactedWeek()
