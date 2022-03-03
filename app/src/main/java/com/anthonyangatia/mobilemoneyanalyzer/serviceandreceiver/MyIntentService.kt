@@ -36,7 +36,7 @@ private const val PROCESSMESSAGE = "com.anthonyangatia.mobilemoneyanalyzer.servi
  */
 class MyIntentService : IntentService("MyIntentService") {
 
-    val CHANNEL_ID = "Test_Channel_ID"
+    val CHANNEL_ID = "Test_Channel_ID"//It will show in the users setting screen
 
     override fun onHandleIntent(intent: Intent?) {
         createNotificationChannel()
@@ -174,7 +174,7 @@ class MyIntentService : IntentService("MyIntentService") {
             val name: CharSequence = "Channel Name"
             val description = "Channel description"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(this.CHANNEL_ID, name, importance)
+            val channel = NotificationChannel(this.CHANNEL_ID, name, importance)//note: Users will see the channel ID in their setting screen
             channel.description = description
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this

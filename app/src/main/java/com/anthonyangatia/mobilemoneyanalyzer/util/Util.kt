@@ -221,9 +221,10 @@ private fun formatTime(date: String): String {
     var newstring = date.replace("AM", "a.m.")
     if(newstring.equals(date)){
         var newstring = date.replace("PM", "p.m.")
-//        return newstring
+        return newstring
     }
-    return date //Rreturn type for android 11
+    return newstring
+//    return date //Rreturn type for android 11
 }
 
 fun convertToDouble(value: String):Double{
