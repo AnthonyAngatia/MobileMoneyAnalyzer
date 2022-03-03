@@ -18,6 +18,6 @@ MoMo analyzer is an application that primarily helps the user analyse their mobi
 - Architecture components(Livedata, Navigation components, Room database etc)
 
 # Screenshots
-![Home screen](github-assets/images/HomeScreen.png)
-![Other screen](github-assets/images/OtherScreen.png)
+![Home screen](github-assets/HomeScreen.png)
+![Other screen](github-assets/OtherScreen.png)
 
