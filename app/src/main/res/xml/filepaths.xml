@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+<!--    <files-path path="MoMafiles/" name="files" />-->
+<!--    <external-path-->
+<!--        name="MobileMoneyAnalyzer"-->
+<!--        path="." />-->
+    <files-path name="movies_csv_files" path="."/>
+</paths>

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.BarChartFragmentBinding
+import com.anthonyangatia.mobilemoneyanalyzer.util.BarChartStyle
 import com.anthonyangatia.mobilemoneyanalyzer.util.LineChartStyle
 import com.anthonyangatia.mobilemoneyanalyzer.util.daysOfWeek
 import com.github.mikephil.charting.charts.BarChart
@@ -20,6 +21,7 @@ class BarChartFragment : Fragment() {
 
     var barEntries  = mutableListOf<BarEntry>()
     lateinit var barChart:BarChart
+    private lateinit var barChartStyle: BarChartStyle
 
     private lateinit var binding: BarChartFragmentBinding
 //    var lineEntry = ArrayList<Entry>()
@@ -35,19 +37,13 @@ class BarChartFragment : Fragment() {
             BarChartViewModel::class.java)
 
         barChart = binding.barChart
-
-//        for (i in 1..7) barEntries.add(BarEntry(i.toFloat(), 5f))//xaxislabel, yaxisvalue
-//
-
-
-
+        barChartStyle = context?.let { BarChartStyle(it) }!!
 
         barChartViewModel.amtTransactedWeekLive.observe(viewLifecycleOwner, {
-            Timber.i(it.values.toString())
-            if (it.size < 7 ) {
+            if (it.size == 7 ) {
                 var dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) -1
                 for (i in 6 downTo 0) {
-                    if (dayOfWeek > 0 ) dayOfWeek = 6
+                    if (dayOfWeek < 0 ) dayOfWeek = 6
                     var dayStr = dayOfWeekStr(dayOfWeek)
                     var amt = it.get(dayStr)
 //                    Timber.i(it.values.toString())
@@ -72,6 +68,8 @@ class BarChartFragment : Fragment() {
         val dataSet = BarDataSet(barEntries, "label1")
         var barData = BarData(dataSet)
         barChart.data = barData
+        barChartStyle.styleChart(barChart)
+        barChartStyle.styleDataSet(dataSet)
         barChart.invalidate()
 
     }

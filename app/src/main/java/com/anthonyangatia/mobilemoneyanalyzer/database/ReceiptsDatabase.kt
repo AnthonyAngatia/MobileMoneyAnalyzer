@@ -4,9 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 
-@Database(entities = [Receipt::class, Person::class, Business::class], version = 1, exportSchema = false)
+@Database(entities = [Receipt::class, PersonAndBusiness::class, Target::class], version = 1, exportSchema = false)
 abstract class ReceiptsDatabase: RoomDatabase() {
 
     abstract val receiptsDao:ReceiptsDao
@@ -33,3 +32,24 @@ abstract class ReceiptsDatabase: RoomDatabase() {
     }
 //    TODO:Write DB test as in codelabs
 }
+//TODO: Read the below code to understand initialization of databasein another way
+//@Dao
+//interface VideoDao {
+//    ...
+//}
+//abstract class VideosDatabase: RoomDatabase() {
+//    ...
+//}
+//
+//private lateinit var INSTANCE: VideosDatabase
+//
+//fun getDatabase(context: Context): VideosDatabase {
+//    synchronized(VideosDatabase::class.java) {
+//        if (!::INSTANCE.isInitialized) {
+//            INSTANCE = Room.databaseBuilder(context.applicationContext,
+//                VideosDatabase::class.java,
+//                "videos").build()
+//        }
+//    }
+//    return INSTANCE
+//}

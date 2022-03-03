@@ -4,39 +4,44 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.anthonyangatia.mobilemoneyanalyzer.R
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.FragmentNotificationsBinding
+import com.anthonyangatia.mobilemoneyanalyzer.ui.home.CategoryAdapter
+import timber.log.Timber
 
 class NotificationsFragment : Fragment() {
 
-    private lateinit var notificationsViewModel: NotificationsViewModel
-    private var _binding: FragmentNotificationsBinding? = null
+    private val notificationsViewModel: NotificationsViewModel by lazy { ViewModelProvider(this).get(NotificationsViewModel::class.java)  }
+    private lateinit var binding: FragmentNotificationsBinding
+    val categoryAdapter = CategoryAdapter()
+    val targetAdapter = TargetAdapter()
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        notificationsViewModel =
-            ViewModelProvider(this).get(NotificationsViewModel::class.java)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        binding = FragmentNotificationsBinding.inflate(inflater, container, false)
 
-        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        binding.categoryRecyclerView.adapter = categoryAdapter
+
+        notificationsViewModel.categoriesAndAmount.observe(viewLifecycleOwner, {
+            categoryAdapter.categoryAmountList = it
+        })
+
+        binding.recyclerViewTargets.adapter = targetAdapter
+
+        notificationsViewModel.targets.observe(viewLifecycleOwner, {
+            Timber.i("Observing targets:" + it.size.toString())
+            it?.let{
+                targetAdapter.targetList = it
+            }
+        })
+
+
 
 //
-        return root
+        return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.settings.personaldetails.PersonDetailFragment">
+    tools:context=".ui.settings.target.PersonDetailFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -12,11 +12,10 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
+            style="@style/CustomCardView"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:backgroundTint="@color/indigo"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -30,12 +29,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:contentDescription="TODO"
                     android:src="@drawable/user_avatar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="TODO" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/personNameTv"
@@ -182,7 +181,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/roboto_black"
-            android:text="Transfer History"
+            android:text="Transaction History"
             android:textColor="@color/indigo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/targetAmt" />
@@ -192,11 +191,12 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="@+id/button"
             app:layout_constraintStart_toStartOf="@+id/textView10"
             app:layout_constraintTop_toBottomOf="@+id/textView10"
             tools:itemCount="3"
-            tools:listitem="@layout/sms_receipt_item_view" />
+            tools:listitem="@layout/item_view_sms_receipt" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

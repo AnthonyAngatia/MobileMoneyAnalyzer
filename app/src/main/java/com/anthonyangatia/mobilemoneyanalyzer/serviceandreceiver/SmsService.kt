@@ -50,6 +50,7 @@ class SmsService : Service() {
             this.priority = IntentFilter.SYSTEM_HIGH_PRIORITY
             this.addAction(SMS_RECEIVE_ACTION)
         }
-        this.registerReceiver(smsReceiver, intentFilter)
+//        this.registerReceiver(smsReceiver, intentFilter)//TODO: Resolve this error Service com.anthonyangatia.mobilemoneyanalyzer.serviceandreceiver.SmsService has leaked IntentReceiver com.anthonyangatia.mobilemoneyanalyzer.serviceandreceiver.SmsReceiver@3cc970d that was originally registered here. Are you missing a call to unregisterReceiver()?
+//
     }
 }

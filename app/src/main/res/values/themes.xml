@@ -22,4 +22,21 @@
         <item name="colorOnSecondary">@color/black</item>
 
     </style>
+    <style name="Theme.MobileMoneyAnalyzerNoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <!--        Primary-->
+        <item name="colorPrimary">@color/indigo</item>
+        <item name="colorPrimaryVariant">@color/indigo</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!--        Secondary-->
+        <item name="colorSecondary">@color/indigo</item>
+        <item name="colorSecondaryVariant">@color/indigo</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+<!--        <item name="android:fontFamily">@font/roboto</item>-->
+<!--        <item name="fontFamily">@font/roboto</item>-->
+
+    </style>
+
 </resources>

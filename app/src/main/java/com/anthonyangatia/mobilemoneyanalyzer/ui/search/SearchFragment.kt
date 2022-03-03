@@ -4,14 +4,11 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.appcompat.widget.SearchView
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.anthonyangatia.mobilemoneyanalyzer.R
+import com.anthonyangatia.mobilemoneyanalyzer.ReceiptsAdapter
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDatabase
 import com.anthonyangatia.mobilemoneyanalyzer.databinding.SearchFragmentBinding
-
-
+import com.anthonyangatia.mobilemoneyanalyzer.util.onQueryTextChanged
 
 
 class SearchFragment : Fragment(){
@@ -19,7 +16,7 @@ class SearchFragment : Fragment(){
     private lateinit var binding:SearchFragmentBinding
     private lateinit var searchViewModel:SearchViewModel
 
-    private val searchAdapter = SearchAdapter()
+    private val receiptsAdapter = ReceiptsAdapter("SearchFragment")
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -31,13 +28,13 @@ class SearchFragment : Fragment(){
         searchViewModel =ViewModelProvider(this, viewModelFactory).get(SearchViewModel::class.java)
 
 //        val adapter = searchAdapter
-        binding.searchList.adapter = searchAdapter
+        binding.personSearchListSearch.adapter = receiptsAdapter
 
 
 
         searchViewModel.receipts?.observe(viewLifecycleOwner, Observer{
             it?.let{
-                searchAdapter.receiptList = it
+                receiptsAdapter.receiptList = it
 //                Timber.i(it.toString())
             }
         })
@@ -47,32 +44,6 @@ class SearchFragment : Fragment(){
             searchDatabase(it)
         }
 
-
-//        searchView.setOnQueryTextListener( object : SearchView.OnQueryTextListener{
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                return true
-//            }
-//
-//            override fun onQueryTextChange(query: String?): Boolean {
-//                if(query != null){
-//                    searchDatabase(query)
-//                }
-//                return true
-//            }
-//        })
-
-//        searchView.setOnQueryTextListener(object :
-//            SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String): Boolean {
-//// do something on text submit
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String): Boolean {
-//// do something when text changes
-//                return false
-//            }
-//        })
         return binding.root
     }
 
@@ -80,24 +51,9 @@ class SearchFragment : Fragment(){
         val searchQuery = "%$query%"
         searchViewModel.searchDatabase(searchQuery).observe(viewLifecycleOwner, {
             it?.let {
-                searchAdapter.receiptList = it
+                receiptsAdapter.receiptList = it
             }
         })
     }
-}
-
-inline fun  SearchView.onQueryTextChanged( crossinline listener: (String) -> Unit) {
-    this.setOnQueryTextListener(object:SearchView.OnQueryTextListener{
-        override fun onQueryTextSubmit(query: String?): Boolean {
-            return true
-        }
-        override fun onQueryTextChange(query: String?): Boolean {
-            if(query != null){
-                listener(query)
-            }
-            return true
-        }
-
-    })
 }
 

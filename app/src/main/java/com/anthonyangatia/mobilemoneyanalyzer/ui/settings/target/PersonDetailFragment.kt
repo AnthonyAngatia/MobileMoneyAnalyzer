@@ -1,11 +1,11 @@
-package com.anthonyangatia.mobilemoneyanalyzer.ui.settings.personaldetails
+package com.anthonyangatia.mobilemoneyanalyzer.ui.settings.target
 
 import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -18,7 +18,7 @@ class PersonDetailFragment : Fragment() {
     
     lateinit var binding:FragmentPersonDetailBinding
     lateinit var personalDetailViewModel:PersonalDetailViewModel
-    val adapter:ReceiptsAdapter = ReceiptsAdapter()
+    val adapter = ReceiptsAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentPersonDetailBinding.inflate(inflater, container, false)
@@ -26,13 +26,22 @@ class PersonDetailFragment : Fragment() {
         binding.personTransactionList.adapter = adapter
         val application = requireNotNull(this.activity).application
         val database = ReceiptsDatabase.getInstance(application).receiptsDao
-        val viewModelFactory = PersonalDetailViewModelFactory(database, application)
+        val args = PersonDetailFragmentArgs.fromBundle(requireArguments())
+        val name = args.name
+        val viewModelFactory = PersonalDetailViewModelFactory(database, application, name)
         personalDetailViewModel = ViewModelProvider(this, viewModelFactory).get(PersonalDetailViewModel::class.java)
 
-        binding.personNameTv.text = "Set Name From Args"
+
+
+
+
+        binding.personNameTv.text = name
         binding.button.setOnClickListener {
             if(binding.targetAmt.text != null){
                 personalDetailViewModel.updateExpense(binding.targetAmt.text.toString().toDouble())
+                Toast.makeText(context, "Target Set", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context,"Target is null", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -61,10 +70,10 @@ class PersonDetailFragment : Fragment() {
     }
 }
 
-class PersonalDetailViewModelFactory(val database: ReceiptsDao, val application: Application):ViewModelProvider.Factory {
+class PersonalDetailViewModelFactory(val database: ReceiptsDao, val application: Application, val name:String):ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PersonalDetailViewModel::class.java)) {
-            return PersonalDetailViewModel(database, application) as T
+            return PersonalDetailViewModel(database, application, name) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
