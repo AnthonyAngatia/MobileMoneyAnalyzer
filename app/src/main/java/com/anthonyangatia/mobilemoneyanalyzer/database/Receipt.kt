@@ -1,39 +1,91 @@
 package com.anthonyangatia.mobilemoneyanalyzer.database
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.util.*
+import androidx.room.*
 
 @Entity(tableName = "transaction_receipt_table")
 data class Receipt(
-    @PrimaryKey(autoGenerate = true)
-    var receiptId: Long = 0L,
+    @ColumnInfo(name = "receipt_message")
+    var message: String,
 
     @ColumnInfo(name = "receipt_code")
-    var code: String = "default-code",
+    var code: String? = null,
 
-    @ColumnInfo(name = "recipient")
-    var recipient: String? = "default-recipient",
+    @ColumnInfo(name = "transaction_type")
+    var transactionType: String? = null, //sentToNumber, sentBuyGoods, sentToPayBill, sentToMshwari, receivedMoney, accountBalance
 
-    @ColumnInfo(name = "sender")
-    var sender: String? = "default-sender",
+    var category: String? = null,
 
-    @ColumnInfo(name = "transactionType")
-    var transactionType: String? = null,
-
-    var date: String? = null,//TODO: Look for valid type for dates and time
-
-    var time: String? = null,
+    var date: Long? = null,//TODO: Look for valid type for dates and time
 
     @ColumnInfo(name = "account_balance")
-    var balance: String = "0.0",
+    var balance: Double? = null,
 
     @ColumnInfo(name = "amount_sent")
-    var amountSent: String? = "10.0",
+    var amountSent: Double? = null,
 
     @ColumnInfo(name = "amount_received")
-    var amountReceived: String? = "0.0",
+    var amountReceived: Double? = null,
 
     @ColumnInfo(name="transaction_cost")
-    var transactionCost: String? ="0.0")
+    var transactionCost: Double? = null,
+    var name: String? = null
+){
+    @PrimaryKey(autoGenerate = true)
+    var receiptId: Long = 0L
+}
+
+@Entity(foreignKeys = [ForeignKey(
+        entity = PersonAndBusiness::class,
+        parentColumns = arrayOf("name"),
+        childColumns = arrayOf("name"),
+        onDelete = ForeignKey.CASCADE
+    )]
+)
+data class PersonAndBusiness(
+    @PrimaryKey()
+    var name: String, //person name or buy goods name or paybill name
+    var phoneNumber: String? = null, //for person
+    @ColumnInfo(name="target_expenditure")
+    var targetExpense:Double? = null
+)
+
+@Entity()
+data class Target(
+    val name: String,//Identifier of person or business
+    val targetExpense: Double,
+    val currentExpenditure:Double,
+    val status:Boolean,//If true then it is active else, false
+    val dateSet:Long,
+    val durationStart: Long, //time in milliseconds
+    val durationEnd: Long//time in milliseconds
+
+){
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0L
+}
+
+data class PersonWithTargets(
+    @Embedded val user: PersonAndBusiness,
+    @Relation(
+        parentColumn = "name",
+        entityColumn = "name"
+    )
+    val targets: List<Target>
+)
+
+data class PersonWithReceipts(
+    @Embedded val user: PersonAndBusiness,
+    @Relation(
+        parentColumn = "name",
+        entityColumn = "name"
+    )
+    val receipts: List<Receipt>
+)
+
+data class PersonReceipt(val personAndBusiness: PersonAndBusiness, val receipt: Receipt)
+
+data class TransactionSummary(val transactionType:String, val amount: Double)
+
+
+
+

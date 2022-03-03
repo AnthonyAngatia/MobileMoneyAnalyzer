@@ -14,9 +14,9 @@
     <color name="light_blue_700">#0288D1</color>
     <color name="light_blue_200">#81D4FA</color>
 
-
-
-
+<!--    cutom colors-->
+    <color name="indigo">#4953CF</color>
+    <color name="light_gray_spinner_shade">#3DC4C4C4</color>
 
 
 </resources>
