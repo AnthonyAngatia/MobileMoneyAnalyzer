@@ -4,6 +4,7 @@ import android.app.Application
 import android.provider.Telephony
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.anthonyangatia.mobilemoneyanalyzer.database.Receipt
 import com.anthonyangatia.mobilemoneyanalyzer.database.ReceiptsDao
@@ -17,7 +18,7 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
 
 //    private val _lastReceipt:MutableLiveData<Receipt> = MutableLiveData()
 
-    var lastReceipt:LiveData<Receipt>?
+    var lastReceipt:LiveData<Receipt?>? = null
 //        get() = _lastReceipt
 
     init {
@@ -38,7 +39,7 @@ class ReceiptViewModel(val database: ReceiptsDao, application: Application): And
 
         receipts = database.getAllReceipts()!!
 //        _lastReceipt.value = database.getLastReceipt()!!
-        lastReceipt = database.getLastReceipt()
+//        lastReceipt = database.getLastReceipt().asLiveData()
 
     }
     fun getSms(){
