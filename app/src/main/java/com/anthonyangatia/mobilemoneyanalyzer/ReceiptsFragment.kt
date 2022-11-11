@@ -39,14 +39,14 @@ class ReceiptsFragment : Fragment() {
             }
         })
         var x = false
-        receiptViewModel.lastReceipt?.observe(viewLifecycleOwner, {
-
-            if(x!=false){
-                receiptViewModel.getSms()
-            }
-//            Timber.i("LastReceipt observation status"+ it.toString())
-            x = true
-        })
+//        receiptViewModel.lastReceipt.observe(viewLifecycleOwner, {
+//
+//            if(x!=false){
+//                receiptViewModel.getSms()
+//            }
+////            Timber.i("LastReceipt observation status"+ it.toString())
+//            x = true
+//        })
 
 //        if(receiptViewModel.receipts == null){
 //            adapter.receiptList = listOf(Receipt(), Receipt())

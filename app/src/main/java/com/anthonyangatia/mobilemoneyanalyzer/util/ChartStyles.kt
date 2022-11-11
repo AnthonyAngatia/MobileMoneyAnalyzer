@@ -8,6 +8,7 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.LineDataSet
+import timber.log.Timber
 import javax.inject.Inject
 
 class LineChartStyle @Inject constructor(private val context:Context){
@@ -55,7 +56,14 @@ class BarChartStyle(private val context:Context){
     fun styleChart(barChart: BarChart){
         barChart.apply {
             axisRight.isEnabled = false
+//            this.setDrawBarShadow(true)
+
+//            this.setDrawValueAboveBar(false)
+//            this.isAutoScaleMinMaxEnabled
             axisLeft.apply {
+                Timber.i("Range of value:${this.mAxisRange}")
+                this.mAxisMaximum=7000f //? Can we find mValuesMaximum
+                this.isAxisMaxCustom
                 isEnabled = true
                 setDrawGridLines(false)
             }
@@ -70,9 +78,10 @@ class BarChartStyle(private val context:Context){
 
             }
 
+
             setTouchEnabled(true)
             isDragEnabled = true
-            setScaleEnabled(false)
+            setScaleEnabled(true)
             setPinchZoom(false)
             description = null
             legend.isEnabled = false

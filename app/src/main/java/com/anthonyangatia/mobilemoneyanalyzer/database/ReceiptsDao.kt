@@ -39,7 +39,7 @@ interface ReceiptsDao{
     suspend fun highestAmountSent(name: String, beginningDate: Long, endDate: Long):List<AmountTransacted>?//Not sure of this query
 
     @Query("SELECT * FROM transaction_receipt_table LIMIT 1")
-    fun getLastReceipt():LiveData<Receipt>?
+    suspend fun getLastReceipt():Receipt?
 
     @Query("DELETE FROM transaction_receipt_table")
     suspend fun clear()
